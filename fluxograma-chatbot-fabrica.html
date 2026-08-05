@@ -1,694 +1,486 @@
-<title>Funil de Atendimento e Decisão — Chatbot da Fábrica</title>
+<title>Fluxo do Chatbot de Suporte — Fábrica</title>
 <style>
 :root{
-  --ground:#E7E8E4;
-  --panel:#FCFCFB;
-  --panel-2:#F0F2ED;
-  --line:#C7CBC3;
-  --line-soft:#DCDFD8;
-  --ink:#141A1D;
-  --ink-2:#4E585D;
-  --ink-3:#7B858A;
-  --ticket:#0E8C87;
-  --projeto:#B87309;
-  --ok:#3C8551;
-  --pend:#BC4327;
-  --rev:#8A6A1F;
-  --idle:#9AA2A6;
-  --glow:0 0 0 1px rgba(14,140,135,.35), 0 6px 22px -8px rgba(14,140,135,.55);
-  --mono:ui-monospace,"DejaVu Sans Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --ground:#EDF0F4;
+  --grid-dot:#CFD6DF;
+  --panel:#FFFFFF;
+  --ink:#141A24;
+  --ink-2:#5B6675;
+  --line:#D3DAE3;
+
+  --bot:#6D4AFF;
+  --class:#0C9BC4;
+  --tick:#0FA294;
+  --agir:#15A34A;
+  --proj:#E07C0A;
+  --matriz:#DB5A1B;
+  --agil:#78A81A;
+  --casc:#2563EB;
+  --hib:#9333EA;
+  --apr:#DB2777;
+  --lic:#D9A400;
+
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Liberation Sans",sans-serif;
+  --mono:ui-monospace,"DejaVu Sans Mono",Menlo,Consolas,monospace;
+  --shadow:0 10px 24px -14px rgba(20,26,36,.5);
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --ground:#0F1316;
-    --panel:#171D21;
-    --panel-2:#1C242A;
-    --line:#2C363C;
-    --line-soft:#232C31;
-    --ink:#E6ECEE;
-    --ink-2:#98A4AA;
-    --ink-3:#6C7A81;
-    --ticket:#31C3B6;
-    --projeto:#E7A73B;
-    --ok:#62B879;
-    --pend:#E2694B;
-    --rev:#D2B15B;
-    --idle:#5F6B71;
-    --glow:0 0 0 1px rgba(49,195,182,.4), 0 8px 26px -10px rgba(49,195,182,.5);
+    --ground:#0D1017;
+    --grid-dot:#1E2634;
+    --panel:#161B24;
+    --ink:#EAEFF6;
+    --ink-2:#93A0B2;
+    --line:#28313F;
+
+    --bot:#9B85FF;
+    --class:#35BEE4;
+    --tick:#2ACFBD;
+    --agir:#45CE78;
+    --proj:#FFA83D;
+    --matriz:#FF8552;
+    --agil:#A8D93A;
+    --casc:#5B8DFF;
+    --hib:#C07CFF;
+    --apr:#FF5FA6;
+    --lic:#F5C939;
+    --shadow:0 12px 28px -16px rgba(0,0,0,.9);
   }
 }
 :root[data-theme="light"]{
-  --ground:#E7E8E4;--panel:#FCFCFB;--panel-2:#F0F2ED;--line:#C7CBC3;--line-soft:#DCDFD8;
-  --ink:#141A1D;--ink-2:#4E585D;--ink-3:#7B858A;--ticket:#0E8C87;--projeto:#B87309;
-  --ok:#3C8551;--pend:#BC4327;--rev:#8A6A1F;--idle:#9AA2A6;
-  --glow:0 0 0 1px rgba(14,140,135,.35), 0 6px 22px -8px rgba(14,140,135,.55);
+  --ground:#EDF0F4;--grid-dot:#CFD6DF;--panel:#FFFFFF;--ink:#141A24;--ink-2:#5B6675;--line:#D3DAE3;
+  --bot:#6D4AFF;--class:#0C9BC4;--tick:#0FA294;--agir:#15A34A;--proj:#E07C0A;--matriz:#DB5A1B;
+  --agil:#78A81A;--casc:#2563EB;--hib:#9333EA;--apr:#DB2777;--lic:#D9A400;
+  --shadow:0 10px 24px -14px rgba(20,26,36,.5);
 }
 :root[data-theme="dark"]{
-  --ground:#0F1316;--panel:#171D21;--panel-2:#1C242A;--line:#2C363C;--line-soft:#232C31;
-  --ink:#E6ECEE;--ink-2:#98A4AA;--ink-3:#6C7A81;--ticket:#31C3B6;--projeto:#E7A73B;
-  --ok:#62B879;--pend:#E2694B;--rev:#D2B15B;--idle:#5F6B71;
-  --glow:0 0 0 1px rgba(49,195,182,.4), 0 8px 26px -10px rgba(49,195,182,.5);
+  --ground:#0D1017;--grid-dot:#1E2634;--panel:#161B24;--ink:#EAEFF6;--ink-2:#93A0B2;--line:#28313F;
+  --bot:#9B85FF;--class:#35BEE4;--tick:#2ACFBD;--agir:#45CE78;--proj:#FFA83D;--matriz:#FF8552;
+  --agil:#A8D93A;--casc:#5B8DFF;--hib:#C07CFF;--apr:#FF5FA6;--lic:#F5C939;
+  --shadow:0 12px 28px -16px rgba(0,0,0,.9);
 }
 
 *{box-sizing:border-box}
 body{
-  margin:0;background:var(--ground);color:var(--ink);
-  font-family:var(--sans);line-height:1.5;
+  margin:0;color:var(--ink);font-family:var(--sans);
+  background:
+    radial-gradient(var(--grid-dot) 1.1px, transparent 1.1px) 0 0/22px 22px,
+    var(--ground);
   -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 64px;display:flex;flex-direction:column;gap:22px}
+.wrap{max-width:1000px;margin:0 auto;padding:26px 16px 56px;display:flex;flex-direction:column;gap:16px}
 
-/* ---------- cabeçalho ---------- */
-.head{display:flex;flex-direction:column;gap:10px}
-.eyebrow{
-  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--ink-3);display:flex;align-items:center;gap:10px;
-}
-.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 h1{
-  margin:0;font-size:clamp(26px,4.6vw,40px);line-height:1.08;letter-spacing:-.02em;
-  font-weight:650;text-wrap:balance;
+  margin:0;font-size:clamp(19px,3.2vw,26px);font-weight:800;letter-spacing:-.02em;
+  display:flex;align-items:center;gap:10px;
 }
-.lede{margin:0;max-width:62ch;color:var(--ink-2);font-size:15px}
-
-/* ---------- regras de topo ---------- */
-.rules{
-  display:flex;flex-wrap:wrap;
-  background:var(--panel);border:1px solid var(--line);border-radius:3px;overflow:hidden;
+h1 .spark{width:12px;height:12px;border-radius:50%;background:var(--bot);box-shadow:0 0 0 5px color-mix(in srgb,var(--bot) 22%,transparent)}
+.pill{
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:4px 10px;background:var(--panel);
 }
-.rule{
-  flex:1 1 260px;padding:12px 14px;display:flex;flex-direction:column;gap:3px;
-  border-top:1px solid var(--line);
-}
-.rule + .rule{border-left:1px solid var(--line)}
-.rule b{font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;font-weight:600}
-.rule span{font-size:12.5px;color:var(--ink-2)}
-.rules-tag{
-  flex:1 0 100%;background:var(--panel-2);padding:8px 14px;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
-}
-
-/* ---------- console ---------- */
-.console{
-  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
-  border:1px solid var(--line);background:var(--panel);border-radius:3px;padding:10px;
-}
+.top .sp{flex:1}
 button{
-  font-family:var(--mono);font-size:12px;letter-spacing:.04em;
-  background:var(--panel-2);color:var(--ink);border:1px solid var(--line);
-  padding:7px 12px;border-radius:2px;cursor:pointer;transition:background .15s,border-color .15s,color .15s;
+  font-family:var(--sans);font-size:12.5px;font-weight:700;letter-spacing:.02em;
+  background:var(--panel);color:var(--ink);border:2px solid var(--line);
+  padding:7px 13px;border-radius:999px;cursor:pointer;transition:.18s;
 }
-button:hover{border-color:var(--ink-3)}
-button:focus-visible{outline:2px solid var(--ticket);outline-offset:2px}
-button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
-.console .sep{flex:1}
-.seg{display:flex;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:2px;overflow:hidden}
-.seg button{border:0;border-radius:0;margin:0}
-.status-line{
-  font-family:var(--mono);font-size:11.5px;color:var(--ink-2);
-  padding:2px 4px;min-width:16ch;
-}
+button:hover{border-color:var(--ink-2)}
+button:focus-visible{outline:3px solid var(--class);outline-offset:2px}
+button[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+#play[aria-pressed="true"]{background:var(--bot);border-color:var(--bot);color:#fff}
+.ctrls{display:flex;gap:7px;flex-wrap:wrap}
 
-/* ---------- palco ---------- */
-.canvas{overflow-x:auto;border:1px solid var(--line);background:var(--panel);border-radius:3px}
-.stage{position:relative;min-width:620px;padding:22px 22px 22px 74px}
+.canvas{overflow-x:auto;border-radius:16px}
+.stage{position:relative;min-width:600px;padding:14px 10px 14px 58px}
 #wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-.wire{fill:none;stroke:var(--line);stroke-width:1.5;transition:stroke .3s,opacity .3s}
-.wire.hot{stroke:var(--ticket);stroke-width:2}
-.wire.hot-projeto{stroke:var(--projeto);stroke-width:2}
-.wire.dim{opacity:.28}
-.flow{fill:none;stroke-width:2;stroke-dasharray:5 9;opacity:0;transition:opacity .3s}
-.flow.on{opacity:.85;animation:march 1s linear infinite}
-@keyframes march{to{stroke-dashoffset:-14}}
-.pulse{opacity:0}
-.pulse.on{opacity:1}
-.wlabel{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;fill:var(--ink-3);text-transform:uppercase;
-  paint-order:stroke;stroke:var(--panel);stroke-width:5px;stroke-linejoin:round;
+.wire{fill:none;stroke-width:3;stroke-linecap:round;opacity:.5}
+.wire.lit{opacity:1}
+.dash{fill:none;stroke-width:3;stroke-linecap:round;stroke-dasharray:1 13;opacity:0;animation:march 1.1s linear infinite}
+.dash.lit{opacity:.95}
+@keyframes march{to{stroke-dashoffset:-28}}
+.head-tri{opacity:.55}
+.head-tri.lit{opacity:1}
+.token{opacity:0;transition:opacity .18s}
+.token.on{opacity:1}
+.tag{
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  paint-order:stroke;stroke:var(--ground);stroke-width:6px;stroke-linejoin:round;
 }
-.wlabel.lane-ticket{fill:var(--ticket)}
-.wlabel.lane-projeto{fill:var(--projeto)}
 
-.grid{
-  position:relative;z-index:1;
-  display:grid;grid-template-columns:1fr 1fr;column-gap:26px;row-gap:46px;align-items:start;
-}
+.grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;column-gap:22px;row-gap:44px;align-items:start}
 .full{grid-column:1/-1}
-.col-a{grid-column:1}
-.col-b{grid-column:2}
+.n.full{max-width:530px;margin:0 auto}
+.a{grid-column:1}
+.b{grid-column:2}
 
-/* ---------- nós ---------- */
-.node{
-  position:relative;display:block;width:100%;text-align:left;
-  background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--idle);
-  border-radius:3px;padding:11px 13px 12px;cursor:pointer;
-  transition:transform .25s cubic-bezier(.2,.8,.3,1),box-shadow .25s,border-color .25s;
+/* ---- cards ---- */
+.n{
+  --c:var(--line);
+  position:relative;width:100%;display:flex;align-items:center;gap:12px;text-align:left;
+  background:var(--panel);border:2.5px solid var(--c);border-radius:16px;
+  padding:12px 14px;cursor:default;box-shadow:var(--shadow);
+  transition:transform .3s cubic-bezier(.2,.8,.3,1),box-shadow .3s,filter .3s;
 }
-.node:hover{border-color:var(--ink-3);border-left-color:var(--nodecolor,var(--idle))}
-.node[data-status="ok"]{--nodecolor:var(--ok);border-left-color:var(--ok)}
-.node[data-status="update"]{--nodecolor:var(--pend);border-left-color:var(--pend)}
-.node[data-status="review"]{--nodecolor:var(--rev);border-left-color:var(--rev)}
-.node[data-status="none"]{--nodecolor:var(--idle);border-left-color:var(--idle)}
-.node.active{box-shadow:var(--glow);transform:translateY(-2px)}
-.node.active[data-lane="projeto"]{box-shadow:0 0 0 1px rgba(184,115,9,.4),0 8px 24px -10px rgba(184,115,9,.6)}
-.node.dim{opacity:.34}
-.node.selected{border-color:var(--ink)}
-.nrow{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
-.nid{
-  font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink-3);
-  border:1px solid var(--line);padding:0 5px;border-radius:2px;line-height:1.6;
+.n .ico{
+  flex:0 0 auto;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);
 }
-.ntitle{font-family:var(--mono);font-size:13px;font-weight:650;letter-spacing:.01em}
-.nsub{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
-.nbody{margin:6px 0 0;font-size:12.5px;color:var(--ink-2);max-width:44ch}
-.badge{
-  position:absolute;top:9px;right:10px;
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
-  padding:2px 6px;border-radius:2px;border:1px solid currentColor;opacity:.9;
-}
-.badge[data-s="ok"]{color:var(--ok)}
-.badge[data-s="update"]{color:var(--pend)}
-.badge[data-s="review"]{color:var(--rev)}
-.badge[data-s="none"]{color:var(--idle)}
+.n .ico svg{width:26px;height:26px;display:block}
+.n .tx{display:flex;flex-direction:column;gap:1px;min-width:0}
+.n b{font-size:15px;font-weight:800;letter-spacing:-.01em;line-height:1.18}
+.n small{font-family:var(--mono);font-size:11px;color:var(--c);font-weight:700;letter-spacing:.02em}
+.n.on{transform:translateY(-3px) scale(1.015);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 22%,transparent),var(--shadow)}
+.n.off{opacity:.55}
 
-#need{display:flex;justify-content:center}
-.entry{
-  display:inline-flex;align-items:center;gap:8px;
-  font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
-  border:1px dashed var(--line);border-radius:2px;padding:8px 14px;color:var(--ink-2);
-  background:var(--panel);transition:border-color .25s,color .25s;
-}
-.entry.active{border-color:var(--ticket);border-style:solid;color:var(--ink)}
-.entry .dot{width:7px;height:7px;border-radius:50%;background:var(--idle)}
-.entry.active .dot{background:var(--ticket)}
+.n.bot{--c:var(--bot)} .n.class{--c:var(--class)}
+.n.tick{--c:var(--tick)} .n.agir{--c:var(--agir)}
+.n.proj{--c:var(--proj)} .n.matriz{--c:var(--matriz)}
+.n.apr{--c:var(--apr)} .n.lic{--c:var(--lic)}
 
-.trilhas{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.trilha{
-  background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--ok);
-  border-radius:3px;padding:8px 9px;cursor:pointer;text-align:left;
-  font-family:var(--mono);transition:box-shadow .25s,transform .25s,border-color .25s;
+/* ---- trilhas ---- */
+.trilhas{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.tr{
+  --c:var(--line);background:var(--panel);border:2.5px solid var(--c);border-radius:14px;
+  padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:5px;
+  box-shadow:var(--shadow);transition:transform .3s cubic-bezier(.2,.8,.3,1),box-shadow .3s,filter .3s;
 }
-.trilha b{display:block;font-size:11.5px;letter-spacing:.06em;font-weight:650}
-.trilha span{font-size:10px;color:var(--ink-3)}
-.trilha.active{box-shadow:0 0 0 1px rgba(184,115,9,.45),0 8px 22px -10px rgba(184,115,9,.6);transform:translateY(-2px)}
-.trilha.dim{opacity:.34}
+.tr svg{width:24px;height:24px;color:var(--c);display:block}
+.tr b{font-size:11.5px;font-weight:800;letter-spacing:.03em;color:var(--ink)}
+.tr.agil{--c:var(--agil)} .tr.casc{--c:var(--casc)} .tr.hib{--c:var(--hib)}
+.tr.on{transform:translateY(-3px) scale(1.03);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 24%,transparent),var(--shadow)}
+.tr.off{opacity:.55}
 
-.lane-head{
-  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--ink-3);padding-bottom:5px;border-bottom:1px solid var(--line-soft);
-  margin-bottom:-34px;align-self:end;
+/* ---- rótulos de faixa ---- */
+.lane{
+  justify-self:start;font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:#fff;
+  padding:4px 12px;border-radius:999px;margin-bottom:-32px;
 }
-.lane-head.t{color:var(--ticket)}
-.lane-head.p{color:var(--projeto)}
-
-/* ---------- painel de detalhe ---------- */
-.detail{
-  border:1px solid var(--line);background:var(--panel);border-radius:3px;
-  display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:1px;background:var(--line);
-}
-.detail>div{background:var(--panel);padding:14px 16px}
-.detail h2{
-  margin:0 0 2px;font-family:var(--mono);font-size:14px;font-weight:650;letter-spacing:.01em;
-}
-.detail .meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
-.detail p{margin:0 0 8px;font-size:13.5px;color:var(--ink-2);max-width:60ch}
-.detail p:last-child{margin-bottom:0}
-.detail .marca{font-size:12.5px;color:var(--ink-2);border-left:2px solid var(--line);padding-left:10px}
-
-/* ---------- contadores ---------- */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
-.stat{
-  border:1px solid var(--line);background:var(--panel);border-radius:3px;padding:10px 12px;
-  display:flex;flex-direction:column;justify-content:space-between;gap:4px;
-}
-.hint{
-  display:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--ink-3);padding:8px 12px 0;
-}
-.stat .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
-.stat .v{font-family:var(--mono);font-size:26px;font-weight:650;font-variant-numeric:tabular-nums;line-height:1.25}
-.stat.t .v{color:var(--ticket)}
-.stat.p .v{color:var(--projeto)}
-.stat.l .v{color:var(--ok)}
-
-/* ---------- legenda / rodapé ---------- */
-.legend{display:flex;flex-wrap:wrap;gap:14px;font-family:var(--mono);font-size:11px;color:var(--ink-2)}
-.legend i{display:inline-block;width:22px;height:3px;vertical-align:middle;margin-right:6px}
-footnote,.note{display:block;font-size:12px;color:var(--ink-3);max-width:70ch}
+.lane.t{background:var(--tick)} .lane.p{background:var(--proj)}
+@media (prefers-color-scheme: dark){ .lane{color:#0D1017} }
+:root[data-theme="dark"] .lane{color:#0D1017}
+:root[data-theme="light"] .lane{color:#fff}
 
 @media (max-width:640px){
-  .detail{grid-template-columns:1fr}
-  .wrap{padding:20px 12px 48px}
-  .hint{display:block}
-  .stage{min-width:560px;padding:18px 16px 18px 62px}
-  .nbody{font-size:12px}
+  .wrap{padding:18px 10px 40px}
+  .stage{min-width:560px;padding:12px 6px 12px 50px}
+  .n b{font-size:13.5px}
+  .n .ico{width:38px;height:38px;border-radius:11px}
+  .n .ico svg{width:22px;height:22px}
 }
-@media (prefers-reduced-motion: reduce){
-  *{animation:none !important;transition-duration:.01ms !important}
-}
+@media (prefers-reduced-motion: reduce){ *{animation:none !important;transition-duration:.01ms !important} }
 </style>
 
 <div class="wrap">
 
-  <header class="head">
-    <div class="eyebrow">0.2 · Arquitetura geral do sistema</div>
-    <h1>Funil de atendimento e decisão do chatbot da fábrica</h1>
-    <p class="lede">Uma necessidade entra por uma porta só. O chatbot tenta resolver; o que não resolve é classificado, priorizado e executado — e tudo que sai vira lição que volta para o chatbot.</p>
-  </header>
-
-  <section class="rules" aria-label="Regras que valem acima de qualquer trilha">
-    <div class="rules-tag">Duas regras valem acima de qualquer trilha — Livro 1</div>
-    <div class="rule"><b>Limite de WIP do portfólio</b><span>Nada entra em andamento além do limite. O gargalo é excesso de trabalho aberto.</span></div>
-    <div class="rule"><b>SLA de decisão: 72 h</b><span>Toda demanda tem destino decidido em até 72 horas — decidir rápido é parte da governança.</span></div>
-  </section>
-
-  <section class="console" aria-label="Controles da simulação">
-    <button id="play" aria-pressed="false">▶ Rodar funil</button>
-    <button id="reset">↺ Zerar</button>
-    <div class="seg" role="group" aria-label="Tipo de demanda">
-      <button data-run="auto" aria-pressed="true">Alternar</button>
-      <button data-run="resolvido" aria-pressed="false">Resolvido no bot</button>
+  <div class="top">
+    <h1><span class="spark"></span>Fluxo do Chatbot de Suporte</h1>
+    <span class="pill">Fábrica</span>
+    <span class="sp"></span>
+    <div class="ctrls">
+      <button id="play" aria-pressed="false">▶ Animar</button>
       <button data-run="ticket" aria-pressed="false">Ticket</button>
       <button data-run="projeto" aria-pressed="false">Projeto</button>
     </div>
-    <span class="sep"></span>
-    <span class="status-line" id="statusLine" role="status">parado</span>
-  </section>
+  </div>
 
   <div class="canvas">
-    <p class="hint">↔ arraste o diagrama para o lado</p>
     <div class="stage" id="stage">
-      <svg id="wires" aria-hidden="true">
-        <defs>
-          <marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L8 4 L0 8 z" fill="var(--line)"></path>
-          </marker>
-          <marker id="ar-t" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L8 4 L0 8 z" fill="var(--ticket)"></path>
-          </marker>
-          <marker id="ar-p" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L8 4 L0 8 z" fill="var(--projeto)"></path>
-          </marker>
-        </defs>
-      </svg>
+      <svg id="wires" aria-hidden="true"></svg>
 
       <div class="grid" id="grid">
-        <div class="full" id="need"><span class="entry"><span class="dot"></span>Necessidade</span></div>
 
-        <button class="node full" id="n1" data-status="update" data-key="n1">
-          <span class="badge" data-s="update">em atualização</span>
-          <span class="nrow"><span class="nid">1</span><span class="ntitle">ATENDIMENTO</span><span class="nsub">Chatbot IA</span></span>
-          <p class="nbody">Responde com documentos, normas e lições aprendidas.</p>
-        </button>
-
-        <button class="node full" id="n2" data-status="none" data-key="n2">
-          <span class="badge" data-s="none">sem marcação</span>
-          <span class="nrow"><span class="nid">2</span><span class="ntitle">COLETA + CLASSIFICAÇÃO</span><span class="nsub">IA</span></span>
-          <p class="nbody">Ticket ou Projeto? Qual área?</p>
-        </button>
-
-        <div class="col-a lane-head t">Ticket</div>
-        <div class="col-b lane-head p">Projeto</div>
-
-        <button class="node col-a" id="n3a" data-status="ok" data-lane="ticket" data-key="n3a">
-          <span class="badge" data-s="ok">validado</span>
-          <span class="nrow"><span class="nid">3a</span><span class="ntitle">PRIORIZAÇÃO</span></span>
-          <p class="nbody">Kanban CoS · GUT + SLA</p>
-        </button>
-
-        <button class="node col-b" id="n3b" data-status="review" data-lane="projeto" data-key="n3b">
-          <span class="badge" data-s="review">em revisão</span>
-          <span class="nrow"><span class="nid">3b</span><span class="ntitle">PRIORIZAÇÃO</span></span>
-          <p class="nbody">AHP + Entrevista de Valor → ranking do portfólio</p>
-        </button>
-
-        <button class="node col-a" id="n4a" data-status="ok" data-lane="ticket" data-key="n4a">
-          <span class="badge" data-s="ok">validado</span>
-          <span class="nrow"><span class="nid">4a</span><span class="ntitle">VER E AGIR</span></span>
-          <p class="nbody">Execução direta.</p>
-        </button>
-
-        <button class="node col-b" id="n4b" data-status="update" data-lane="projeto" data-key="n4b">
-          <span class="badge" data-s="update">em atualização</span>
-          <span class="nrow"><span class="nid">4b</span><span class="ntitle">MATRIZ DE DECISÃO DE TRILHA</span></span>
-          <p class="nbody">Livro 2 — define como o projeto será conduzido.</p>
-        </button>
-
-        <div class="col-b trilhas">
-          <button class="trilha" id="tr-agil" data-key="agil"><b>ÁGIL</b><span>L.3</span></button>
-          <button class="trilha" id="tr-cascata" data-key="cascata"><b>CASCATA</b><span>L.4</span></button>
-          <button class="trilha" id="tr-hibrido" data-key="hibrido"><b>HÍBRIDO</b><span>L.5</span></button>
+        <div class="n bot full" id="n1">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="7.5" width="17" height="12" rx="4"/><path d="M12 3.2v4.3"/><circle cx="12" cy="2.6" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="13" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.5" fill="currentColor" stroke="none"/><path d="M9.5 16.6h5"/><path d="M1.6 11.5v4M22.4 11.5v4"/></svg></span>
+          <span class="tx"><b>Atendimento</b><small>Chatbot IA</small></span>
         </div>
 
-        <button class="node full" id="licoes" data-status="update" data-key="licoes">
-          <span class="badge" data-s="update">em atualização</span>
-          <span class="nrow"><span class="ntitle">LIÇÕES APRENDIDAS</span><span class="nsub">→ alimentam o chatbot</span></span>
-          <p class="nbody">O funil vira um sistema que aprende: o que foi resolvido volta como resposta na porta de entrada.</p>
-        </button>
+        <div class="n class full" id="n2">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h18l-7 8v7l-4 2.2v-9.2z"/><path d="M20.5 17h-4M18.5 15v4" /></svg></span>
+          <span class="tx"><b>Coleta e Classificação</b><small>Ticket ou Projeto?</small></span>
+        </div>
+
+        <div class="lane t a">Ticket</div>
+        <div class="lane p b">Projeto</div>
+
+        <div class="n tick a" id="n3a">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="19" height="17" rx="2.6"/><path d="M8.8 3.5v17M15.2 3.5v17"/><rect x="4.4" y="6" width="2.9" height="4.6" rx="1" fill="currentColor" stroke="none"/><rect x="10.6" y="6" width="2.9" height="7.4" rx="1" fill="currentColor" stroke="none"/><rect x="16.8" y="6" width="2.9" height="3" rx="1" fill="currentColor" stroke="none"/></svg></span>
+          <span class="tx"><b>Priorização</b><small>Kanban · GUT · SLA</small></span>
+        </div>
+
+        <div class="n proj b" id="n3b">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 6.5h14"/><path d="M5 6.5 2.2 13h5.6zM19 6.5 16.2 13h5.6z"/><path d="M2.2 13a2.8 2.8 0 0 0 5.6 0M16.2 13a2.8 2.8 0 0 0 5.6 0"/><path d="M8.5 21h7"/></svg></span>
+          <span class="tx"><b>Priorização</b><small>AHP + Entrevista de Valor</small></span>
+        </div>
+
+        <div class="n agir a" id="n4a">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.6 3.4a5.2 5.2 0 0 0-6.4 6.4L3 15v5.4h5.4l5.2-5.2a5.2 5.2 0 0 0 6.4-6.4l-3.1 3.1-2.9-.6-.6-2.9z"/></svg></span>
+          <span class="tx"><b>Ver e Agir</b><small>execução</small></span>
+        </div>
+
+        <div class="n matriz b" id="n4b">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2.6"/><path d="M12 3v18M3 12h18"/><circle cx="7.5" cy="7.5" r="1.7" fill="currentColor" stroke="none"/><circle cx="16.5" cy="16.5" r="1.7" fill="currentColor" stroke="none"/></svg></span>
+          <span class="tx"><b>Matriz de Decisão</b><small>trilha do projeto</small></span>
+        </div>
+
+        <div class="trilhas b">
+          <div class="tr agil" id="tAgil">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 12a8.2 8.2 0 1 1-2.6-6"/><path d="M20.6 2.4v4.2h-4.2"/></svg>
+            <b>ÁGIL</b>
+          </div>
+          <div class="tr casc" id="tCasc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 5h6v5h6v5h6"/><path d="M8.5 5v5M14.5 10v5"/></svg>
+            <b>CASCATA</b>
+          </div>
+          <div class="tr hib" id="tHib">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+          <b>HÍBRIDA</b>
+          </div>
+        </div>
+
+        <div class="n apr b" id="n5">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.6 14.6 8l5.9.8-4.3 4.1 1 5.9L12 16l-5.2 2.8 1-5.9L3.5 8.8 9.4 8z"/><path d="M7.6 21.4h8.8"/></svg></span>
+          <span class="tx"><b>Aprovação da Liderança</b><small>Sponsor</small></span>
+        </div>
+
+        <div class="n lic full" id="n6">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17.5h6M9.8 20.6h4.4"/><path d="M12 2.4a6.6 6.6 0 0 0-3.9 11.9c.5.4.8 1 .9 1.6h6c.1-.6.4-1.2.9-1.6A6.6 6.6 0 0 0 12 2.4z"/></svg></span>
+          <span class="tx"><b>Lições Aprendidas</b><small>realimenta o chatbot</small></span>
+        </div>
+
       </div>
     </div>
   </div>
-
-  <section class="detail" aria-live="polite">
-    <div>
-      <h2 id="dTitle">Como ler este funil</h2>
-      <div class="meta" id="dMeta">clique em qualquer caixa</div>
-      <p id="dBody">Rode a simulação para ver uma demanda percorrer o caminho. Cada caixa abre o detalhe do que acontece ali e o estado em que a etapa está hoje.</p>
-      <p class="marca" id="dMarca">As marcas de estado (validado / em revisão / em atualização) vêm das anotações à mão feitas sobre o diagrama original.</p>
-    </div>
-    <div>
-      <div class="stats">
-        <div class="stat"><div class="k">Demandas</div><div class="v" id="sTotal">0</div></div>
-        <div class="stat"><div class="k">Resolvidas no bot</div><div class="v" id="sBot">0</div></div>
-        <div class="stat t"><div class="k">Tickets</div><div class="v" id="sTicket">0</div></div>
-        <div class="stat p"><div class="k">Projetos</div><div class="v" id="sProj">0</div></div>
-        <div class="stat l"><div class="k">Lições</div><div class="v" id="sLicoes">0</div></div>
-      </div>
-    </div>
-  </section>
-
-  <div class="legend">
-    <span><i style="background:var(--ok)"></i>validado (✓ no original)</span>
-    <span><i style="background:var(--rev)"></i>em revisão (✓ e ✗ juntos)</span>
-    <span><i style="background:var(--pend)"></i>em atualização (✗ no original)</span>
-    <span><i style="background:var(--idle)"></i>sem marcação</span>
-  </div>
-  <p class="note">Contadores são de simulação — servem para mostrar o comportamento do funil, não medem operação real.</p>
-
 </div>
 
 <script>
 (function(){
   "use strict";
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  var DETAIL = {
-    need:{t:"NECESSIDADE",m:"entrada única",b:"Qualquer dúvida, correção ou melhoria da fábrica entra pelo mesmo lugar. Porta única é o que permite medir volume, classificar e aplicar SLA.",n:"Sem marcação no original."},
-    n1:{t:"1 · ATENDIMENTO (Chatbot IA)",m:"em atualização",b:"O chatbot responde consultando documentos, normas e as lições aprendidas já registradas. O que ele resolve aqui não vira ticket nem projeto — e esse é o objetivo: a maior parte do volume morre na porta.",n:"Marcado com “✗” e a anotação “em atualização (prompt)”."},
-    n2:{t:"2 · COLETA + CLASSIFICAÇÃO (IA)",m:"sem marcação",b:"Só chega aqui o que o chatbot não resolveu. A IA coleta o contexto que falta e responde a duas perguntas: é ticket ou projeto? de qual área? A partir daqui o caminho se divide.",n:"Sem marca à mão no original."},
-    n3a:{t:"3a · PRIORIZAÇÃO (ticket)",m:"validado",b:"Kanban com Classes de Serviço, GUT e SLA. Ticket é trabalho pequeno e conhecido: entra na fila certa e respeita o limite de WIP.",n:"Marcado com “✓”."},
-    n4a:{t:"4a · VER E AGIR",m:"validado",b:"Execução direta, sem cerimônia de projeto. Ticket resolvido fecha e vira registro.",n:"Marcado com “✓”."},
-    n3b:{t:"3b · PRIORIZAÇÃO (projeto)",m:"em revisão",b:"AHP mais Entrevista de Valor produzem o ranking do portfólio. É aqui que se decide o que entra, e o limite de WIP do portfólio manda mais que a ordem do ranking.",n:"Traz as duas marcas: “✗” sobre o método e “✓” sobre o ranking do portfólio."},
-    n4b:{t:"4b · MATRIZ DE DECISÃO DE TRILHA",m:"em atualização",b:"Livro 2. Aprovado o projeto, a matriz decide como conduzi-lo: ágil, cascata ou híbrido. A escolha é do projeto, não da preferência do time.",n:"Anotação à mão: “em atualização”."},
-    agil:{t:"ÁGIL — Livro 3",m:"validado",b:"Escopo que se descobre andando, entrega em incrementos, cliente perto. Trilha para o que muda enquanto é feito.",n:"Marcado com “✓”."},
-    cascata:{t:"CASCATA — Livro 4",m:"validado",b:"Escopo estável, sequência conhecida, forte dependência de fornecedor ou parada de linha. Trilha para o que precisa ser planejado inteiro antes.",n:"Marcado com “✓”."},
-    hibrido:{t:"HÍBRIDO — Livro 5",m:"validado",b:"Marcos e contrato fechados na cascata, execução interna em ciclos ágeis. Trilha para o que é obrigado a conviver com os dois mundos.",n:"Marcado com “✓”."},
-    licoes:{t:"LIÇÕES APRENDIDAS",m:"em atualização",b:"Toda saída — ticket ou projeto — vira registro que realimenta o chatbot. É o que fecha o ciclo: o funil vira um sistema que aprende, e a porta de entrada responde melhor a cada volta.",n:"Marcado com “✗”."}
-  };
-
+  var SVGNS = "http://www.w3.org/2000/svg";
   var stage = document.getElementById("stage");
   var svg = document.getElementById("wires");
-  var SVGNS = "http://www.w3.org/2000/svg";
-
   function el(id){ return document.getElementById(id); }
-  var need = el("need").firstElementChild;
 
-  // arestas: [de, para, rótulo, faixa, tipo]
   var EDGES = [
-    {id:"e0", a:"need",   b:"n1",  lane:null},
-    {id:"e1", a:"n1",     b:"n2",  lane:null, label:"não resolvido"},
-    {id:"e2", a:"n2",     b:"n3a", lane:"ticket"},
-    {id:"e3", a:"n2",     b:"n3b", lane:"projeto"},
-    {id:"e4", a:"n3a",    b:"n4a", lane:"ticket"},
-    {id:"e5", a:"n3b",    b:"n4b", lane:"projeto"},
-    {id:"e6", a:"n4b",    b:"tr-agil", lane:"projeto"},
-    {id:"e7", a:"n4b",    b:"tr-cascata", lane:"projeto"},
-    {id:"e8", a:"n4b",    b:"tr-hibrido", lane:"projeto"},
-    {id:"e9", a:"n4a",    b:"licoes", lane:"ticket"},
-    {id:"e10",a:"tr-agil",b:"licoes", lane:"projeto"},
-    {id:"e11",a:"tr-cascata",b:"licoes", lane:"projeto"},
-    {id:"e12",a:"tr-hibrido",b:"licoes", lane:"projeto"},
-    {id:"e13",a:"licoes", b:"n1", lane:null, back:true, label:"alimenta o chatbot"}
+    {id:"e1", a:"n1",  b:"n2",   c:"--bot"},
+    {id:"e2", a:"n2",  b:"n3a",  c:"--tick"},
+    {id:"e3", a:"n2",  b:"n3b",  c:"--proj"},
+    {id:"e4", a:"n3a", b:"n4a",  c:"--tick"},
+    {id:"e5", a:"n3b", b:"n4b",  c:"--proj"},
+    {id:"e6", a:"n4b", b:"tAgil",c:"--agil"},
+    {id:"e7", a:"n4b", b:"tCasc",c:"--casc"},
+    {id:"e8", a:"n4b", b:"tHib", c:"--hib"},
+    {id:"e9", a:"tAgil",b:"n5",  c:"--agil"},
+    {id:"e10",a:"tCasc",b:"n5",  c:"--casc"},
+    {id:"e11",a:"tHib", b:"n5",  c:"--hib"},
+    {id:"e12",a:"n5",  b:"n6",   c:"--apr"},
+    {id:"e13",a:"n4a", b:"n6",   c:"--agir"},
+    {id:"e14",a:"n6",  b:"n1",   c:"--lic", back:true}
   ];
 
-  var wires = {};  // id -> {base, flow, label}
+  var W = {};
 
   function box(id){
-    var node = id === "need" ? need : el(id);
-    var r = node.getBoundingClientRect();
-    var s = stage.getBoundingClientRect();
-    return {
-      left:r.left-s.left, right:r.right-s.left,
-      top:r.top-s.top, bottom:r.bottom-s.top,
-      cx:r.left-s.left+r.width/2, cy:r.top-s.top+r.height/2
-    };
+    var r = el(id).getBoundingClientRect(), s = stage.getBoundingClientRect();
+    return {left:r.left-s.left, right:r.right-s.left, top:r.top-s.top, bottom:r.bottom-s.top,
+            cx:r.left-s.left+r.width/2, cy:r.top-s.top+r.height/2};
   }
 
-  function d(edge){
-    var a = box(edge.a), b = box(edge.b);
-    if(edge.back){
-      var gx = 26, r = 12;
-      return "M"+a.left+" "+a.cy+" L"+(gx+r)+" "+a.cy+
-             " Q"+gx+" "+a.cy+" "+gx+" "+(a.cy-r)+
-             " L"+gx+" "+(b.cy+r)+
-             " Q"+gx+" "+b.cy+" "+(gx+r)+" "+b.cy+
-             " L"+(b.left-2)+" "+b.cy;
+  function dOf(e){
+    var a = box(e.a), b = box(e.b);
+    if(e.back){
+      var g = 20, r = 14;
+      return "M"+a.left+" "+a.cy+" L"+(g+r)+" "+a.cy+
+             " Q"+g+" "+a.cy+" "+g+" "+(a.cy-r)+
+             " L"+g+" "+(b.cy+r)+
+             " Q"+g+" "+b.cy+" "+(g+r)+" "+b.cy+
+             " L"+(b.left-9)+" "+b.cy;
     }
-    var y1 = a.bottom+2, y2 = b.top-4, m = (y1+y2)/2;
+    var y1 = a.bottom+3, y2 = b.top-11, m = (y1+y2)/2;
     return "M"+a.cx+" "+y1+" C"+a.cx+" "+m+", "+b.cx+" "+m+", "+b.cx+" "+y2;
   }
 
   function build(){
     EDGES.forEach(function(e){
+      var col = "var("+e.c+")";
       var base = document.createElementNS(SVGNS,"path");
-      base.setAttribute("class","wire");
-      base.setAttribute("marker-end","url(#ar)");
+      base.setAttribute("class","wire"); base.setAttribute("stroke",col);
       svg.appendChild(base);
-      var flow = document.createElementNS(SVGNS,"path");
-      flow.setAttribute("class","flow");
-      flow.setAttribute("stroke", e.lane==="projeto" ? "var(--projeto)" : "var(--ticket)");
-      svg.appendChild(flow);
-      var label = null;
-      if(e.label){
-        label = document.createElementNS(SVGNS,"text");
-        label.setAttribute("class","wlabel"+(e.lane?" lane-"+e.lane:""));
-        label.setAttribute("text-anchor","middle");
-        label.textContent = e.label;
-        svg.appendChild(label);
+      var dash = document.createElementNS(SVGNS,"path");
+      dash.setAttribute("class","dash"); dash.setAttribute("stroke",col);
+      svg.appendChild(dash);
+      var tri = document.createElementNS(SVGNS,"path");
+      tri.setAttribute("class","head-tri"); tri.setAttribute("fill",col);
+      tri.setAttribute("d","M0 0 L-11 5.5 L-11 -5.5 Z");
+      svg.appendChild(tri);
+      var tag = null;
+      if(e.tag){
+        tag = document.createElementNS(SVGNS,"text");
+        tag.setAttribute("class","tag"); tag.setAttribute("fill",col);
+        tag.setAttribute("text-anchor","middle");
+        tag.textContent = e.tag;
+        svg.appendChild(tag);
       }
-      wires[e.id] = {base:base, flow:flow, label:label, def:e};
+      W[e.id] = {e:e, base:base, dash:dash, tri:tri, tag:tag};
     });
+    var glow = document.createElementNS(SVGNS,"circle");
+    glow.setAttribute("class","token"); glow.setAttribute("r","11"); glow.setAttribute("opacity","0");
+    svg.appendChild(glow);
     var dot = document.createElementNS(SVGNS,"circle");
-    dot.setAttribute("class","pulse"); dot.setAttribute("r","5");
+    dot.setAttribute("class","token"); dot.setAttribute("r","6");
     svg.appendChild(dot);
-    wires.dot = dot;
+    W.glow = glow; W.dot = dot;
     layout();
   }
 
+  function fit(){
+    var canvas = stage.parentElement;
+    stage.style.transform = "none";
+    var natural = stage.offsetWidth, tall = stage.offsetHeight;
+    var s = Math.min(1, canvas.clientWidth / natural);
+    if(s < 1){
+      stage.style.transformOrigin = "top left";
+      stage.style.transform = "scale("+s+")";
+      canvas.style.height = Math.ceil(tall*s)+"px";
+    }else{
+      canvas.style.height = "";
+    }
+  }
+
   function layout(){
-    var w = stage.offsetWidth, h = stage.offsetHeight;
-    svg.setAttribute("viewBox","0 0 "+w+" "+h);
+    stage.style.transform = "none";
+    svg.setAttribute("viewBox","0 0 "+stage.offsetWidth+" "+stage.offsetHeight);
     EDGES.forEach(function(e){
-      var w2 = wires[e.id];
-      var path = d(e);
-      w2.base.setAttribute("d", path);
-      w2.flow.setAttribute("d", path);
-      if(w2.label){
+      var w = W[e.id], p = dOf(e);
+      w.base.setAttribute("d", p);
+      w.dash.setAttribute("d", p);
+      var len = w.base.getTotalLength();
+      var pt = w.base.getPointAtLength(len), pv = w.base.getPointAtLength(Math.max(0,len-2));
+      var ang = Math.atan2(pt.y-pv.y, pt.x-pv.x)*180/Math.PI;
+      w.tri.setAttribute("transform","translate("+pt.x+","+pt.y+") rotate("+ang+")");
+      if(w.tag){
         var a = box(e.a), b = box(e.b);
         if(e.back){
-          var mx = 26 - 6, my = (a.cy+b.cy)/2;
-          w2.label.setAttribute("x", mx);
-          w2.label.setAttribute("y", my);
-          w2.label.setAttribute("text-anchor","middle");
-          w2.label.setAttribute("transform","rotate(-90 "+mx+" "+my+")");
+          var mx = 20, my = (a.cy+b.cy)/2;
+          w.tag.setAttribute("x", mx); w.tag.setAttribute("y", my);
+          w.tag.setAttribute("transform","rotate(-90 "+mx+" "+my+")");
         }else{
-          w2.label.setAttribute("x", (a.cx+b.cx)/2 + (e.lane?0:8));
-          w2.label.setAttribute("y", (a.bottom+b.top)/2 + 4);
+          var q = w.base.getPointAtLength(len*0.45);
+          w.tag.setAttribute("x", q.x); w.tag.setAttribute("y", q.y-8);
         }
       }
     });
+    fit();
   }
 
-  /* ---------- estado visual ---------- */
-  var ALL_NODES = ["n1","n2","n3a","n3b","n4a","n4b","tr-agil","tr-cascata","tr-hibrido","licoes"];
+  var NODES = ["n1","n2","n3a","n3b","n4a","n4b","tAgil","tCasc","tHib","n5","n6"];
 
-  function clearAll(){
-    ALL_NODES.forEach(function(id){ el(id).classList.remove("active","dim"); });
-    need.classList.remove("active");
+  function reset(){
+    NODES.forEach(function(id){ el(id).classList.remove("on","off"); });
     EDGES.forEach(function(e){
-      var w2 = wires[e.id];
-      w2.base.classList.remove("hot","hot-projeto","dim");
-      w2.base.setAttribute("marker-end","url(#ar)");
-      w2.flow.classList.remove("on");
+      W[e.id].base.classList.remove("lit");
+      W[e.id].dash.classList.remove("lit");
+      W[e.id].tri.classList.remove("lit");
     });
-    wires.dot.classList.remove("on");
+    W.dot.classList.remove("on"); W.glow.classList.remove("on");
   }
 
-  function activate(id){
-    if(id === "need"){ need.classList.add("active"); return; }
-    el(id).classList.add("active");
+  function focus(route){
+    var keep = {};
+    route.forEach(function(s){ if(s[0]==="n") keep[s[1]] = 1; });
+    NODES.forEach(function(id){ el(id).classList.toggle("off", !keep[id]); });
   }
 
-  function heat(edgeId){
-    var w2 = wires[edgeId];
-    var lane = w2.def.lane;
-    w2.base.classList.add(lane === "projeto" ? "hot-projeto" : "hot");
-    w2.base.setAttribute("marker-end", lane === "projeto" ? "url(#ar-p)" : "url(#ar-t)");
-    if(!reduce) w2.flow.classList.add("on");
-  }
+  var raf = null, playing = false, timer = null, mode = "auto", turn = 0, trilhaTurn = 0;
 
-  /* ---------- pulso ---------- */
-  var raf = null;
-  function travel(edgeId, done){
-    var w2 = wires[edgeId], p = w2.base, dot = wires.dot;
-    var len = p.getTotalLength();
-    dot.setAttribute("fill", w2.def.lane === "projeto" ? "var(--projeto)" : "var(--ticket)");
-    if(reduce){ heat(edgeId); done(); return; }
-    heat(edgeId);
-    dot.classList.add("on");
-    var dur = Math.max(420, Math.min(1100, len*3.2)) / speed;
+  function travel(eid, done){
+    var w = W[eid];
+    w.base.classList.add("lit"); w.tri.classList.add("lit");
+    if(!reduce) w.dash.classList.add("lit");
+    var col = getComputedStyle(document.documentElement).getPropertyValue(w.e.c).trim();
+    W.dot.setAttribute("fill", col);
+    W.glow.setAttribute("fill", col); W.glow.setAttribute("opacity",".22");
+    if(reduce){ done(); return; }
+    var p = w.base, len = p.getTotalLength();
+    var dur = Math.max(380, Math.min(950, len*2.9));
+    W.dot.classList.add("on"); W.glow.classList.add("on");
     var t0 = null;
     function step(ts){
-      if(t0 === null) t0 = ts;
-      var k = Math.min(1, (ts-t0)/dur);
-      var pt = p.getPointAtLength(len*k);
-      dot.setAttribute("cx", pt.x); dot.setAttribute("cy", pt.y);
-      if(k < 1){ raf = requestAnimationFrame(step); }
-      else { dot.classList.remove("on"); done(); }
+      if(t0===null) t0 = ts;
+      var k = Math.min(1,(ts-t0)/dur);
+      var e = k<.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2;
+      var pt = p.getPointAtLength(len*e);
+      W.dot.setAttribute("cx",pt.x); W.dot.setAttribute("cy",pt.y);
+      W.glow.setAttribute("cx",pt.x); W.glow.setAttribute("cy",pt.y);
+      if(k<1){ raf = requestAnimationFrame(step); }
+      else { W.dot.classList.remove("on"); W.glow.classList.remove("on"); done(); }
     }
     raf = requestAnimationFrame(step);
   }
 
-  /* ---------- roteiros ---------- */
-  function script(kind, trilha){
-    if(kind === "resolvido") return [["node","need"],["edge","e0"],["node","n1"],["end","bot"]];
-    if(kind === "ticket") return [["node","need"],["edge","e0"],["node","n1"],["edge","e1"],["node","n2"],
-      ["edge","e2"],["node","n3a"],["edge","e4"],["node","n4a"],["edge","e9"],["node","licoes"],
-      ["edge","e13"],["node","n1"],["end","ticket"]];
-    var t = trilha || "agil";
-    var eTo = {agil:"e6", cascata:"e7", hibrido:"e8"}[t];
-    var eFrom = {agil:"e10", cascata:"e11", hibrido:"e12"}[t];
-    return [["node","need"],["edge","e0"],["node","n1"],["edge","e1"],["node","n2"],
-      ["edge","e3"],["node","n3b"],["edge","e5"],["node","n4b"],["edge",eTo],["node","tr-"+t],
-      ["edge",eFrom],["node","licoes"],["edge","e13"],["node","n1"],["end","projeto"]];
-  }
-
-  /* ---------- motor ---------- */
-  var playing = false, timer = null, speed = 1;
-  var mode = "auto", cycle = 0, trilhaCycle = 0;
-  var stats = {total:0, bot:0, ticket:0, proj:0, licoes:0};
-  var statusLine = el("statusLine");
-
-  function say(s){ statusLine.textContent = s; }
-
-  function bump(key){
-    stats[key]++;
-    el("sTotal").textContent = stats.total;
-    el("sBot").textContent = stats.bot;
-    el("sTicket").textContent = stats.ticket;
-    el("sProj").textContent = stats.proj;
-    el("sLicoes").textContent = stats.licoes;
-  }
-
-  function pickKind(){
-    if(mode !== "auto") return mode;
-    var order = ["resolvido","ticket","resolvido","projeto"];
-    return order[cycle++ % order.length];
+  function route(kind, trilha){
+    if(kind === "ticket"){
+      return [["n","n1"],["e","e1"],["n","n2"],["e","e2"],["n","n3a"],["e","e4"],["n","n4a"],
+              ["e","e13"],["n","n6"],["e","e14"],["n","n1"]];
+    }
+    var map = {agil:["tAgil","e6","e9"], cascata:["tCasc","e7","e10"], hibrida:["tHib","e8","e11"]};
+    var t = map[trilha];
+    return [["n","n1"],["e","e1"],["n","n2"],["e","e3"],["n","n3b"],["e","e5"],["n","n4b"],
+            ["e",t[1]],["n",t[0]],["e",t[2]],["n","n5"],["e","e12"],["n","n6"],["e","e14"],["n","n1"]];
   }
 
   function run(){
     if(!playing) return;
-    var kind = pickKind();
-    var trilhas = ["agil","cascata","hibrido"];
-    var trilha = trilhas[trilhaCycle++ % 3];
-    var steps = script(kind, trilha);
+    var kind = mode === "auto" ? (turn++ % 2 ? "projeto" : "ticket") : mode;
+    var trilhas = ["agil","cascata","hibrida"];
+    var r = route(kind, trilhas[trilhaTurn++ % 3]);
+    reset(); focus(r);
     var i = 0;
-    clearAll();
-    say("demanda entrando…");
-
-    function next(){
+    (function next(){
       if(!playing) return;
-      if(i >= steps.length){ return; }
-      var s = steps[i++];
-      if(s[0] === "node"){
-        activate(s[1]);
-        var label = s[1] === "need" ? "necessidade registrada" :
-                    s[1] === "n1" ? "chatbot consultando docs, normas e lições" :
-                    s[1] === "n2" ? "classificando: ticket ou projeto?" :
-                    s[1] === "n3a" ? "priorizando na fila (CoS · GUT · SLA)" :
-                    s[1] === "n4a" ? "executando: ver e agir" :
-                    s[1] === "n3b" ? "AHP + entrevista de valor → ranking" :
-                    s[1] === "n4b" ? "matriz decidindo a trilha" :
-                    s[1] === "licoes" ? "registrando lição aprendida" :
-                    "trilha definida: " + s[1].replace("tr-","");
-        say(label);
-        timer = setTimeout(next, (s[1] === "need" ? 420 : 700)/speed);
-      } else if(s[0] === "edge"){
-        travel(s[1], next);
-      } else {
-        if(s[1] === "bot"){ bump("bot"); say("resolvido na porta de entrada — não virou ticket"); }
-        if(s[1] === "ticket"){ bump("ticket"); bump("licoes"); say("ticket concluído — lição alimentou o chatbot"); }
-        if(s[1] === "projeto"){ bump("proj"); bump("licoes"); say("projeto concluído — lição alimentou o chatbot"); }
-        bump("total");
-        timer = setTimeout(function(){ if(playing) run(); }, 1400/speed);
-      }
-    }
-    next();
+      if(i >= r.length){ timer = setTimeout(function(){ if(playing) run(); }, 1500); return; }
+      var s = r[i++];
+      if(s[0] === "n"){ el(s[1]).classList.add("on"); timer = setTimeout(next, 480); }
+      else { travel(s[1], next); }
+    })();
   }
 
   function stop(){
     playing = false;
     if(timer) clearTimeout(timer);
     if(raf) cancelAnimationFrame(raf);
-    el("play").textContent = "▶ Rodar funil";
+    el("play").textContent = "▶ Animar";
     el("play").setAttribute("aria-pressed","false");
-    say("parado");
+  }
+  function start(){
+    playing = true;
+    el("play").textContent = "❚❚ Pausar";
+    el("play").setAttribute("aria-pressed","true");
+    run();
   }
 
-  el("play").addEventListener("click", function(){
-    if(playing){ stop(); return; }
-    playing = true;
-    this.textContent = "❚❚ Pausar";
-    this.setAttribute("aria-pressed","true");
-    run();
-  });
-
-  el("reset").addEventListener("click", function(){
-    stop(); clearAll();
-    stats = {total:0,bot:0,ticket:0,proj:0,licoes:0};
-    ["sTotal","sBot","sTicket","sProj","sLicoes"].forEach(function(id){ el(id).textContent = "0"; });
-    say("zerado");
-  });
+  el("play").addEventListener("click", function(){ playing ? stop() : start(); });
 
   Array.prototype.forEach.call(document.querySelectorAll("[data-run]"), function(b){
     b.addEventListener("click", function(){
+      var same = b.getAttribute("aria-pressed") === "true";
       Array.prototype.forEach.call(document.querySelectorAll("[data-run]"), function(x){
-        x.setAttribute("aria-pressed", String(x === b));
+        x.setAttribute("aria-pressed", String(!same && x === b));
       });
-      mode = b.getAttribute("data-run");
-      if(playing){ if(timer) clearTimeout(timer); if(raf) cancelAnimationFrame(raf); clearAll(); run(); }
+      mode = same ? "auto" : b.getAttribute("data-run");
+      if(timer) clearTimeout(timer);
+      if(raf) cancelAnimationFrame(raf);
+      if(!playing) start(); else run();
     });
   });
 
-  /* ---------- detalhe ---------- */
-  function show(key){
-    var info = DETAIL[key];
-    if(!info) return;
-    el("dTitle").textContent = info.t;
-    el("dMeta").textContent = info.m;
-    el("dBody").textContent = info.b;
-    el("dMarca").textContent = info.n;
-    Array.prototype.forEach.call(document.querySelectorAll(".node,.trilha"), function(n){
-      n.classList.toggle("selected", n.getAttribute("data-key") === key);
-    });
-  }
-  Array.prototype.forEach.call(document.querySelectorAll("[data-key]"), function(n){
-    n.addEventListener("click", function(){ show(n.getAttribute("data-key")); });
-  });
-  need.setAttribute("tabindex","0");
-  need.addEventListener("click", function(){ show("need"); });
-  need.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); show("need"); } });
-
-  /* ---------- início ---------- */
   build();
   window.addEventListener("resize", layout);
-  if(window.ResizeObserver){ new ResizeObserver(layout).observe(stage); }
-  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(layout); }
-  if(!reduce){
-    setTimeout(function(){ el("play").click(); }, 600);
-  } else {
-    say("animação reduzida — use os botões");
-  }
+  if(window.ResizeObserver) new ResizeObserver(layout).observe(stage);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+  if(!reduce) setTimeout(start, 500);
 })();
 </script>
