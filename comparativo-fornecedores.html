@@ -9,40 +9,40 @@
 
 :root{
   color-scheme:light dark;
-  --paper:#E4E9EB; --panel:#F9FAFB; --panel-2:#EDF1F2; --sunk:#DCE3E6;
+  --paper:#E4E9EB; --panel:#F9FAFB; --panel-2:#EDF1F2;
   --ink:#0F171B; --ink-2:#4A575E; --ink-3:#75858D;
   --rule:#C2CCD0; --rule-2:#9DABB1;
-  --oxide:#1B4C61; --oxide-2:#356E86; --track:#CBDBE3;
-  --brass:#8A6512; --brass-2:#B5891D;
+  --bar:#23596F; --bar-best:#8A6512; --on-bar:#FFFFFF;
+  --brass:#8A6512; --brass-2:#B5891D; --oxide:#1B4C61;
   --adverse:#8C3A30;
   --shadow:0 1px 0 rgba(15,23,27,.05), 0 1px 3px rgba(15,23,27,.06);
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --paper:#0B1113; --panel:#141D21; --panel-2:#1A252A; --sunk:#101A1D;
+    --paper:#0B1113; --panel:#141D21; --panel-2:#1A252A;
     --ink:#E1E9EC; --ink-2:#9AAAB2; --ink-3:#74848C;
     --rule:#26343A; --rule-2:#3D4F57;
-    --oxide:#6FAFCA; --oxide-2:#4C8CA8; --track:#1E3945;
-    --brass:#D6AA43; --brass-2:#D6AA43;
+    --bar:#6FAFCA; --bar-best:#D6AA43; --on-bar:#0B1113;
+    --brass:#D6AA43; --brass-2:#D6AA43; --oxide:#6FAFCA;
     --adverse:#DE8577;
     --shadow:0 1px 0 rgba(0,0,0,.3), 0 1px 4px rgba(0,0,0,.35);
   }
 }
 :root[data-theme="light"]{
-  --paper:#E4E9EB; --panel:#F9FAFB; --panel-2:#EDF1F2; --sunk:#DCE3E6;
+  --paper:#E4E9EB; --panel:#F9FAFB; --panel-2:#EDF1F2;
   --ink:#0F171B; --ink-2:#4A575E; --ink-3:#75858D;
   --rule:#C2CCD0; --rule-2:#9DABB1;
-  --oxide:#1B4C61; --oxide-2:#356E86; --track:#CBDBE3;
-  --brass:#8A6512; --brass-2:#B5891D;
+  --bar:#23596F; --bar-best:#8A6512; --on-bar:#FFFFFF;
+  --brass:#8A6512; --brass-2:#B5891D; --oxide:#1B4C61;
   --adverse:#8C3A30;
   --shadow:0 1px 0 rgba(15,23,27,.05), 0 1px 3px rgba(15,23,27,.06);
 }
 :root[data-theme="dark"]{
-  --paper:#0B1113; --panel:#141D21; --panel-2:#1A252A; --sunk:#101A1D;
+  --paper:#0B1113; --panel:#141D21; --panel-2:#1A252A;
   --ink:#E1E9EC; --ink-2:#9AAAB2; --ink-3:#74848C;
   --rule:#26343A; --rule-2:#3D4F57;
-  --oxide:#6FAFCA; --oxide-2:#4C8CA8; --track:#1E3945;
-  --brass:#D6AA43; --brass-2:#D6AA43;
+  --bar:#6FAFCA; --bar-best:#D6AA43; --on-bar:#0B1113;
+  --brass:#D6AA43; --brass-2:#D6AA43; --oxide:#6FAFCA;
   --adverse:#DE8577;
   --shadow:0 1px 0 rgba(0,0,0,.3), 0 1px 4px rgba(0,0,0,.35);
 }
@@ -50,170 +50,113 @@
 *{box-sizing:border-box}
 body{
   margin:0; background:var(--paper); color:var(--ink);
-  font-family:"Texto",system-ui,sans-serif; font-size:15px; line-height:1.6;
+  font-family:"Texto",system-ui,sans-serif; font-size:15px; line-height:1.55;
   -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:1260px; margin:0 auto; padding:clamp(20px,4vw,52px) clamp(16px,3.5vw,40px) 72px; display:flex; flex-direction:column; gap:clamp(30px,4.5vw,52px)}
-
-/* ---------- micro type ---------- */
+.wrap{max-width:1180px; margin:0 auto; padding:clamp(22px,4vw,54px) clamp(16px,3.5vw,40px) 64px; display:flex; flex-direction:column; gap:clamp(28px,4vw,44px)}
 .lbl{font-family:"Dado",monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3)}
 .num{font-family:"Dado",monospace; font-variant-numeric:tabular-nums}
 
-/* ---------- cabeçalho / bloco de carimbo ---------- */
-.head{display:flex; flex-direction:column; gap:20px}
-.eyebrow{display:flex; flex-wrap:wrap; align-items:center; gap:10px}
-.eyebrow .bar{width:34px; height:2px; background:var(--brass-2)}
+/* ---------- cabeçalho ---------- */
+.head{display:flex; flex-direction:column; gap:14px}
+.eyebrow{display:flex; align-items:center; gap:10px}
+.eyebrow .bar{width:32px; height:2px; background:var(--brass-2)}
 h1{
   font-family:"Titulo",Georgia,serif; font-weight:700;
-  font-size:clamp(28px,4.4vw,45px); line-height:1.1; letter-spacing:-.012em;
-  margin:0; text-wrap:balance; max-width:19ch;
+  font-size:clamp(27px,4.2vw,42px); line-height:1.1; letter-spacing:-.012em;
+  margin:0; text-wrap:balance; max-width:17ch;
 }
-.lead{margin:0; max-width:64ch; color:var(--ink-2); font-size:clamp(15px,1.45vw,16.5px)}
-.lead strong{color:var(--ink)}
-
-.stamp{
-  display:grid; grid-template-columns:repeat(4,1fr);
-  border:1px solid var(--rule-2); background:var(--panel);
-  box-shadow:var(--shadow);
-}
-.stamp > div{padding:11px 14px 12px; border-right:1px solid var(--rule); display:flex; flex-direction:column; gap:3px; min-width:0}
-.stamp > div:last-child{border-right:0}
-.stamp b{font-family:"Dado",monospace; font-weight:700; font-size:13.5px; font-variant-numeric:tabular-nums; color:var(--ink); overflow-wrap:anywhere}
-.stamp span.sub{font-size:11.5px; color:var(--ink-3); line-height:1.35}
-
-/* ---------- resumo ---------- */
-.resumo{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--rule-2); border:1px solid var(--rule-2); box-shadow:var(--shadow)}
-.tile{background:var(--panel); padding:16px 18px 18px; display:flex; flex-direction:column; gap:6px}
-.tile .v{font-family:"Dado",monospace; font-weight:700; font-variant-numeric:tabular-nums; font-size:clamp(21px,2.7vw,29px); line-height:1.05; letter-spacing:-.02em}
-.tile .v.hi{color:var(--brass)}
-.tile .v.lo{color:var(--oxide)}
-.tile .n{font-size:12.5px; color:var(--ink-2); line-height:1.4}
+.taxa{display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 16px; border-top:1px solid var(--rule-2); border-bottom:1px solid var(--rule-2); padding:10px 0}
+.taxa b{font-family:"Dado",monospace; font-weight:700; font-size:14px; font-variant-numeric:tabular-nums}
+.taxa span{font-size:12.5px; color:var(--ink-3)}
 
 /* ---------- seções ---------- */
-section{display:flex; flex-direction:column; gap:18px}
-.sechead{display:flex; align-items:baseline; gap:12px; border-bottom:1px solid var(--rule-2); padding-bottom:9px; flex-wrap:wrap}
-.sechead .no{font-family:"Dado",monospace; font-weight:700; font-size:12px; color:var(--brass); letter-spacing:.06em}
-.sechead h2{font-family:"Titulo",Georgia,serif; font-weight:700; font-size:clamp(17px,2vw,21px); margin:0; letter-spacing:-.005em}
-.sechead .note{margin-left:auto; font-size:12px; color:var(--ink-3)}
+section{display:flex; flex-direction:column; gap:14px}
+.sechead{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap}
+.sechead h2{font-family:"Titulo",Georgia,serif; font-weight:700; font-size:clamp(17px,2vw,20px); margin:0}
+.sechead .note{font-size:12.5px; color:var(--ink-3)}
 
-/* ---------- colunas lado a lado ---------- */
-.grid{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0; border-top:1px solid var(--rule-2); border-left:1px solid var(--rule-2); box-shadow:var(--shadow)}
-.col{background:var(--panel); border-right:1px solid var(--rule-2); border-bottom:1px solid var(--rule-2); display:flex; flex-direction:column; padding:0 0 16px; min-width:0}
-.col.best{background:var(--panel-2)}
-.cap{height:4px; background:var(--rule-2)}
-.col.best .cap{background:var(--brass-2)}
-.col.top .cap{background:var(--oxide-2)}
-.colhead{padding:12px 15px 0; display:flex; flex-direction:column; gap:2px}
-.rank{display:flex; align-items:center; gap:8px; justify-content:space-between}
-.rank .r{font-family:"Dado",monospace; font-weight:700; font-size:12px; color:var(--ink-3); letter-spacing:.06em}
-.tag{font-family:"Dado",monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; padding:2px 6px; border:1px solid var(--brass-2); color:var(--brass); white-space:nowrap}
-.tag.neutro{border-color:var(--rule-2); color:var(--ink-3)}
-.forn{font-family:"Titulo",Georgia,serif; font-weight:700; font-size:clamp(17px,1.9vw,21px); line-height:1.15; margin-top:5px; letter-spacing:-.01em; overflow-wrap:anywhere}
-.orig{font-size:11.5px; color:var(--ink-3)}
-
-.preco{padding:14px 15px 13px; display:flex; flex-direction:column; gap:5px; border-top:1px solid var(--rule); margin-top:12px}
-.preco .cur{font-family:"Dado",monospace; font-size:11px; color:var(--ink-3); letter-spacing:.08em}
-.preco .v{font-family:"Dado",monospace; font-weight:700; font-variant-numeric:tabular-nums; font-size:clamp(16px,1.75vw,20px); line-height:1.1; letter-spacing:-.03em; color:var(--ink)}
-.col.best .preco .v{color:var(--brass)}
-.delta{font-family:"Dado",monospace; font-size:12px; font-variant-numeric:tabular-nums; color:var(--adverse); display:flex; flex-direction:column; gap:1px}
-.delta.ref{color:var(--ink-3)}
-.delta .pct{font-weight:700}
-
-.especs{margin-top:auto; padding:0 15px; display:flex; flex-direction:column}
-.esp{display:flex; flex-direction:column; gap:1px; padding:9px 0; border-top:1px solid var(--rule)}
-.esp .k{font-family:"Dado",monospace; font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-3)}
-.esp .d{font-size:12.5px; line-height:1.4; color:var(--ink-2)}
-.esp .d .num{font-size:12.5px; color:var(--ink)}
-.esp .d.nd{color:var(--ink-3); font-style:italic}
-sup.fn{font-family:"Dado",monospace; font-size:9px; color:var(--brass); vertical-align:super; margin-left:1px}
-a.fn{color:var(--brass); text-decoration:none; border-bottom:1px dotted var(--brass)}
-a.fn:focus-visible{outline:2px solid var(--oxide-2); outline-offset:2px}
-
-/* ---------- escala / régua ---------- */
-.escala{border:1px solid var(--rule-2); background:var(--panel); box-shadow:var(--shadow); padding:20px clamp(14px,2.4vw,26px) 16px}
-.ruler{display:grid; grid-template-columns:minmax(112px,158px) 1fr; column-gap:clamp(12px,1.8vw,22px); row-gap:0; align-items:center}
-.rlab{display:flex; flex-direction:column; align-items:flex-end; gap:0; padding:8px 0; min-width:0}
-.rlab .n{font-weight:700; font-size:13px; line-height:1.25; overflow-wrap:anywhere}
-.rlab .v{font-family:"Dado",monospace; font-size:11.5px; font-variant-numeric:tabular-nums; color:var(--ink-2); line-height:1.35}
-.rlab.best .v{color:var(--brass); font-weight:700}
-.rtrack{position:relative; height:36px; display:flex; align-items:center}
-.rtrack .ticks{position:absolute; inset:0; display:flex; justify-content:space-between; pointer-events:none}
+/* ---------- gráfico ---------- */
+.chart{border:1px solid var(--rule-2); background:var(--panel); box-shadow:var(--shadow); padding:clamp(18px,2.6vw,28px) clamp(14px,2.4vw,26px) 16px}
+.ruler{display:grid; grid-template-columns:minmax(90px,132px) 1fr minmax(66px,78px); column-gap:clamp(10px,1.6vw,18px); align-items:center}
+.rname{font-weight:700; font-size:14px; text-align:right; overflow-wrap:anywhere}
+.rtrack{position:relative; height:46px; display:flex; align-items:center}
+.rtrack .ticks{position:absolute; inset:4px 0; display:flex; justify-content:space-between; pointer-events:none}
 .rtrack .ticks i{flex:0 0 1px; background:var(--rule); display:block}
-.rbar{position:relative; height:16px; flex:0 0 var(--w); background:var(--oxide-2); clip-path:inset(0 0 0 0)}
-.rbar.best{background:var(--brass-2)}
-.rcap{position:absolute; left:var(--w); top:50%; transform:translateY(-50%); width:1px; height:30px; background:var(--ink-3)}
-.axis{display:grid; grid-template-columns:minmax(112px,158px) 1fr; column-gap:clamp(12px,1.8vw,22px); margin-top:6px; padding-top:8px; border-top:1px solid var(--rule-2)}
-.axis .marks{position:relative; display:flex; justify-content:space-between}
-.axis .marks span{font-family:"Dado",monospace; font-size:10.5px; color:var(--ink-3); font-variant-numeric:tabular-nums; transform:translateX(-50%)}
-.axis .marks span:first-child{transform:none}
-.axis .marks span:last-child{transform:translateX(-100%)}
-.axis .unit{font-family:"Dado",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); text-align:right; align-self:center}
+.rbar{
+  position:relative; z-index:1; height:30px; flex:0 0 var(--w); background:var(--bar);
+  display:flex; align-items:center; justify-content:flex-end; padding-right:11px;
+  clip-path:inset(0 0 0 0);
+}
+.rbar.best{background:var(--bar-best)}
+.rbar b{font-family:"Dado",monospace; font-weight:700; font-size:clamp(12px,1.35vw,15px); font-variant-numeric:tabular-nums; color:var(--on-bar); white-space:nowrap}
+.rpct{font-family:"Dado",monospace; font-weight:700; font-size:13px; font-variant-numeric:tabular-nums; color:var(--adverse); white-space:nowrap}
+.rpct.ref{color:var(--brass)}
+.axis{display:grid; grid-template-columns:minmax(90px,132px) 1fr minmax(66px,78px); column-gap:clamp(10px,1.6vw,18px); margin-top:4px; padding-top:8px; border-top:1px solid var(--rule-2)}
+.axis .unit{font-family:"Dado",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); text-align:right}
+.axis .marks{display:flex; justify-content:space-between; height:15px}
+.axis .marks i{flex:0 0 1px; position:relative}
+.axis .marks i::before{
+  content:attr(data-v); position:absolute; top:0; left:50%; transform:translateX(-50%);
+  font-family:"Dado",monospace; font-style:normal; font-size:10.5px; color:var(--ink-3); font-variant-numeric:tabular-nums;
+}
 @media (prefers-reduced-motion:no-preference){
-  .rbar{animation:sweep .85s cubic-bezier(.22,.68,.32,1) both; animation-delay:var(--d,0s)}
+  .rbar{animation:sweep .8s cubic-bezier(.22,.68,.32,1) both; animation-delay:var(--d,0s)}
   @keyframes sweep{from{clip-path:inset(0 100% 0 0)} to{clip-path:inset(0 0 0 0)}}
 }
 
-/* ---------- tabela ---------- */
-.tabwrap{overflow-x:auto; border:1px solid var(--rule-2); background:var(--panel); box-shadow:var(--shadow)}
-table{border-collapse:collapse; width:100%; min-width:820px; font-size:13px}
-thead th{
-  font-family:"Dado",monospace; font-size:9.5px; letter-spacing:.11em; text-transform:uppercase;
-  color:var(--ink-3); font-weight:400; text-align:right; padding:11px 14px; border-bottom:1px solid var(--rule-2);
-  background:var(--panel-2); white-space:nowrap; vertical-align:bottom;
-}
-thead th:first-child{text-align:left}
-tbody td{padding:11px 14px; border-bottom:1px solid var(--rule); text-align:right; font-variant-numeric:tabular-nums; font-family:"Dado",monospace; white-space:nowrap}
-tbody td:first-child{text-align:left; font-family:"Texto",sans-serif; font-weight:700; white-space:nowrap}
-tbody tr:last-child td{border-bottom:0}
-tbody tr.destaque td{background:var(--panel-2)}
-tbody tr.destaque td:first-child{color:var(--brass)}
-td.nd{color:var(--ink-3); font-family:"Texto",sans-serif; font-style:italic}
-td.dt{color:var(--adverse)}
-tfoot td{padding:10px 14px; font-size:11.5px; color:var(--ink-3); border-top:1px solid var(--rule-2); text-align:left; font-family:"Texto",sans-serif}
+/* ---------- cards lado a lado ---------- */
+.grid{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0; border-top:1px solid var(--rule-2); border-left:1px solid var(--rule-2); box-shadow:var(--shadow)}
+.col{background:var(--panel); border-right:1px solid var(--rule-2); border-bottom:1px solid var(--rule-2); display:flex; flex-direction:column; min-width:0}
+.col.best{background:var(--panel-2)}
+.cap{height:4px; background:var(--rule-2)}
+.col.best .cap{background:var(--brass-2)}
+.cbody{padding:13px 15px 16px; display:flex; flex-direction:column; gap:3px; flex:1}
+.rank{display:flex; align-items:center; justify-content:space-between; gap:8px}
+.rank .r{font-family:"Dado",monospace; font-weight:700; font-size:12px; color:var(--ink-3)}
+.tag{font-family:"Dado",monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; padding:2px 6px; border:1px solid var(--brass-2); color:var(--brass); white-space:nowrap}
+.tag.neutro{border-color:var(--rule-2); color:var(--ink-3)}
+.forn{font-family:"Titulo",Georgia,serif; font-weight:700; font-size:clamp(17px,1.9vw,20px); line-height:1.15; margin-top:5px; letter-spacing:-.01em; overflow-wrap:anywhere}
+.v{font-family:"Dado",monospace; font-weight:700; font-variant-numeric:tabular-nums; font-size:clamp(15px,1.65vw,18px); letter-spacing:-.03em; margin-top:7px}
+.col.best .v{color:var(--brass)}
+.d{font-family:"Dado",monospace; font-size:12.5px; font-variant-numeric:tabular-nums; color:var(--adverse); font-weight:700}
+.d.ref{color:var(--ink-3); font-weight:400}
+.obs{margin-top:auto; padding-top:11px; font-size:12px; color:var(--ink-2); line-height:1.4}
+.obs .num{font-size:11.5px; color:var(--ink)}
 
-/* ---------- premissas ---------- */
-.premissas{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; border-top:1px solid var(--rule-2); border-left:1px solid var(--rule-2); box-shadow:var(--shadow)}
-.prem{background:var(--panel); border-right:1px solid var(--rule-2); border-bottom:1px solid var(--rule-2); padding:15px 17px 17px; display:flex; flex-direction:column; gap:6px}
-.prem .k{display:flex; align-items:baseline; gap:8px}
-.prem .k b{font-family:"Dado",monospace; font-size:11px; color:var(--brass); font-weight:700}
-.prem .k h3{font-family:"Texto",sans-serif; font-size:13.5px; font-weight:700; margin:0; line-height:1.3}
-.prem p{margin:0; font-size:13px; color:var(--ink-2); line-height:1.55}
-.prem p .num{font-size:12.5px; color:var(--ink)}
+/* ---------- pontos de atenção ---------- */
+.notas{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; border-top:1px solid var(--rule-2); border-left:1px solid var(--rule-2); box-shadow:var(--shadow)}
+.nota{background:var(--panel); border-right:1px solid var(--rule-2); border-bottom:1px solid var(--rule-2); padding:14px 16px 16px; display:flex; flex-direction:column; gap:4px}
+.nota h3{font-size:13.5px; font-weight:700; margin:0}
+.nota p{margin:0; font-size:13px; color:var(--ink-2)}
+.nota p .num{font-size:12.5px; color:var(--ink)}
 
-/* ---------- recomendação ---------- */
-.reco{border:1px solid var(--rule-2); border-left:4px solid var(--brass-2); background:var(--panel); box-shadow:var(--shadow); padding:18px clamp(16px,2.4vw,26px) 20px; display:flex; flex-direction:column; gap:9px}
-.reco h2{font-family:"Titulo",Georgia,serif; font-size:19px; margin:0; font-weight:700}
-.reco p{margin:0; max-width:78ch; color:var(--ink-2); font-size:14.5px}
-.reco p .num{color:var(--ink); font-weight:700}
-.reco ul{margin:4px 0 0; padding-left:19px; display:flex; flex-direction:column; gap:5px; color:var(--ink-2); font-size:14px; max-width:78ch}
-.reco li::marker{color:var(--brass)}
-
-footer{border-top:1px solid var(--rule-2); padding-top:14px; font-size:11.5px; color:var(--ink-3); display:flex; flex-wrap:wrap; gap:6px 22px}
+/* ---------- fecho ---------- */
+.reco{border:1px solid var(--rule-2); border-left:4px solid var(--brass-2); background:var(--panel); box-shadow:var(--shadow); padding:16px clamp(16px,2.4vw,24px)}
+.reco p{margin:0; font-size:15.5px; max-width:76ch}
+.reco .num{font-family:"Dado",monospace; font-weight:700; font-variant-numeric:tabular-nums}
+footer{border-top:1px solid var(--rule); padding-top:12px; font-size:11.5px; color:var(--ink-3); display:flex; flex-wrap:wrap; gap:5px 20px}
 
 /* ---------- responsivo ---------- */
-@media (max-width:1060px){
+@media (max-width:900px){
   .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .premissas{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .stamp{grid-template-columns:repeat(2,1fr)}
-  .stamp > div:nth-child(2n){border-right:0}
-  .stamp > div:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+  .notas{grid-template-columns:1fr}
 }
-@media (max-width:720px){
+@media (max-width:620px){
   .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .premissas{grid-template-columns:1fr}
-  .resumo{grid-template-columns:1fr}
   .ruler,.axis{grid-template-columns:1fr}
-  .rlab{flex-direction:row; align-items:baseline; justify-content:space-between; gap:12px; padding:10px 0 2px}
-  .rtrack{height:26px}
+  .rname{text-align:left; padding-top:10px}
+  .rpct{padding-bottom:6px}
+  .rtrack{height:34px}
+  .rbar{height:24px}
   .axis .unit{text-align:left; padding-bottom:4px}
 }
-@media (max-width:460px){ .grid{grid-template-columns:1fr} }
-
+@media (max-width:420px){ .grid{grid-template-columns:1fr} }
 @media print{
   body{background:#fff}
-  .wrap{padding:0; gap:22px; max-width:none}
+  .wrap{padding:0; gap:20px; max-width:none}
   .grid{grid-template-columns:repeat(5,1fr)}
-  section,.escala,.tabwrap,.grid,.resumo{break-inside:avoid}
+  section,.chart,.grid,.notas{break-inside:avoid}
   .rbar{animation:none}
 }
 </style>
@@ -221,316 +164,157 @@ footer{border-top:1px solid var(--rule-2); padding-top:14px; font-size:11.5px; c
 <div class="wrap">
 
   <header class="head">
-    <div class="eyebrow">
-      <span class="bar"></span>
-      <span class="lbl">Suprimentos · Planta de Santa Catarina · Documento interno</span>
-    </div>
-    <h1>Comparativo de preços — linha de montagem automatizada</h1>
-    <p class="lead">Cinco propostas recebidas para o mesmo pacote de automação. A proposta da MASMEC foi convertida de euro para real pela PTAX de fechamento, de modo que <strong>as cinco são lidas na mesma moeda e na mesma base tributária</strong>. A comparação usa o <strong>valor líquido, sem impostos</strong>, porque ICMS, PIS e COFINS são recuperáveis pelo cliente e não representam custo efetivo.</p>
-
-    <div class="stamp">
-      <div>
-        <span class="lbl">Data da análise</span>
-        <b>06/08/2026</b>
-        <span class="sub">Propostas vigentes na data</span>
-      </div>
-      <div>
-        <span class="lbl">Taxa de conversão</span>
-        <b>EUR 1,00 = BRL 5,9062</b>
-        <span class="sub">PTAX venda, fechamento de 05/08/2026 — Banco Central do Brasil</span>
-      </div>
-      <div>
-        <span class="lbl">Base de comparação</span>
-        <b>Valor líquido</b>
-        <span class="sub">Sem impostos recuperáveis</span>
-      </div>
-      <div>
-        <span class="lbl">Propostas</span>
-        <b>5</b>
-        <span class="sub">Bosch · Mondragon · MASMEC · AUMAQ · AUTEC</span>
-      </div>
+    <div class="eyebrow"><span class="bar"></span><span class="lbl">Suprimentos · Planta de Santa Catarina</span></div>
+    <h1>Comparativo de preços — 5 fornecedores</h1>
+    <div class="taxa">
+      <b>€ 1,00 = R$ 5,9062</b>
+      <span>PTAX de 05/08/2026 — usada para converter a proposta da MASMEC.</span>
+      <span>Valores líquidos, sem impostos recuperáveis.</span>
     </div>
   </header>
 
-  <div class="resumo">
-    <div class="tile">
-      <span class="lbl">Menor preço líquido</span>
-      <span class="v hi">R$ 5.572.917</span>
-      <span class="n">Mondragon — referência de todas as comparações desta página.</span>
-    </div>
-    <div class="tile">
-      <span class="lbl">Maior preço líquido</span>
-      <span class="v lo">R$ 14.352.066</span>
-      <span class="n">MASMEC — € 2.430.000 convertidos à PTAX de 05/08/2026.</span>
-    </div>
-    <div class="tile">
-      <span class="lbl">Amplitude entre extremos</span>
-      <span class="v">R$ 8.779.149</span>
-      <span class="n">A proposta mais cara custa <strong>2,6×</strong> a mais barata para o mesmo escopo declarado.</span>
-    </div>
-  </div>
-
   <section>
     <div class="sechead">
-      <span class="no">01</span>
-      <h2>Fornecedores lado a lado</h2>
-      <span class="note">Ordenados do menor para o maior preço líquido</span>
+      <h2>Quanto custa cada proposta</h2>
+      <span class="note">Mesma escala · valores em reais</span>
     </div>
 
-    <div class="grid">
-
-      <article class="col best">
-        <div class="cap"></div>
-        <div class="colhead">
-          <div class="rank"><span class="r">1º</span><span class="tag">Menor preço</span></div>
-          <div class="forn">Mondragon</div>
-          <div class="orig">Cotação em BRL</div>
-        </div>
-        <div class="preco">
-          <span class="cur">LÍQUIDO (SEM IMPOSTOS)</span>
-          <span class="v">R$ 5.572.917,45</span>
-          <span class="delta ref">Referência da comparação</span>
-        </div>
-        <div class="especs">
-          <div class="esp"><span class="k">Com impostos</span><span class="d"><span class="num">R$ 6.733.504,25</span></span></div>
-          <div class="esp"><span class="k">Impostos recuperáveis</span><span class="d"><span class="num">R$ 1.160.586,79</span> · 20,8%</span></div>
-          <div class="esp"><span class="k">Prazo de entrega</span><span class="d nd">Não declarado</span></div>
-          <div class="esp"><span class="k">Escopo</span><span class="d">Sistema completo, preço fechado</span></div>
-        </div>
-      </article>
-
-      <article class="col">
-        <div class="cap"></div>
-        <div class="colhead">
-          <div class="rank"><span class="r">2º</span><span class="tag neutro">BRL</span></div>
-          <div class="forn">AUMAQ</div>
-          <div class="orig">Cotação em BRL</div>
-        </div>
-        <div class="preco">
-          <span class="cur">LÍQUIDO (SEM IMPOSTOS)</span>
-          <span class="v">R$ 7.819.822,41</span>
-          <span class="delta"><span class="pct">+40,3%</span><span>+ R$ 2.246.904,96</span></span>
-        </div>
-        <div class="especs">
-          <div class="esp"><span class="k">Com impostos</span><span class="d"><span class="num">R$ 9.448.337,93</span></span></div>
-          <div class="esp"><span class="k">Impostos recuperáveis</span><span class="d"><span class="num">R$ 1.628.515,52</span> · 20,8%</span></div>
-          <div class="esp"><span class="k">Prazo de entrega</span><span class="d"><span class="num">300 dias</span> após a ordem de compra</span></div>
-          <div class="esp"><span class="k">Escopo</span><span class="d">Investimento total declarado</span></div>
-        </div>
-      </article>
-
-      <article class="col">
-        <div class="cap"></div>
-        <div class="colhead">
-          <div class="rank"><span class="r">3º</span><span class="tag neutro">BRL</span></div>
-          <div class="forn">AUTEC</div>
-          <div class="orig">Cotação em BRL</div>
-        </div>
-        <div class="preco">
-          <span class="cur">VALOR TOTAL<a class="fn" href="#p2"><sup class="fn">2</sup></a></span>
-          <span class="v">R$ 9.962.436,00</span>
-          <span class="delta"><span class="pct">+78,8%</span><span>+ R$ 4.389.518,55</span></span>
-        </div>
-        <div class="especs">
-          <div class="esp"><span class="k">Com impostos</span><span class="d nd">Base não discriminada</span></div>
-          <div class="esp"><span class="k">Impostos recuperáveis</span><span class="d nd">Não informado</span></div>
-          <div class="esp"><span class="k">Prazo de entrega</span><span class="d nd">Não declarado</span></div>
-          <div class="esp"><span class="k">Escopo</span><span class="d">Valor total, sem memória de cálculo</span></div>
-        </div>
-      </article>
-
-      <article class="col">
-        <div class="cap"></div>
-        <div class="colhead">
-          <div class="rank"><span class="r">4º</span><span class="tag neutro">BRL</span></div>
-          <div class="forn">Bosch</div>
-          <div class="orig">Cotação em BRL</div>
-        </div>
-        <div class="preco">
-          <span class="cur">LÍQUIDO (NET)</span>
-          <span class="v">R$ 12.128.835,84</span>
-          <span class="delta"><span class="pct">+117,6%</span><span>+ R$ 6.555.918,39</span></span>
-        </div>
-        <div class="especs">
-          <div class="esp"><span class="k">Valor de venda (bruto)</span><span class="d"><span class="num">R$ 15.187.623,14</span></span></div>
-          <div class="esp"><span class="k">Diferença bruto − líquido</span><span class="d"><span class="num">R$ 3.058.787,30</span> · 25,2%</span></div>
-          <div class="esp"><span class="k">Prazo de entrega</span><span class="d nd">Não declarado</span></div>
-          <div class="esp"><span class="k">Escopo</span><span class="d">Linha Transfer TS2 + 10 estações, item a item<a class="fn" href="#p4"><sup class="fn">4</sup></a></span></div>
-        </div>
-      </article>
-
-      <article class="col top">
-        <div class="cap"></div>
-        <div class="colhead">
-          <div class="rank"><span class="r">5º</span><span class="tag neutro">EUR → BRL</span></div>
-          <div class="forn">MASMEC</div>
-          <div class="orig">Cotação em EUR · convertida</div>
-        </div>
-        <div class="preco">
-          <span class="cur">€ 2.430.000 × 5,9062</span>
-          <span class="v">R$ 14.352.066,00</span>
-          <span class="delta"><span class="pct">+157,5%</span><span>+ R$ 8.779.148,55</span></span>
-        </div>
-        <div class="especs">
-          <div class="esp"><span class="k">Budget antes do desconto</span><span class="d">€ 2.770.000 · <span class="num">R$ 16.360.174,00</span></span></div>
-          <div class="esp"><span class="k">Custos de importação</span><span class="d nd">Não inclusos<a class="fn" href="#p3"><sup class="fn">3</sup></a></span></div>
-          <div class="esp"><span class="k">Prazo de entrega</span><span class="d nd">Não declarado</span></div>
-          <div class="esp"><span class="k">Escopo</span><span class="d">Modular All Drives, instalação em Santa Catarina inclusa</span></div>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
-  <section>
-    <div class="sechead">
-      <span class="no">02</span>
-      <h2>Escala comparativa</h2>
-      <span class="note">Valores líquidos, mesma escala para as cinco propostas</span>
-    </div>
-
-    <div class="escala">
+    <div class="chart">
       <div class="ruler">
-        <div class="rlab best"><span class="n">Mondragon</span><span class="v">R$ 5.572.917</span></div>
+        <div class="rname">Mondragon</div>
         <div class="rtrack" style="--w:34.83%; --d:.05s">
           <div class="ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <div class="rbar best"></div>
-          <div class="rcap"></div>
+          <div class="rbar best"><b>R$ 5,57 mi</b></div>
         </div>
+        <div class="rpct ref">base</div>
 
-        <div class="rlab"><span class="n">AUMAQ</span><span class="v">R$ 7.819.822</span></div>
+        <div class="rname">AUMAQ</div>
         <div class="rtrack" style="--w:48.87%; --d:.15s">
           <div class="ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <div class="rbar"></div>
-          <div class="rcap"></div>
+          <div class="rbar"><b>R$ 7,82 mi</b></div>
         </div>
+        <div class="rpct">+40%</div>
 
-        <div class="rlab"><span class="n">AUTEC</span><span class="v">R$ 9.962.436</span></div>
+        <div class="rname">AUTEC</div>
         <div class="rtrack" style="--w:62.27%; --d:.25s">
           <div class="ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <div class="rbar"></div>
-          <div class="rcap"></div>
+          <div class="rbar"><b>R$ 9,96 mi</b></div>
         </div>
+        <div class="rpct">+79%</div>
 
-        <div class="rlab"><span class="n">Bosch</span><span class="v">R$ 12.128.836</span></div>
+        <div class="rname">Bosch</div>
         <div class="rtrack" style="--w:75.81%; --d:.35s">
           <div class="ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <div class="rbar"></div>
-          <div class="rcap"></div>
+          <div class="rbar"><b>R$ 12,13 mi</b></div>
         </div>
+        <div class="rpct">+118%</div>
 
-        <div class="rlab"><span class="n">MASMEC</span><span class="v">R$ 14.352.066</span></div>
+        <div class="rname">MASMEC</div>
         <div class="rtrack" style="--w:89.70%; --d:.45s">
           <div class="ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          <div class="rbar"></div>
-          <div class="rcap"></div>
+          <div class="rbar"><b>R$ 14,35 mi</b></div>
         </div>
+        <div class="rpct">+157%</div>
       </div>
 
       <div class="axis">
         <span class="unit">R$ milhões</span>
-        <div class="marks">
-          <span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span>
+        <div class="marks"><i data-v="0"></i><i data-v="2"></i><i data-v="4"></i><i data-v="6"></i><i data-v="8"></i><i data-v="10"></i><i data-v="12"></i><i data-v="14"></i><i data-v="16"></i></div>
+        <span></span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2>Lado a lado</h2>
+      <span class="note">Do menor para o maior preço</span>
+    </div>
+
+    <div class="grid">
+      <article class="col best">
+        <div class="cap"></div>
+        <div class="cbody">
+          <div class="rank"><span class="r">1º</span><span class="tag">Menor preço</span></div>
+          <div class="forn">Mondragon</div>
+          <div class="v">R$ 5.572.917</div>
+          <div class="d ref">base da comparação</div>
+          <div class="obs">Com impostos <span class="num">R$ 6.733.504</span></div>
         </div>
-      </div>
+      </article>
+
+      <article class="col">
+        <div class="cap"></div>
+        <div class="cbody">
+          <div class="rank"><span class="r">2º</span><span class="tag neutro">BRL</span></div>
+          <div class="forn">AUMAQ</div>
+          <div class="v">R$ 7.819.822</div>
+          <div class="d">+ R$ 2,25 mi · +40%</div>
+          <div class="obs">Com impostos <span class="num">R$ 9.448.338</span><br>Entrega em <span class="num">300 dias</span></div>
+        </div>
+      </article>
+
+      <article class="col">
+        <div class="cap"></div>
+        <div class="cbody">
+          <div class="rank"><span class="r">3º</span><span class="tag neutro">BRL</span></div>
+          <div class="forn">AUTEC</div>
+          <div class="v">R$ 9.962.436</div>
+          <div class="d">+ R$ 4,39 mi · +79%</div>
+          <div class="obs">Valor único, sem separar impostos</div>
+        </div>
+      </article>
+
+      <article class="col">
+        <div class="cap"></div>
+        <div class="cbody">
+          <div class="rank"><span class="r">4º</span><span class="tag neutro">BRL</span></div>
+          <div class="forn">Bosch</div>
+          <div class="v">R$ 12.128.836</div>
+          <div class="d">+ R$ 6,56 mi · +118%</div>
+          <div class="obs">Bruto <span class="num">R$ 15.187.623</span><br>Linha TS2 + 10 estações</div>
+        </div>
+      </article>
+
+      <article class="col">
+        <div class="cap"></div>
+        <div class="cbody">
+          <div class="rank"><span class="r">5º</span><span class="tag neutro">EUR</span></div>
+          <div class="forn">MASMEC</div>
+          <div class="v">R$ 14.352.066</div>
+          <div class="d">+ R$ 8,78 mi · +157%</div>
+          <div class="obs"><span class="num">€ 2.430.000</span> convertidos<br>Sem custos de importação</div>
+        </div>
+      </article>
     </div>
   </section>
 
   <section>
-    <div class="sechead">
-      <span class="no">03</span>
-      <h2>Tabela consolidada</h2>
-      <span class="note">Todos os valores em reais</span>
-    </div>
-
-    <div class="tabwrap">
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Fornecedor</th>
-            <th scope="col">Moeda de origem</th>
-            <th scope="col">Valor de origem</th>
-            <th scope="col">Líquido em R$</th>
-            <th scope="col">Com impostos em R$</th>
-            <th scope="col">Dif. vs. menor preço</th>
-            <th scope="col">Dif. %</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="destaque">
-            <td>Mondragon</td><td>BRL</td><td>5.572.917,45</td><td>5.572.917,45</td><td>6.733.504,25</td><td>—</td><td>—</td>
-          </tr>
-          <tr>
-            <td>AUMAQ</td><td>BRL</td><td>7.819.822,41</td><td>7.819.822,41</td><td>9.448.337,93</td><td class="dt">+2.246.904,96</td><td class="dt">+40,3%</td>
-          </tr>
-          <tr>
-            <td>AUTEC</td><td>BRL</td><td>9.962.436,00</td><td>9.962.436,00</td><td class="nd">não discriminado</td><td class="dt">+4.389.518,55</td><td class="dt">+78,8%</td>
-          </tr>
-          <tr>
-            <td>Bosch</td><td>BRL</td><td>12.128.835,84</td><td>12.128.835,84</td><td>15.187.623,14</td><td class="dt">+6.555.918,39</td><td class="dt">+117,6%</td>
-          </tr>
-          <tr>
-            <td>MASMEC</td><td>EUR</td><td>€ 2.430.000,00</td><td>14.352.066,00</td><td class="nd">a apurar na importação</td><td class="dt">+8.779.148,55</td><td class="dt">+157,5%</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr><td colspan="7">Conversão MASMEC: € 2.430.000,00 × 5,9062 = R$ 14.352.066,00 — PTAX venda de fechamento de 05/08/2026 (Banco Central do Brasil). O valor Bosch de R$ 12.128.835,84 confere com a soma das 11 posições da proposta (linha Transfer TS2 e estações 1 a 10).</td></tr>
-        </tfoot>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <div class="sechead">
-      <span class="no">04</span>
-      <h2>Premissas e ressalvas</h2>
-      <span class="note">Ler antes de decidir</span>
-    </div>
-
-    <div class="premissas">
-      <div class="prem" id="p1">
-        <div class="k"><b>1</b><h3>Por que comparar pelo valor líquido</h3></div>
-        <p>ICMS, PIS e COFINS são recuperáveis pelo cliente, como a própria Mondragon destaca em sua proposta. O valor líquido é, portanto, o custo que de fato fica na empresa. O ranking pelo valor com impostos, onde informado, mantém a mesma ordem.</p>
+    <div class="sechead"><h2>Pontos de atenção</h2></div>
+    <div class="notas">
+      <div class="nota">
+        <h3>MASMEC vai custar mais</h3>
+        <p>Os <span class="num">R$ 14,35 mi</span> são só a conversão. Faltam impostos de importação, frete e câmbio até o fechamento.</p>
       </div>
-      <div class="prem" id="p2">
-        <div class="k"><b>2</b><h3>AUTEC informou apenas um valor</h3></div>
-        <p>Não há discriminação de impostos. Se os <span class="num">R$ 9.962.436,00</span> já os incluírem, o líquido equivalente cairia para cerca de <span class="num">R$ 8,15 milhões</span> — a AUTEC continuaria em 3º lugar. A posição não muda; o valor da negociação, sim. Solicitar a abertura.</p>
+      <div class="nota">
+        <h3>AUTEC mandou um número só</h3>
+        <p>Sem separar impostos. Mesmo no cenário mais favorável, segue em 3º lugar.</p>
       </div>
-      <div class="prem" id="p3">
-        <div class="k"><b>3</b><h3>MASMEC: o real custo é maior que o convertido</h3></div>
-        <p>Os <span class="num">R$ 14.352.066,00</span> refletem apenas a conversão do preço de lista. Não incluem imposto de importação, IPI, ICMS de importação, frete internacional, seguro, AFRMM nem despacho aduaneiro. Além disso, o preço é <em>budget</em> e fica exposto ao câmbio até o fechamento do contrato — a cada centavo de alta do euro, o custo sobe <span class="num">R$ 24.300</span>.</p>
-      </div>
-      <div class="prem" id="p4">
-        <div class="k"><b>4</b><h3>Os escopos não são idênticos</h3></div>
-        <p>A Bosch detalha 11 posições (linha Transfer TS2 e dez estações). A MASMEC inclui a instalação na planta de Santa Catarina. As demais apresentam preço fechado sem abertura. Uma equalização técnica é necessária antes de tratar os números como diretamente comparáveis.</p>
-      </div>
-      <div class="prem" id="p5">
-        <div class="k"><b>5</b><h3>Só um fornecedor declarou prazo</h3></div>
-        <p>A AUMAQ informa <span class="num">300 dias</span> após a ordem de compra. Os demais não declararam. Para um investimento desta ordem, o prazo é critério de decisão junto com o preço e precisa ser exigido de todos.</p>
-      </div>
-      <div class="prem" id="p6">
-        <div class="k"><b>6</b><h3>A taxa de câmbio tem data</h3></div>
-        <p>Toda a comparação usa a PTAX de <span class="num">05/08/2026</span>: <span class="num">EUR 1,00 = BRL 5,9062</span>. Se a análise for reapresentada em outra data, a conversão da MASMEC precisa ser refeita.</p>
+      <div class="nota">
+        <h3>Escopos ainda não equalizados</h3>
+        <p>Só a AUMAQ declarou prazo. Equalizar o escopo técnico antes de decidir.</p>
       </div>
     </div>
   </section>
 
   <div class="reco">
-    <h2>O que os números mostram</h2>
-    <p>A <strong>Mondragon</strong> apresenta o menor preço líquido: <span class="num">R$ 5.572.917,45</span>. Está <span class="num">R$ 2,25 milhões</span> abaixo da segunda colocada e <span class="num">R$ 8,78 milhões</span> abaixo da mais cara. Convertida para reais, a proposta da <strong>MASMEC</strong> deixa de ser competitiva: os € 2.430.000 equivalem a <span class="num">R$ 14,35 milhões</span> antes mesmo dos custos de importação.</p>
-    <p>Antes de levar a recomendação à aprovação:</p>
-    <ul>
-      <li>Equalizar o escopo técnico das cinco propostas — sem isso, a diferença de <span class="num">R$ 8,78 milhões</span> pode estar comparando pacotes diferentes.</li>
-      <li>Exigir da AUTEC a abertura entre valor líquido e impostos.</li>
-      <li>Pedir à MASMEC um preço posto na planta, em reais, ou definir a política de hedge cambial.</li>
-      <li>Obter prazo de entrega formal de todos os fornecedores.</li>
-    </ul>
+    <p><strong>Mondragon é o menor preço:</strong> <span class="num">R$ 5,57 mi</span> — <span class="num">R$ 2,25 mi</span> abaixo do segundo colocado e <span class="num">2,6×</span> mais barato que o mais caro.</p>
   </div>
 
   <footer>
-    <span>Documento interno de suporte à decisão · Suprimentos</span>
-    <span>Elaborado em 06/08/2026</span>
-    <span>Fonte cambial: PTAX venda, Banco Central do Brasil</span>
+    <span>Documento interno · Suprimentos</span>
+    <span>06/08/2026</span>
+    <span>Câmbio: PTAX venda, Banco Central do Brasil</span>
   </footer>
 
 </div>
