@@ -1,0 +1,51 @@
+# =============================================================================
+# TASKS — every deliverable, exam, reading and errand you need to remember.
+#
+# SAMPLE DATA. Tell me what you actually have due and I will rewrite this.
+#
+# status:  todo | doing | done | blocked
+# type:    assignment | exam | reading | paper | presentation | admin
+# effort:  your honest guess, in hours. Used to warn you when a week is
+#          overloaded BEFORE the week starts.
+# =============================================================================
+
+tasks:
+  - id: t-001
+    course: sample-ml
+    title: "SAMPLE — Assignment 2: gradient descent from scratch"
+    type: assignment
+    due: 2026-08-21
+    due_time: "23:59"
+    effort: 6
+    status: todo
+    notes: "Replace with a real deliverable."
+
+  - id: t-002
+    course: sample-stats
+    title: "SAMPLE — Problem set 3"
+    type: assignment
+    due: 2026-08-25
+    due_time: "23:59"
+    effort: 4
+    status: doing
+    notes: ""
+
+  - id: t-003
+    course: sample-ml
+    title: "SAMPLE — Read Bishop ch. 4"
+    type: reading
+    due: 2026-08-18
+    due_time: "19:00"
+    effort: 2
+    status: todo
+    notes: "Before Tuesday's class."
+
+  - id: t-004
+    course: sample-stats
+    title: "SAMPLE — Midterm exam"
+    type: exam
+    due: 2026-09-10
+    due_time: "19:00"
+    effort: 12
+    status: todo
+    notes: ""

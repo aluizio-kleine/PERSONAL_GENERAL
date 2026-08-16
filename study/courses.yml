@@ -1,0 +1,49 @@
+# =============================================================================
+# COURSES — the five disciplines you are taking this term.
+#
+# This file is SAMPLE DATA so you can see the dashboard working. Send me your
+# real schedule / syllabi and I will replace all of it.
+#
+# You never have to edit this by hand: just tell me "Tuesday's class moved to
+# 20:00" or paste a syllabus, and I will update it.
+# =============================================================================
+
+term: "2026.2"
+timezone: "America/Sao_Paulo"   # tell me if this is wrong — it drives every reminder
+
+courses:
+  - id: sample-ml
+    name: "SAMPLE — Machine Learning"
+    code: "PPG-501"
+    professor: "TBD"
+    # day: mon tue wed thu fri sat sun
+    schedule:
+      - day: tue
+        start: "19:00"
+        end: "22:00"
+        where: "Room B-204"
+    # How the final grade is composed. Weights should add to 100.
+    grading:
+      - item: "Assignments"
+        weight: 40
+      - item: "Midterm"
+        weight: 25
+      - item: "Final project"
+        weight: 35
+    notes: "Replace this course with a real one."
+
+  - id: sample-stats
+    name: "SAMPLE — Statistical Inference"
+    code: "PPG-502"
+    professor: "TBD"
+    schedule:
+      - day: thu
+        start: "19:00"
+        end: "22:00"
+        where: "Online"
+    grading:
+      - item: "Problem sets"
+        weight: 50
+      - item: "Final exam"
+        weight: 50
+    notes: ""

@@ -1,0 +1,350 @@
+<title>Master's Term Board</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  color-scheme: light;
+  --bg:      #EFF1F5;
+  --surface: #FFFFFF;
+  --sunken:  #E4E7EE;
+  --ink:     #14161D;
+  --muted:   #5B6274;
+  --faint:   #878FA3;
+  --line:    #D8DCE5;
+  --accent:  #3F51C4;
+
+  --late-fg: #A6301C;  --late-bg: #F7DED8;
+  --now-fg:  #A6301C;  --now-bg:  #F7DED8;
+  --soon-fg: #8A5606;  --soon-bg: #F8E7C9;
+  --week-fg: #2C4499;  --week-bg: #DFE4F8;
+  --calm-fg: #5B6274;  --calm-bg: #E4E7EE;
+  --done-fg: #2C6A4F;  --done-bg: #D9EBE1;
+
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Roboto Mono", Menlo, Consolas, monospace;
+  --sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg:      #0F1118;
+    --surface: #171A23;
+    --sunken:  #1E222D;
+    --ink:     #E7EAF2;
+    --muted:   #969DB1;
+    --faint:   #6C7386;
+    --line:    #262B38;
+    --accent:  #8494F2;
+
+    --late-fg: #F0A08D;  --late-bg: #3B1F1A;
+    --now-fg:  #F0A08D;  --now-bg:  #3B1F1A;
+    --soon-fg: #E5B871;  --soon-bg: #382A14;
+    --week-fg: #A8B4F7;  --week-bg: #202741;
+    --calm-fg: #969DB1;  --calm-bg: #1E222D;
+    --done-fg: #85C7A6;  --done-bg: #172B22;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg:      #0F1118;
+  --surface: #171A23;
+  --sunken:  #1E222D;
+  --ink:     #E7EAF2;
+  --muted:   #969DB1;
+  --faint:   #6C7386;
+  --line:    #262B38;
+  --accent:  #8494F2;
+
+  --late-fg: #F0A08D;  --late-bg: #3B1F1A;
+  --now-fg:  #F0A08D;  --now-bg:  #3B1F1A;
+  --soon-fg: #E5B871;  --soon-bg: #382A14;
+  --week-fg: #A8B4F7;  --week-bg: #202741;
+  --calm-fg: #969DB1;  --calm-bg: #1E222D;
+  --done-fg: #85C7A6;  --done-bg: #172B22;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 20px 16px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: 0;
+}
+
+h1 {
+  font-family: var(--mono);
+  font-size: clamp(24px, 6vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 4px 0 0;
+  text-wrap: balance;
+}
+
+h2 {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+section { display: block; }
+
+/* ---- status strip ---- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stat .n {
+  font-family: var(--mono);
+  font-size: 26px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.stat .k {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.stat.alarm { border-color: var(--late-fg); }
+.stat.alarm .n { color: var(--late-fg); }
+
+/* ---- board rows ---- */
+.board { display: flex; flex-direction: column; gap: 6px; }
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 12px;
+  align-items: start;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--stripe, var(--line));
+  border-radius: 3px;
+  padding: 11px 13px;
+}
+.row .cd {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--chip-fg, var(--muted));
+  background: var(--chip-bg, var(--sunken));
+  border-radius: 2px;
+  padding: 4px 6px;
+  text-align: center;
+  white-space: nowrap;
+}
+.row .title { font-weight: 500; text-wrap: pretty; }
+.row .meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--faint);
+  margin-top: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+.row .note {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.row.is-done .title { text-decoration: line-through; color: var(--faint); }
+
+.sev-late { --stripe: var(--late-fg); --chip-fg: var(--late-fg); --chip-bg: var(--late-bg); }
+.sev-now  { --stripe: var(--now-fg);  --chip-fg: var(--now-fg);  --chip-bg: var(--now-bg); }
+.sev-soon { --stripe: var(--soon-fg); --chip-fg: var(--soon-fg); --chip-bg: var(--soon-bg); }
+.sev-week { --stripe: var(--week-fg); --chip-fg: var(--week-fg); --chip-bg: var(--week-bg); }
+.sev-calm { --stripe: var(--line);    --chip-fg: var(--calm-fg); --chip-bg: var(--calm-bg); }
+.sev-done { --stripe: var(--done-fg); --chip-fg: var(--done-fg); --chip-bg: var(--done-bg); }
+
+/* ---- today ---- */
+.today-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.classline {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--line);
+}
+.classline:last-child { border-bottom: 0; padding-bottom: 0; }
+.classline .t {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.classline .w {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+}
+.empty {
+  font-size: 14px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ---- week grid ---- */
+.week {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+@media (min-width: 760px) {
+  .week { grid-template-columns: repeat(7, 1fr); }
+}
+.day {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 9px 10px;
+  min-height: 62px;
+}
+.day.is-today { border-color: var(--accent); background: var(--sunken); }
+.day .dh {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--faint);
+  margin-bottom: 6px;
+}
+.day.is-today .dh { color: var(--accent); font-weight: 600; }
+.day .ev { font-size: 12px; line-height: 1.35; margin-bottom: 7px; }
+.day .ev:last-child { margin-bottom: 0; }
+.day .ev b { display: block; font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--muted); }
+
+/* ---- courses ---- */
+.courses {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+}
+.course {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.course .cn { font-weight: 600; line-height: 1.3; }
+.course .cm {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 10px;
+}
+.weights { display: flex; height: 6px; border-radius: 2px; overflow: hidden; background: var(--sunken); }
+.weights span { display: block; }
+.wlegend {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--faint);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 10px;
+}
+
+footer {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  line-height: 1.6;
+}
+</style>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Term 2026.2 &middot; America/Sao_Paulo</p>
+    <h1>Sunday, 16 August 2026</h1>
+    <div class="stats"><div class="stat "><span class="n">0</span><span class="k">overdue</span></div><div class="stat "><span class="n">0</span><span class="k">due today</span></div><div class="stat "><span class="n">2</span><span class="k">due in 7 days</span></div><div class="stat "><span class="n">8h</span><span class="k">work queued</span></div><div class="stat "><span class="n">4</span><span class="k">open total</span></div></div>
+  </header>
+
+  <section>
+    <h2>Today</h2>
+    <div class="today-card">
+      <div class="empty">No classes scheduled today.</div>
+      
+    </div>
+  </section>
+
+  <section>
+    <h2>Deadline board</h2>
+    <div class="board"><div class="row sev-soon"><div class="cd">2d</div><div><div class="title">SAMPLE — Read Bishop ch. 4</div><div class="meta"><span>Reading</span><span>SAMPLE — Machine Learning</span><span>Tue 18 Aug 19:00</span><span>2h</span></div><div class="note">Before Tuesday&#x27;s class.</div></div></div><div class="row sev-week"><div class="cd">5d</div><div><div class="title">SAMPLE — Assignment 2: gradient descent from scratch</div><div class="meta"><span>Assignment</span><span>SAMPLE — Machine Learning</span><span>Fri 21 Aug 23:59</span><span>6h</span></div><div class="note">Replace with a real deliverable.</div></div></div><div class="row sev-calm"><div class="cd">9d</div><div><div class="title">SAMPLE — Problem set 3</div><div class="meta"><span>Assignment</span><span>SAMPLE — Statistical Inference</span><span>Tue 25 Aug 23:59</span><span>4h</span><span>in progress</span></div></div></div><div class="row sev-calm"><div class="cd">25d</div><div><div class="title">SAMPLE — Midterm exam</div><div class="meta"><span>Exam</span><span>SAMPLE — Statistical Inference</span><span>Thu 10 Sep 19:00</span><span>12h</span></div></div></div></div>
+  </section>
+
+  <section>
+    <h2>Week</h2>
+    <div class="week"><div class="day"><div class="dh">MON</div></div><div class="day"><div class="dh">TUE</div><div class="ev"><b>19:00</b>SAMPLE — Machine Learning</div></div><div class="day"><div class="dh">WED</div></div><div class="day"><div class="dh">THU</div><div class="ev"><b>19:00</b>SAMPLE — Statistical Inference</div></div><div class="day"><div class="dh">FRI</div></div><div class="day"><div class="dh">SAT</div></div><div class="day is-today"><div class="dh">SUN</div></div></div>
+  </section>
+
+  <section>
+    <h2>Disciplines</h2>
+    <div class="courses"><div class="course"><div class="cn">SAMPLE — Machine Learning</div><div class="cm"><span>PPG-501</span><span>TBD</span><span>TUE 19:00</span><span>2 open / 0 done</span></div><div class="weights"><span style="width:40.0000%;background:var(--accent)"></span><span style="width:25.0000%;background:var(--week-fg)"></span><span style="width:35.0000%;background:var(--soon-fg)"></span></div><div class="wlegend"><span>Assignments 40%</span><span>Midterm 25%</span><span>Final project 35%</span></div></div><div class="course"><div class="cn">SAMPLE — Statistical Inference</div><div class="cm"><span>PPG-502</span><span>TBD</span><span>THU 19:00</span><span>2 open / 0 done</span></div><div class="weights"><span style="width:50.0000%;background:var(--accent)"></span><span style="width:50.0000%;background:var(--week-fg)"></span></div><div class="wlegend"><span>Problem sets 50%</span><span>Final exam 50%</span></div></div></div>
+  </section>
+
+  <footer>
+    Generated 2026-08-16 20:25 UTC from study/courses.yml and study/tasks.yml.<br>
+    Countdowns are relative to 2026-08-16 in America/Sao_Paulo.
+  </footer>
+</div>
