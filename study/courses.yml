@@ -13,14 +13,24 @@ term: "2026.2"
 timezone: "America/Sao_Paulo"
 term_start: 2026-08-10
 
-# Realistic study hours per week outside class. Drives the workload bars.
-weekly_capacity: 20
+# Study hours actually available per weekday, outside class and work.
+#   1h/day at WEG  +  18:00-20:00 at home (2h), except Tuesday, which is
+#   taken by the Estatística class from 17:15 to 20:30.
+# Weekends are 0 until told otherwise — say the word and I will change them.
+study_capacity:
+  mon: 3
+  tue: 1
+  wed: 3
+  thu: 3
+  fri: 3
+  sat: 0
+  sun: 0
 
 courses:
   # ---------------------------------------------------------------- Joinville
   - id: ciencia-dados
-    color: "#0F766E"
-    color_dark: "#5EEAD4"
+    color: "#33788F"
+    color_dark: "#8FC8DA"
     name: "Ciência de Dados"
     code: "ESE410031"
     professor: "Ricardo Pfitscher / Benjamin Grando Moreira"
@@ -46,8 +56,8 @@ courses:
 
   # ---------------------------------------------------- Florianópolis (PPGEAS)
   - id: machine-learning
-    color: "#4338CA"
-    color_dark: "#A5B4FC"
+    color: "#4E62A6"
+    color_dark: "#A3AFE0"
     name: "Machine Learning"
     code: "DAS410058"
     professor: "Eric Aislan Antonelo"
@@ -71,8 +81,8 @@ courses:
     notes: "Bimestral, 9 weeks. Exam in week 6, project presentation in week 9."
 
   - id: ia
-    color: "#7E22CE"
-    color_dark: "#D8B4FE"
+    color: "#7E5F9E"
+    color_dark: "#C4ABDC"
     name: "Inteligência Artificial"
     code: "DAS410057"
     professor: "Jomi F. Hubner"
@@ -94,8 +104,8 @@ courses:
     notes: "Bimestral, 8 weeks. Seminários in week 8."
 
   - id: sma
-    color: "#A16207"
-    color_dark: "#FCD34D"
+    color: "#B08339"
+    color_dark: "#E0BE84"
     name: "Sistemas Multiagentes"
     code: "DAS410059"
     professor: "Jomi F. Hubner"
@@ -118,8 +128,8 @@ courses:
       but the 40% final project needs sustained work, not a sprint.
 
   - id: estatistica
-    color: "#BE123C"
-    color_dark: "#FDA4AF"
+    color: "#AF5F6B"
+    color_dark: "#DFA3AC"
     name: "Estatística para Análise de Dados"
     code: ""
     professor: ""

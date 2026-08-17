@@ -19,8 +19,8 @@ tasks:
     due: 2026-08-14
     due_time: "12:15"
     effort: 0
-    status: todo
-    notes: "CONFIRMED. Was scheduled for Fri 14/08 (síncrono remoto). Tell me if you already presented and I will archive it."
+    status: done
+    notes: "Apresentado em 14/08/2026 (síncrono remoto). 10% da nota."
 
   - id: cd-pc
     course: ciencia-dados
