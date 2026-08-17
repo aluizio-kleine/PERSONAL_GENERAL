@@ -6,8 +6,10 @@
 #              The plans say the cronograma "may be modified", so confirm these
 #              in class and tell me the real dates.
 #
-# Effort figures are deliberate guesses, sized so the 7-day workload warning
-# means something. Correct them whenever one feels wrong.
+# size = how much work an activity is, as a rough bucket rather than a fake
+# hour count: pequeno / medio / grande. No teaching plan states how long a
+# deliverable takes, so an hour figure would only be a guess wearing a
+# precise-looking number. The scheduler counts study DAYS, not hours.
 # =============================================================================
 
 tasks:
@@ -18,7 +20,7 @@ tasks:
     type: presentation
     due: 2026-08-14
     due_time: "12:15"
-    effort: 0
+    size: pequeno
     weight: 10
     status: done
     notes: "Apresentado em 14/08/2026 (síncrono remoto). 10% da nota."
@@ -29,9 +31,16 @@ tasks:
     type: exam
     due: 2026-08-21
     due_time: "12:15"
-    effort: 10
+    size: grande
     weight: 30
     status: todo
+    steps:
+      - "Revisar fontes, coleta e armazenamento de dados"
+      - "Revisar tratamento e pré-processamento"
+      - "Revisar técnicas de análise de dados e modelos"
+      - "Revisar técnicas de visualização"
+      - "Revisar análise espacial"
+      - "Revisar séries temporais e correlações"
     notes: "CONFIRMED. 30% of the grade. Covers everything from 12/06 onward: coleta e armazenamento, pré-processamento, modelos, visualização, análise espacial, séries temporais."
 
   - id: cd-ac
@@ -40,9 +49,16 @@ tasks:
     type: paper
     due: 2026-08-28
     due_time: "23:59"
-    effort: 20
+    size: grande
     weight: 30
     status: todo
+    steps:
+      - "Definir o tema (o mesmo do seminário final)"
+      - "Levantar e ler as referências"
+      - "Montar a estrutura do artigo"
+      - "Escrever metodologia e resultados"
+      - "Revisar e formatar"
+      - "Entregar"
     notes: >
       CONFIRMED. 30% of the grade. The paper is written about the seminário
       final topic, so the seminar work and the paper share their research —
@@ -55,9 +71,13 @@ tasks:
     type: presentation
     due: 2026-09-11
     due_time: "12:15"
-    effort: 8
+    size: medio
     weight: 30
     status: todo
+    steps:
+      - "Reaproveitar a pesquisa do artigo científico"
+      - "Montar os slides"
+      - "Ensaiar a apresentação"
     notes: "CONFIRMED. 30% of the grade. Last session of the discipline."
 
   # ------------------------------------------------- Machine Learning (40/40/20)
@@ -67,9 +87,15 @@ tasks:
     type: exam
     due: 2026-09-16
     due_time: "12:00"
-    effort: 12
+    size: grande
     weight: 40
     status: todo
+    steps:
+      - "Revisar regressão"
+      - "Revisar classificação e regularização"
+      - "Revisar redes neurais I"
+      - "Revisar redes neurais II"
+      - "Refazer os exercícios das aulas"
     notes: "ESTIMATED — week 6 of 9, Wednesday slot. 40% of the grade. Covers regression, classification, regularization, neural networks I-II."
 
   - id: ml-project
@@ -78,9 +104,15 @@ tasks:
     type: paper
     due: 2026-10-05
     due_time: "23:59"
-    effort: 25
+    size: grande
     weight: 30
     status: todo
+    steps:
+      - "Escolher o problema e o conjunto de dados"
+      - "Definir um baseline"
+      - "Treinar e ajustar os modelos"
+      - "Avaliar os resultados"
+      - "Escrever o relatório"
     notes: "ESTIMATED. 40% of the grade. Deliberately dated two days before the presentation so the work is finished before the slides."
 
   - id: ml-project-pres
@@ -89,9 +121,12 @@ tasks:
     type: presentation
     due: 2026-10-07
     due_time: "12:00"
-    effort: 4
+    size: medio
     weight: 10
     status: todo
+    steps:
+      - "Montar os slides a partir do relatório"
+      - "Ensaiar a apresentação"
     notes: "ESTIMATED — week 9 of 9, Wednesday slot."
 
   - id: ml-assignments
@@ -100,9 +135,13 @@ tasks:
     type: admin
     due: 2026-08-19
     due_time: "12:00"
-    effort: 1
+    size: pequeno
     weight: 0
     status: todo
+    steps:
+      - "Perguntar ao prof. Antonelo na aula de quarta"
+      - "Anotar datas e formato"
+      - "Me mandar aqui no chat para eu cadastrar"
     notes: "20% of the grade sits in up to three assignments with no dates in the plan. Ask Prof. Antonelo on Wednesday, then I will add them."
 
   # ------------------------------------------------- Inteligência Artificial (60/25/15)
@@ -112,9 +151,14 @@ tasks:
     type: presentation
     due: 2026-09-29
     due_time: "12:00"
-    effort: 10
+    size: grande
     weight: 25
     status: todo
+    steps:
+      - "Escolher o tema com o professor"
+      - "Levantar a bibliografia"
+      - "Montar os slides"
+      - "Ensaiar"
     notes: "ESTIMATED — week 8 of 8, Tuesday slot. 25% of the grade."
 
   - id: ia-trabalhos
@@ -123,9 +167,13 @@ tasks:
     type: admin
     due: 2026-08-18
     due_time: "12:00"
-    effort: 1
+    size: pequeno
     weight: 0
     status: todo
+    steps:
+      - "Perguntar ao prof. Hübner na aula de terça"
+      - "Anotar quantos são, datas e formato"
+      - "Me mandar aqui no chat"
     notes: "60% of this discipline is trabalhos práticos with no dates in the plan — the single largest unknown across all five courses. Ask Prof. Hubner Tuesday."
 
   - id: ia-quest-agi
@@ -134,9 +182,16 @@ tasks:
     type: reading
     due: 2026-08-20
     due_time: "23:59"
-    effort: 4
+    size: medio
     weight: 8
     status: todo
+    steps:
+      - "Ler o artigo (Agüera y Arcas & Norvig, 2023)"
+      - "1. O que é AGI e o que a caracteriza?"
+      - "2. Qual a problemática de testar inteligência? Comentar alguns testes usados"
+      - "3. Como falar um idioma fluentemente se relaciona com inteligência? (Chinese Room)"
+      - "4. Existe diferença entre inteligência natural e artificial?"
+      - "5. Você acha a IA perigosa? Por quê?"
     notes: >
       CONFIRMED. Article: Agüera y Arcas & Norvig, "Artificial General
       Intelligence Is Already Here" (2023). Questions: what AGI is and what
@@ -151,9 +206,13 @@ tasks:
     type: presentation
     due: 2026-10-09
     due_time: "12:00"
-    effort: 10
+    size: grande
     weight: 20
     status: todo
+    steps:
+      - "Escolher o artigo/tema"
+      - "Montar os slides"
+      - "Ensaiar"
     notes: "ESTIMATED — seminars run in weeks 9-10 (09/10 and 16/10). 20% of the grade."
 
   - id: sma-projeto
@@ -162,10 +221,16 @@ tasks:
     type: paper
     due: 2026-11-27
     due_time: "23:59"
-    effort: 30
+    size: grande
     weight: 40
     status: todo
-    notes: "ESTIMATED — week 16 of 16. 40% of the grade. Far away, but 30h of work: start it before the November crunch."
+    steps:
+      - "Definir o cenário multiagente"
+      - "Modelar agentes e ambiente em JaCaMo"
+      - "Implementar"
+      - "Testar"
+      - "Escrever a documentação"
+    notes: "ESTIMATED — week 16 of 16. 40% of the grade. Far away, but a big one: start it before the November crunch."
 
   - id: sma-catchup
     course: sma
@@ -173,9 +238,15 @@ tasks:
     type: reading
     due: 2026-09-18
     due_time: "12:00"
-    effort: 8
+    size: medio
     weight: 0
     status: todo
+    steps:
+      - "Pedir material e gravações ao prof. Hübner"
+      - "Semana 1 — introdução a SMA"
+      - "Semana 2 — agentes e JaCaMo"
+      - "Semana 3 — comunicação de agentes"
+      - "Semanas 4 e 5 — arquitetura BDI"
     notes: >
       The Friday CD overlap covers ALL of SMA's only weekly slot, so weeks 1-5
       are missed entirely: introdução, agentes e JaCaMo, comunicação de agentes,
@@ -189,13 +260,20 @@ tasks:
     type: reading
     due: 2026-08-27
     due_time: "23:59"
-    effort: 6
+    size: medio
     weight: 10
     status: todo
+    steps:
+      - "Ler Dresner & Stone (2008) — 65 páginas, comece cedo"
+      - "1. Por que SMA é uma boa abordagem para transporte inteligente?"
+      - "2. Qual propriedade de SMA tem maior impacto? Foi validada experimentalmente?"
+      - "3. Descrever brevemente o funcionamento do agente proposto"
+      - "4. Que aspectos fora da dimensão dos agentes foram considerados?"
+      - "5. Há espaço para IA generativa? Vantagens e desvantagens"
     notes: >
       CONFIRMED. Article: Dresner & Stone, "A multiagent approach to autonomous
       intersection management", JAIR vol. 31, pp. 591-656 (2008) — that is a
-      65-page paper, so 6h is not padding. Questions: why MAS suits intelligent
+      65-page paper, which is why it is sized medium rather than small. Questions: why MAS suits intelligent
       transport; which MAS property helps most and was it validated
       experimentally; how the agent works; what was considered beyond the agent
       dimension; room for generative AI. Counts toward the 10% questionários.
@@ -206,9 +284,12 @@ tasks:
     type: assignment
     due:
     due_time: ""
-    effort: 3
+    size: medio
     weight: 30
     status: doing
+    steps:
+      - "Acompanhar os experimentos propostos em aula"
+      - "Me avisar quando cada um for atribuído"
     notes: "30% of the grade, spread across the semester in JaCaMo. Tell me when each is assigned."
 
   # ------------------------------------------------- Estatística
@@ -218,8 +299,12 @@ tasks:
     type: exam
     due: 2026-08-18
     due_time: "20:30"
-    effort: 2
+    size: pequeno
     status: todo
+    steps:
+      - "Confirmar o prazo real de entrega"
+      - "Revisar o conteúdo da aula"
+      - "Fazer o teste online"
     notes: >
       Tomorrow, in Tuesday's class. Deadline for submission not yet known —
       the due time is a placeholder set to the end of class. Find out the real
@@ -231,8 +316,13 @@ tasks:
     type: assignment
     due: 2026-08-25
     due_time: "23:59"
-    effort: 8
+    size: medio
     status: todo
+    steps:
+      - "Revisar correlação"
+      - "Revisar regressão linear"
+      - "Aplicar no conjunto de dados do trabalho"
+      - "Escrever e entregar"
     notes: "CONFIRMED date. Lands the same day as the second online test."
 
   - id: est-teste-2
@@ -241,8 +331,12 @@ tasks:
     type: exam
     due: 2026-08-25
     due_time: "20:30"
-    effort: 2
+    size: pequeno
     status: todo
+    steps:
+      - "Confirmar o prazo real de entrega"
+      - "Revisar o conteúdo"
+      - "Fazer o teste online"
     notes: "Prazo not yet known — placeholder at end of class. Same day as the correlação/regressão trabalho."
 
   - id: est-plano
@@ -251,8 +345,12 @@ tasks:
     type: admin
     due: 2026-08-18
     due_time: "20:30"
-    effort: 1
+    size: pequeno
     status: todo
+    steps:
+      - "Perguntar na aula de terça"
+      - "Ou procurar no Moodle / CAGR"
+      - "Me mandar o arquivo aqui no chat"
     notes: >
       Highest-leverage hour of the week. One of five disciplines is completely
       invisible here — ask in Tuesday's class, or email the professor, or check

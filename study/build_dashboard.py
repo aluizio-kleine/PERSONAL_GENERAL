@@ -5,11 +5,12 @@ Usage:
     python3 study/build_dashboard.py            # writes study/dashboard.html
     python3 study/build_dashboard.py --brief    # prints the plain-text daily brief
 
-The page renders client-side from a baked JSON payload: it schedules the work
-into the study hours declared in courses.yml, ranks what is critical, and lets
-the viewer complete, edit and add activities. Those edits live in the viewer's
-device storage; the YAML files stay the source of truth and are reconciled from
-the page's export file.
+The page renders client-side from a baked JSON payload. It suggests what to
+study each day by walking deadlines in order and spending study DAYS, never
+invented hour counts: no teaching plan states how long a deliverable takes, so
+activities carry a rough size (pequeno / medio / grande) instead. Viewer edits
+live in device storage; the YAML files stay the source of truth and are
+reconciled from the page's export file.
 """
 
 from __future__ import annotations
@@ -39,6 +40,9 @@ TYPE_PT = {
     "assignment": "Trabalho", "exam": "Prova", "reading": "Leitura",
     "paper": "Artigo", "presentation": "Seminário", "admin": "Pendência",
 }
+
+SIZE_PT = {"pequeno": "Pequeno", "medio": "Médio", "grande": "Grande"}
+SIZE_DAYS = {"pequeno": 1, "medio": 3, "grande": 6}   # study days an activity needs
 
 TIMETABLE_START = 8 * 60
 TIMETABLE_END = 21 * 60
@@ -162,10 +166,11 @@ def build_model(courses_doc: dict, tasks_doc: dict) -> dict:
             "course_name": course.get("name", "Sem disciplina"),
             "due": due.isoformat() if due else None,
             "due_time": raw.get("due_time") or "",
-            "effort": raw.get("effort") or 0,
+            "size": (raw.get("size") or "medio").lower(),
             "weight": raw.get("weight"),
             "status": (raw.get("status") or "todo").lower(),
             "notes": " ".join((raw.get("notes") or "").split()),
+            "steps": [str(s) for s in (raw.get("steps") or [])],
         })
 
     week: dict[str, list[dict]] = {k: [] for k in DAY_KEYS}
@@ -209,11 +214,6 @@ def open_tasks(m: dict) -> list[dict]:
     return out
 
 
-def available_hours(m: dict, start: dt.date, ndays: int) -> int:
-    return sum(m["capacity"][DAY_KEYS[(start + dt.timedelta(days=i)).weekday()]]
-               for i in range(ndays))
-
-
 # --------------------------------------------------------------------------
 # plain-text brief (used by the scheduled morning push)
 # --------------------------------------------------------------------------
@@ -221,17 +221,15 @@ def available_hours(m: dict, start: dt.date, ndays: int) -> int:
 def brief(m: dict) -> str:
     today = m["today"]
     opens = open_tasks(m)
-    late = [t for t in opens if t["days"] is not None and t["days"] < 0]
-    next7 = [t for t in opens if t["days"] is not None and 0 <= t["days"] <= 7]
-    next14 = [t for t in opens if t["days"] is not None and 0 <= t["days"] <= 14]
-    h7 = sum(t["effort"] for t in next7)
-    h14 = sum(t["effort"] for t in next14)
+    late = [x for x in opens if x["days"] is not None and x["days"] < 0]
+    next7 = [x for x in opens if x["days"] is not None and 0 <= x["days"] <= 7]
+    next14 = [x for x in opens if x["days"] is not None and 0 <= x["days"] <= 14]
 
     lines = [f"{FULLDAY_PT[today.weekday()]}, {today.day} de {FULLMONTH_PT[today.month - 1]}"]
 
     if late:
         lines += ["", f"ATRASADO ({len(late)}):"]
-        lines += [f"  - {t['title']} [{t['course_name']}] {countdown(t['days'])}" for t in late]
+        lines += [f"  - {x['title']} [{x['course_name']}] {countdown(x['days'])}" for x in late]
 
     todays = m["week"][DAY_KEYS[today.weekday()]]
     if todays:
@@ -243,21 +241,26 @@ def brief(m: dict) -> str:
     else:
         lines += ["", "Sem aulas hoje."]
 
-    cap_today = m["capacity"][DAY_KEYS[today.weekday()]]
-    lines += ["", f"Horas de estudo disponíveis hoje: {cap_today}h"]
+    if m["capacity"][DAY_KEYS[today.weekday()]] == 0:
+        lines += ["", "Hoje nao tem horario de estudo previsto."]
 
     if next7:
-        lines += ["", f"Nos próximos 7 dias ({h7}h de trabalho):"]
-        lines += [f"  - {countdown(t['days']):>12}  {t['title']} [{t['course_name']}]" for t in next7]
+        lines += ["", f"Proximos 7 dias ({len(next7)} entregas):"]
+        lines += [f"  - {countdown(x['days']):>12}  {x['title']} [{x['course_name']}]"
+                  f" ({SIZE_PT.get(x['size'], x['size']).lower()})" for x in next7]
     else:
-        lines += ["", "Nada nos próximos 7 dias."]
+        lines += ["", "Nada nos proximos 7 dias."]
 
-    if h14 > h7:
-        lines += ["", f"Próximos 14 dias: {h14}h em {len(next14)} item(ns)."]
+    if len(next14) > len(next7):
+        lines += ["", f"Proximos 14 dias: {len(next14)} entregas."]
 
-    avail = available_hours(m, today, 14)
-    if h14 > avail:
-        lines += ["", f"ATENÇÃO: {h14}h de trabalho contra {avail}h disponíveis nos próximos 14 dias."]
+    # Study days, not hours: this is the student's own availability, not a guess.
+    study_days = sum(1 for i in range(14)
+                     if m["capacity"][DAY_KEYS[(today + dt.timedelta(days=i)).weekday()]] > 0)
+    big = [x for x in next14 if x["size"] == "grande"]
+    if big:
+        lines += ["", f"ATENCAO: {len(big)} entrega(s) grande(s) em 14 dias, "
+                      f"com {study_days} dias de estudo disponiveis."]
 
     return "\n".join(lines)
 
@@ -398,8 +401,12 @@ section { min-width: 0; }
 .act-f { display: flex; align-items: baseline; gap: 6px; font-size: 12.5px; color: var(--muted); }
 .act-f b { font-family: var(--mono); font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
 .act-f.bad, .act-f.bad b { color: var(--danger); }
-.act-f .est { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
-              color: var(--faint); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+.sz { font-size: 9.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+       padding: 2px 6px; border-radius: 4px; background: var(--sunken); color: var(--muted); }
+.sz-grande { background: var(--warn-soft); color: var(--warn); }
+.dc-tight, .dc-tight b { color: var(--danger); }
+.dr-tag { font-family: var(--mono); font-style: normal; font-size: 10px; font-weight: 700; color: var(--faint); }
+.dr-why { font-size: 11px; color: var(--faint); margin-top: 2px; }
 .act-foot { display: flex; gap: 7px; align-items: center; }
 .act-done { font-size: 11.5px; color: var(--ok); font-weight: 600; }
 .act-empty { flex: 0 0 calc(100% - 26px); scroll-snap-align: center; font-size: 13px;
@@ -436,13 +443,12 @@ section { min-width: 0; }
 .legend { display: flex; flex-wrap: wrap; gap: 5px 12px; margin-bottom: 14px; }
 .lg { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--muted); }
 .lg i { width: 9px; height: 9px; border-radius: 2px; background: var(--lc); display: block; flex: none; }
-.plot { position: relative; display: grid; grid-template-columns: repeat(14, 1fr); gap: 3px; height: 128px; align-items: end; }
-.pcol { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; cursor: default; }
-.ptrack { position: absolute; left: 0; right: 0; bottom: 0; background: var(--sunken); border-radius: 3px; }
-.pstack { position: relative; display: flex; flex-direction: column-reverse; }
-.pseg { display: block; background: var(--sc); margin-top: 2px; }
-.pstack > .pseg:last-child { border-radius: 4px 4px 0 0; }
-.pcol.today .ptrack { outline: 2px solid var(--ink); outline-offset: 1px; }
+.plot { display: grid; grid-template-columns: repeat(14, 1fr); gap: 3px; }
+.fcell { aspect-ratio: 1 / 1.5; min-height: 34px; border-radius: 5px;
+         background: var(--c); color: var(--on-c, #fff); display: grid; place-items: center;
+         font-size: 8.5px; font-weight: 750; letter-spacing: .02em; }
+.fcell.empty { background: var(--sunken); color: var(--faint); font-size: 12px; }
+.fcell.off { background: repeating-linear-gradient(135deg, var(--sunken) 0 4px, transparent 4px 8px); color: var(--faint); }
 .paxis { display: grid; grid-template-columns: repeat(14, 1fr); gap: 3px; margin-top: 7px; }
 .pax { font-size: 9px; text-align: center; color: var(--faint); line-height: 1.25; font-variant-numeric: tabular-nums; }
 .pax b { display: block; font-weight: 700; font-size: 8.5px; letter-spacing: .02em; }
@@ -589,6 +595,47 @@ section { min-width: 0; }
 .note-box.warn { background: var(--warn-soft); color: var(--warn); }
 .note-box svg { flex: none; margin-top: 2px; }
 
+/* ---------- day modal ---------- */
+.scrim { position: fixed; inset: 0; background: rgba(8,9,11,.55); z-index: 40;
+         display: none; align-items: flex-end; justify-content: center; }
+.scrim.on { display: flex; }
+@media (min-width: 640px) { .scrim { align-items: center; } }
+.modal {
+  background: var(--card); width: 100%; max-width: 520px; max-height: 82vh;
+  border-radius: 16px 16px 0 0; display: flex; flex-direction: column;
+  box-shadow: 0 -8px 40px rgba(0,0,0,.3); overflow: hidden;
+}
+@media (min-width: 640px) { .modal { border-radius: 16px; } }
+.md-head { display: flex; align-items: center; gap: 10px; padding: 15px 14px 12px; border-bottom: 1px solid var(--hair); }
+.md-nav { font: inherit; font-size: 16px; width: 34px; height: 34px; flex: none; border-radius: 50%;
+          border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; }
+.md-nav[disabled] { opacity: .3; cursor: default; }
+.md-title { flex: 1; min-width: 0; }
+.md-title b { display: block; font-size: 16px; font-weight: 650; line-height: 1.2; }
+.md-title span { font-size: 11.5px; color: var(--faint); }
+.md-x { font: inherit; font-size: 20px; line-height: 1; width: 34px; height: 34px; flex: none; border-radius: 50%;
+        border: 0; background: var(--sunken); color: var(--ink); cursor: pointer; }
+.md-x:focus-visible, .md-nav:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.md-body { overflow-y: auto; padding: 12px 14px 20px; display: flex; flex-direction: column; gap: 8px;
+           touch-action: pan-y; }
+.md-hint { font-size: 11px; color: var(--faint); text-align: center; padding-top: 2px; }
+
+/* ---------- steps / to-do ---------- */
+.steps { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+.steps-h { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+           color: var(--faint); margin-bottom: 4px; }
+.step { display: flex; gap: 9px; align-items: flex-start; padding: 7px 6px; border-radius: 8px;
+        cursor: pointer; background: none; border: 0; font: inherit; text-align: left; width: 100%; color: var(--ink); }
+.step:hover { background: var(--sunken); }
+.step:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.step i { flex: none; width: 17px; height: 17px; margin-top: 1px; border-radius: 5px;
+          border: 1.6px solid var(--line); background: var(--card); display: grid; place-items: center;
+          color: transparent; }
+.step.on i { background: var(--ok); border-color: var(--ok); color: var(--card); }
+.step span { flex: 1; font-size: 13px; line-height: 1.4; }
+.step.on span { text-decoration: line-through; color: var(--faint); }
+.step-prog { font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+
 footer { font-size: 11.5px; color: var(--faint); line-height: 1.7; border-top: 1px solid var(--line); padding-top: 13px; }
 footer .btn { margin-bottom: 11px; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
@@ -602,7 +649,7 @@ footer .btn { margin-bottom: 11px; }
 JS = r"""
 'use strict';
 var K = 'mestrado-2026-2';
-var store = { override: {}, edits: {}, added: [], version: 2 };
+var store = { override: {}, edits: {}, added: [], steps: {}, version: 3 };
 var lsOK = true;
 var filter = { mode: 'all', day: null };
 var openIds = {};
@@ -611,9 +658,12 @@ var DEFAULT_WEIGHT = 15;
 
 var DOW = ['SEG','TER','QUA','QUI','SEX','SÁB','DOM'];
 var MON = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+var FULLDOW = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
+var FULLMON = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
 var TYPES = { assignment:'Trabalho', exam:'Prova', reading:'Leitura', paper:'Artigo',
               presentation:'Seminário', admin:'Pendência' };
 var DAYK = ['mon','tue','wed','thu','fri','sat','sun'];
+var SIZE_PT = { pequeno:'Pequeno', medio:'Médio', grande:'Grande' };
 
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -640,6 +690,7 @@ function loadStore() {
         store.override = p.override || {};
         store.edits = p.edits || {};
         store.added = Array.isArray(p.added) ? p.added : [];
+        store.steps = p.steps || {};
       }
     }
   } catch (e) { lsOK = false; }
@@ -690,46 +741,47 @@ function allTasks() {
   });
 }
 
-/* --------------------------------------------------------------------
-   Scheduler: earliest deadline first, poured into each day's real study
-   hours. This is what turns a pile of deadlines into "today you do 2h of
-   X and 1h of Y", and what reveals work that cannot fit before its due
-   date no matter how the days are arranged.
-   -------------------------------------------------------------------- */
-var HORIZON = 140;
+var HORIZON = 200;
+
+/* Scheduler in STUDY DAYS, not hours. Each day with study time gets one focus,
+   taken from the nearest deadline still unfinished; an activity occupies as
+   many study days as its size implies. Nothing here claims to know how long
+   anything takes — it orders the work and shows when a deadline arrives before
+   enough study days do. */
+function sizeDays(t) { return DATA.sizeDays[t.size] || DATA.sizeDays.medio || 3; }
+
 function schedule() {
   var queue = allTasks().filter(function (t) {
-    return t.status !== 'done' && (t.effort || 0) > 0 && t.due;
+    return t.status !== 'done' && t.due;
   }).sort(function (a, b) {
     if (a.due !== b.due) return a.due < b.due ? -1 : 1;
     return (b.weight == null ? DEFAULT_WEIGHT : b.weight) - (a.weight == null ? DEFAULT_WEIGHT : a.weight);
   });
 
-  var left = {};
-  queue.forEach(function (t) { left[t.id] = t.effort; });
+  var need = {}, doneBy = {};
+  queue.forEach(function (t) { need[t.id] = sizeDays(t); doneBy[t.id] = 0; });
 
-  var plan = {};                      // iso -> [{id, hours}]
-  var doneBy = {};                    // id -> hours allocated on/before its due date
-  queue.forEach(function (t) { doneBy[t.id] = 0; });
-
+  var plan = {};                       // iso -> task id (one focus per study day)
   for (var i = 0; i < HORIZON; i++) {
     var day = addDays(TODAY, i);
+    if (capOf(day) <= 0) continue;     // no study time that day
     var iso = ymd(day);
-    var cap = capOf(day);
-    if (cap <= 0) continue;
-    var slots = [];
-    for (var j = 0; j < queue.length && cap > 0; j++) {
+    for (var j = 0; j < queue.length; j++) {
       var t = queue[j];
-      if (left[t.id] <= 0) continue;
-      var take = Math.min(cap, left[t.id]);
-      left[t.id] -= take;
-      cap -= take;
-      slots.push({ id: t.id, hours: take });
-      if (iso <= t.due) doneBy[t.id] += take;
+      if (need[t.id] <= 0) continue;
+      need[t.id] -= 1;
+      plan[iso] = t.id;
+      if (iso <= t.due) doneBy[t.id] += 1;
+      break;
     }
-    if (slots.length) plan[iso] = slots;
   }
-  return { plan: plan, doneBy: doneBy, left: left };
+  return { plan: plan, doneBy: doneBy };
+}
+
+/* True when the deadline arrives before enough study days do. */
+function isTight(t, sch) {
+  if (!t.due || t.status === 'done') return false;
+  return (sch.doneBy[t.id] || 0) < sizeDays(t);
 }
 
 /* ---------- outer carousel: disciplines, each holding its own activity carousel
@@ -743,7 +795,7 @@ function renderDisciplines(sch) {
   el.innerHTML = DATA.courses.map(function (c) {
     var mine = tasks.filter(function (t) { return t.course === c.id; });
     var open = mine.filter(function (t) { return t.status !== 'done'; });
-    var hours = open.reduce(function (a, t) { return a + (t.effort || 0); }, 0);
+    var tight = open.filter(function (t) { return isTight(t, sch); }).length;
     var nextT = open.filter(function (t) { return t.due; })[0];
 
     var meta = [];
@@ -769,21 +821,20 @@ function renderDisciplines(sch) {
     // Up to five, soonest deadline first; undated fall to the end.
     var top5 = open.slice(0, 5);
     var acts = top5.length ? top5.map(function (t, i) {
-      var fitted = t.due ? (sch.doneBy[t.id] || 0) : null;
-      var gap = fitted == null ? 0 : Math.max(0, (t.effort || 0) - fitted);
       var f = '';
       f += '<div class="act-f"><b>' + esc(countdown(t.days)) + '</b>' +
            (t.due ? '&middot; ' + esc(fmtShort(t.due)) : '') + '</div>';
-      f += '<div class="act-f"><b>' + (t.effort || 0) + 'h</b> previstas ' +
-           '<span class="est" title="estimativa minha, não do plano de ensino">est.</span></div>';
       f += '<div class="act-f"><b>' + (t.weight == null ? '?' : t.weight + '%') + '</b> da nota</div>';
-      if (gap > 0) {
-        f += '<div class="act-f bad">cabem <b>' + fitted + 'h</b> antes do prazo, faltam <b>' + gap + 'h</b></div>';
-      } else if (t.due && t.effort) {
-        f += '<div class="act-f">cabe nas horas disponíveis</div>';
+      if (isTight(t, sch)) {
+        f += '<div class="act-f bad">prazo apertado — comece por esta</div>';
+      } else if (!t.due) {
+        f += '<div class="act-f">sem prazo definido</div>';
+      } else {
+        f += '<div class="act-f">dá tempo se começar na ordem</div>';
       }
       return '<article class="act">' +
         '<div class="act-top"><span class="act-type">' + esc(TYPES[t.type] || 'Item') + '</span>' +
+        '<span class="sz sz-' + esc(t.size) + '">' + esc(SIZE_PT[t.size] || t.size) + '</span>' +
         '<span class="act-idx">' + (i + 1) + '/' + top5.length + '</span></div>' +
         '<div class="act-title">' + esc(t.title) + '</div>' +
         '<div class="act-facts">' + f + '</div>' +
@@ -797,8 +848,8 @@ function renderDisciplines(sch) {
       '<span class="dc-name">' + esc(c.name) + '</span></div>' +
       '<div class="dc-meta">' + meta.join(' &middot; ') + '</div>' +
       '<div class="dc-stats"><span><b>' + open.length + '</b> em aberto</span>' +
-      '<span><b>' + hours + 'h</b> previstas</span>' +
       (nextT ? '<span>próxima <b>' + esc(countdown(nextT.days)) + '</b></span>' : '') +
+      (tight ? '<span class="dc-tight"><b>' + tight + '</b> com prazo apertado</span>' : '') +
       '</div></div>' + grade + '<div class="dc-sep"></div>' +
       '<div class="acts" id="acts-' + esc(c.id) + '">' + acts + '</div>' +
       '<div class="dots inner" id="dots-' + esc(c.id) + '"></div>' +
@@ -839,7 +890,7 @@ function renderUpcoming() {
       '<div class="mini-when">' + esc(countdown(t.days).toUpperCase()) + '</div>' +
       '<div class="mini-title">' + esc(t.title) + '</div>' +
       '<div class="mini-sub">' + esc(t.abbr) + ' &middot; ' + esc(fmtShort(t.due)) +
-      (t.effort ? ' &middot; ' + t.effort + 'h' : '') + '</div></article>';
+      ' &middot; ' + esc((SIZE_PT[t.size] || t.size).toLowerCase()) + '</div></article>';
   }).join('');
 }
 
@@ -884,47 +935,46 @@ function wireCarousel(carId, dotId, n, prevId, nextId) {
   sync();
 }
 
-/* ---------- plan chart ---------- */
+/* ---------- focus strip: which discipline each study day belongs to ---------- */
 function renderChart(sch) {
-  var maxCap = Math.max.apply(null, DAYK.map(function (k) { return DATA.capacity[k] || 0; }).concat([1]));
-  var cols = '', axis = '', totals = [0, 0];
+  var cells = '', axis = '', counts = [0, 0];
+  var tasks = allTasks();
+  function byId(id) { return tasks.filter(function (x) { return x.id === id; })[0]; }
 
   for (var i = 0; i < 14; i++) {
     var day = addDays(TODAY, i);
     var iso = ymd(day);
-    var cap = capOf(day);
-    var slots = sch.plan[iso] || [];
-    var used = slots.reduce(function (a, s) { return a + s.hours; }, 0);
-    totals[i < 7 ? 0 : 1] += used;
+    var t = sch.plan[iso] ? byId(sch.plan[iso]) : null;
+    var studyDay = capOf(day) > 0;
 
-    var segs = slots.map(function (s) {
-      var t = allTasks().filter(function (x) { return x.id === s.id; })[0] || {};
-      return '<i class="pseg" style="--sc:var(--c-' + esc(t.course) + ');height:' +
-             (100 * s.hours / maxCap).toFixed(2) + '%" data-tip="' +
-             esc(s.hours + 'h · ' + (t.title || '')) + '"></i>';
-    }).join('');
+    if (t) {
+      cells += '<div class="fcell" style="--c:var(--c-' + esc(t.course) + ');--on-c:var(--on-' +
+               esc(t.course) + ')" data-tip="' + esc(t.title) + '">' + esc(t.abbr) + '</div>';
+    } else {
+      cells += '<div class="fcell empty' + (studyDay ? '' : ' off') + '" data-tip="' +
+               (studyDay ? 'livre' : 'sem horário de estudo') + '">' + (studyDay ? '' : '·') + '</div>';
+    }
 
-    cols += '<div class="pcol' + (i === 0 ? ' today' : '') + '">' +
-      '<div class="ptrack" style="height:' + (100 * cap / maxCap).toFixed(2) + '%"></div>' +
-      '<div class="pstack" style="height:' + (100 * used / maxCap).toFixed(2) + '%">' + segs + '</div></div>';
-
-    var wknd = (day.getDay() === 0 || day.getDay() === 6);
-    axis += '<div class="pax' + (wknd ? ' wknd' : '') + (i === 0 ? ' today' : '') + '">' +
-            '<b>' + DOW[day.getDay() === 0 ? 6 : day.getDay() - 1][0] + '</b>' + day.getDate() + '</div>';
+    var dow = day.getDay() === 0 ? 6 : day.getDay() - 1;
+    axis += '<div class="pax' + (dow > 4 ? ' wknd' : '') + (i === 0 ? ' today' : '') + '">' +
+            '<b>' + DOW[dow][0] + '</b>' + day.getDate() + '</div>';
   }
 
-  document.getElementById('plot').innerHTML = cols;
-  document.getElementById('paxis').innerHTML = axis;
-  var cap0 = 0, cap1 = 0;
-  for (var j = 0; j < 14; j++) { var c = capOf(addDays(TODAY, j)); if (j < 7) cap0 += c; else cap1 += c; }
-  document.getElementById('wktot').innerHTML =
-    '<div>Semana 1: <b>' + totals[0] + 'h</b> de <b>' + cap0 + 'h</b></div>' +
-    '<div>Semana 2: <b>' + totals[1] + 'h</b> de <b>' + cap1 + 'h</b></div>';
+  // Deliveries per week, counted from real dates rather than any estimate.
+  tasks.forEach(function (x) {
+    if (x.status === 'done' || x.days == null) return;
+    if (x.days >= 0 && x.days < 7) counts[0] += 1;
+    else if (x.days >= 7 && x.days < 14) counts[1] += 1;
+  });
 
+  document.getElementById('plot').innerHTML = cells;
+  document.getElementById('paxis').innerHTML = axis;
+  document.getElementById('wktot').innerHTML =
+    '<div>Esta semana: <b>' + counts[0] + '</b> entregas</div>' +
+    '<div>Semana seguinte: <b>' + counts[1] + '</b> entregas</div>';
   document.getElementById('legend').innerHTML = DATA.courses.map(function (c) {
     return '<span class="lg"><i style="--lc:var(--c-' + esc(c.id) + ')"></i>' + esc(c.abbr) + ' — ' + esc(c.name) + '</span>';
   }).join('');
-
   wireTips();
 }
 
@@ -932,10 +982,10 @@ function wireTips() {
   var tip = document.getElementById('tip');
   var plot = document.getElementById('plot');
   plot.querySelectorAll('[data-tip]').forEach(function (seg) {
-    function show(ev) {
+    function show() {
       tip.textContent = seg.getAttribute('data-tip');
       var pr = plot.getBoundingClientRect(), sr = seg.getBoundingClientRect();
-      tip.style.left = (sr.left - pr.left + sr.width / 2) + 'px';
+      tip.style.left = Math.max(60, Math.min(pr.width - 60, sr.left - pr.left + sr.width / 2)) + 'px';
       tip.style.top = (sr.top - pr.top - 6) + 'px';
       tip.classList.add('on');
     }
@@ -947,23 +997,31 @@ function wireTips() {
   });
 }
 
-/* ---------- per-day plan ---------- */
+/* ---------- what to study, day by day ---------- */
 function renderDays(sch) {
   var out = '';
+  var tasks = allTasks();
   for (var i = 0; i < 7; i++) {
     var day = addDays(TODAY, i);
     var iso = ymd(day);
-    var cap = capOf(day);
-    var slots = sch.plan[iso] || [];
-    var label = i === 0 ? 'HOJE' : (i === 1 ? 'AMANHÃ' : DOW[day.getDay() === 0 ? 6 : day.getDay() - 1]);
-    var items = slots.length ? slots.map(function (s) {
-      var t = allTasks().filter(function (x) { return x.id === s.id; })[0] || {};
-      return '<div class="dr-item"><i style="--dc:var(--c-' + esc(t.course) + ')"></i>' +
-             '<span>' + esc(t.title) + '</span><b>' + s.hours + 'h</b></div>';
-    }).join('') : '<div class="dr-free">' + (cap ? cap + 'h livres' : 'sem horário de estudo') + '</div>';
-    out += '<div class="dayrow' + (cap ? '' : ' rest') + '">' +
-      '<div class="dr-when"><b>' + label + '</b>' + day.getDate() + '/' + (day.getMonth()+1) + '</div>' +
-      '<div class="dr-items">' + items + '</div></div>';
+    var dow = day.getDay() === 0 ? 6 : day.getDay() - 1;
+    var label = i === 0 ? 'HOJE' : (i === 1 ? 'AMANHÃ' : DOW[dow]);
+    var id = sch.plan[iso];
+    var t = id ? tasks.filter(function (x) { return x.id === id; })[0] : null;
+    var studyDay = capOf(day) > 0;
+
+    var body;
+    if (t) {
+      body = '<div class="dr-item"><i style="--dc:var(--c-' + esc(t.course) + ')"></i>' +
+             '<span>' + esc(t.title) + '</span>' +
+             '<em class="dr-tag">' + esc(t.abbr) + '</em></div>' +
+             '<div class="dr-why">' + (isTight(t, sch) ? 'prazo apertado' : 'entrega ' + esc(countdown(t.days))) + '</div>';
+    } else {
+      body = '<div class="dr-free">' + (studyDay ? 'sem nada pendente' : 'sem horário de estudo') + '</div>';
+    }
+    out += '<div class="dayrow' + (studyDay ? '' : ' rest') + '">' +
+      '<div class="dr-when"><b>' + label + '</b>' + day.getDate() + '/' + (day.getMonth() + 1) + '</div>' +
+      '<div class="dr-items">' + body + '</div></div>';
   }
   document.getElementById('days').innerHTML = out;
 }
@@ -998,12 +1056,7 @@ function renderCal() {
   var grid = document.getElementById('calgrid');
   grid.innerHTML = h;
   grid.querySelectorAll('[data-day]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var iso = b.getAttribute('data-day');
-      filter = (filter.mode === 'day' && filter.day === iso) ? { mode: 'all', day: null } : { mode: 'day', day: iso };
-      render();
-      document.getElementById('lista').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+    b.addEventListener('click', function () { openDay(b.getAttribute('data-day')); });
   });
 }
 
@@ -1027,7 +1080,7 @@ function renderList() {
   el.innerHTML = tasks.map(function (t) {
     var sub = '<span class="cbadge">' + esc(t.abbr) + '</span><span>' + esc(TYPES[t.type] || 'Item') + '</span>';
     if (t.due) sub += '<span>' + esc(fmtShort(t.due)) + '</span>';
-    if (t.effort) sub += '<span>' + t.effort + 'h</span>';
+    sub += '<span>' + esc((SIZE_PT[t.size] || t.size).toLowerCase()) + '</span>';
     if (t.weight != null && t.weight > 0) sub += '<span>' + t.weight + '% da nota</span>';
     if (t.mine) sub += '<span class="badge-mine">minha</span>';
     if (t.edited) sub += '<span class="badge-mine">editada</span>';
@@ -1036,7 +1089,7 @@ function renderList() {
       (t.mine ? '<button class="tbtn danger" data-del="' + esc(t.id) + '">Remover</button>' : '') +
       (t.edited && !t.mine ? '<button class="tbtn" data-reset="' + esc(t.id) + '">Desfazer edição</button>' : '') +
       '</div>';
-    var note = t.notes ? '<p class="it-note">' + esc(t.notes) + '</p>' : '';
+    var note = (t.notes ? '<p class="it-note">' + esc(t.notes) + '</p>' : '') + renderSteps(t);
 
     return '<div class="item ' + t.sev + (t.status === 'done' ? ' done' : '') +
       (openIds[t.id] ? ' open' : '') + '" style="--c:var(--c-' + esc(t.course) +
@@ -1051,6 +1104,7 @@ function renderList() {
   }).join('');
 
   wireCardActions(el);
+  wireSteps(el);
   el.querySelectorAll('[data-expand]').forEach(function (b) {
     b.addEventListener('click', function () {
       var id = b.getAttribute('data-expand');
@@ -1105,7 +1159,7 @@ function openForm(id) {
   document.getElementById('f-course').value = t ? t.course : DATA.courses[0].id;
   document.getElementById('f-type').value = t ? t.type : 'assignment';
   document.getElementById('f-due').value = t && t.due ? t.due : DATA.today;
-  document.getElementById('f-effort').value = t ? (t.effort || 0) : 2;
+  document.getElementById('f-size').value = t ? (t.size || 'medio') : 'medio';
   document.getElementById('f-weight').value = t && t.weight != null ? t.weight : '';
   f.classList.add('open');
   f.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1129,7 +1183,7 @@ function initForm() {
       course: document.getElementById('f-course').value,
       type: document.getElementById('f-type').value,
       due: document.getElementById('f-due').value || null,
-      effort: Number(document.getElementById('f-effort').value) || 0,
+      size: document.getElementById('f-size').value,
       weight: wv === '' ? null : Number(wv)
     };
     if (editingId) {
@@ -1169,6 +1223,7 @@ function initExport() {
       concluidas: Object.keys(store.override).filter(function (k) { return store.override[k] === 'done'; }),
       reabertas: Object.keys(store.override).filter(function (k) { return store.override[k] === 'todo'; }),
       editadas: store.edits,
+      passos: store.steps,
       novas: store.added
     };
     var data = JSON.stringify(payload, null, 2);
@@ -1194,6 +1249,128 @@ function showFallback(data) {
   box.querySelector('textarea').select();
 }
 
+/* ---------- steps: the to-do breakdown of one activity ---------- */
+function stepState(id) { return store.steps[id] || {}; }
+function renderSteps(t) {
+  if (!t.steps || !t.steps.length) return '';
+  var st = stepState(t.id);
+  var done = t.steps.filter(function (_, i) { return st[i]; }).length;
+  return '<div class="steps"><div class="steps-h">O que fazer ' +
+    '<span class="step-prog">' + done + '/' + t.steps.length + '</span></div>' +
+    t.steps.map(function (s, i) {
+      return '<button type="button" class="step' + (st[i] ? ' on' : '') + '" data-step="' +
+        esc(t.id) + '" data-i="' + i + '" aria-pressed="' + (!!st[i]) + '">' +
+        '<i>' + CHECK + '</i><span>' + esc(s) + '</span></button>';
+    }).join('') + '</div>';
+}
+function wireSteps(scope) {
+  scope.querySelectorAll('[data-step]').forEach(function (b) {
+    b.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      var id = b.getAttribute('data-step'), i = b.getAttribute('data-i');
+      var st = store.steps[id] || (store.steps[id] = {});
+      if (st[i]) delete st[i]; else st[i] = true;
+      saveStore();
+      render();
+      if (modalDay) renderModal();
+    });
+  });
+}
+
+/* ---------- day modal ---------- */
+var modalDay = null;
+function daysWithActivities() {
+  var set = {};
+  allTasks().forEach(function (t) { if (t.due && t.status !== 'done') set[t.due] = true; });
+  return Object.keys(set).sort();
+}
+function openDay(iso) { modalDay = iso; renderModal(); document.getElementById('scrim').classList.add('on'); }
+function closeDay() {
+  modalDay = null;
+  document.getElementById('scrim').classList.remove('on');
+  renderCal();
+}
+function stepDay(dir) {
+  var list = daysWithActivities();
+  if (!list.length) return;
+  // Move to the next/previous day that actually has something on it.
+  var i = list.indexOf(modalDay);
+  if (i === -1) {
+    for (var k = 0; k < list.length; k++) {
+      if (dir > 0 && list[k] > modalDay) { i = k; modalDay = list[k]; renderModal(); return; }
+      if (dir < 0 && list[k] < modalDay) { i = k; }
+    }
+    if (dir < 0 && i !== -1) { modalDay = list[i]; renderModal(); }
+    return;
+  }
+  var j = i + dir;
+  if (j < 0 || j >= list.length) return;
+  modalDay = list[j];
+  renderModal();
+}
+function renderModal() {
+  if (!modalDay) return;
+  var items = allTasks().filter(function (t) { return t.due === modalDay; });
+  var d = parseISO(modalDay);
+  document.getElementById('mdtitle').textContent =
+    FULLDOW[d.getDay() === 0 ? 6 : d.getDay() - 1] + ', ' + d.getDate() + ' de ' + FULLMON[d.getMonth()];
+  var open = items.filter(function (t) { return t.status !== 'done'; }).length;
+  document.getElementById('mdsub').textContent =
+    open === 0 ? 'nada em aberto' : (open === 1 ? '1 atividade' : open + ' atividades');
+
+  var body = document.getElementById('mdbody');
+  body.innerHTML = items.length ? items.map(function (t) {
+    return '<div class="item ' + t.sev + (t.status === 'done' ? ' done' : '') + ' open" ' +
+      'style="--c:var(--c-' + esc(t.course) + ');--on-c:var(--on-' + esc(t.course) + ')">' +
+      '<div class="it-row">' +
+      '<button class="box" data-toggle="' + esc(t.id) + '" role="checkbox" aria-checked="' +
+        (t.status === 'done') + '" aria-label="Concluir">' + CHECK + '</button>' +
+      '<div class="it-main"><div class="it-title">' + esc(t.title) + '</div>' +
+      '<div class="it-sub"><span class="cbadge">' + esc(t.abbr) + '</span>' +
+      '<span>' + esc(TYPES[t.type] || '') + '</span>' +
+      '<span>' + esc((SIZE_PT[t.size] || t.size).toLowerCase()) + '</span>' +
+      (t.weight != null && t.weight > 0 ? '<span>' + t.weight + '% da nota</span>' : '') +
+      '</div></div><span class="pill">' + esc(countdown(t.days)) + '</span></div>' +
+      '<div class="it-foot">' + renderSteps(t) +
+      '<div class="it-acts"><button class="tbtn" data-edit="' + esc(t.id) + '">Editar</button></div>' +
+      '</div></div>';
+  }).join('') : '<p class="empty">Nada marcado para este dia.</p>';
+
+  wireCardActions(body);
+  wireSteps(body);
+
+  var list = daysWithActivities();
+  var i = list.indexOf(modalDay);
+  document.getElementById('mdprev').disabled = !(i > 0 || (i === -1 && list.some(function (x) { return x < modalDay; })));
+  document.getElementById('mdnext').disabled = !((i > -1 && i < list.length - 1) || (i === -1 && list.some(function (x) { return x > modalDay; })));
+}
+function initModal() {
+  document.getElementById('mdclose').addEventListener('click', closeDay);
+  document.getElementById('scrim').addEventListener('click', function (ev) {
+    if (ev.target.id === 'scrim') closeDay();
+  });
+  document.getElementById('mdprev').addEventListener('click', function () { stepDay(-1); });
+  document.getElementById('mdnext').addEventListener('click', function () { stepDay(1); });
+  document.addEventListener('keydown', function (ev) {
+    if (!modalDay) return;
+    if (ev.key === 'Escape') closeDay();
+    if (ev.key === 'ArrowLeft') stepDay(-1);
+    if (ev.key === 'ArrowRight') stepDay(1);
+  });
+  // Horizontal drag anywhere in the sheet jumps to the next/previous busy day.
+  var x0 = null, y0 = null;
+  var sheet = document.getElementById('daymodal');
+  sheet.addEventListener('touchstart', function (ev) {
+    x0 = ev.touches[0].clientX; y0 = ev.touches[0].clientY;
+  }, { passive: true });
+  sheet.addEventListener('touchend', function (ev) {
+    if (x0 == null) return;
+    var dx = ev.changedTouches[0].clientX - x0, dy = ev.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.6) stepDay(dx < 0 ? 1 : -1);
+    x0 = y0 = null;
+  });
+}
+
 /* ---------- boot ---------- */
 function render() {
   var sch = schedule();
@@ -1208,6 +1385,7 @@ function render() {
 }
 loadStore();
 initForm();
+initModal();
 initExport();
 render();
 """
@@ -1292,6 +1470,7 @@ def payload(m: dict) -> str:
                         for g in (c.get("grading") or [])],
         } for c in m["courses"]],
         "tasks": m["tasks"],
+        "sizeDays": SIZE_DAYS,
     }, ensure_ascii=False, separators=(",", ":"))
 
 
@@ -1299,7 +1478,6 @@ def render_html(m: dict) -> str:
     today = m["today"]
     heading = f"{FULLDAY_PT[today.weekday()]}, {today.day} de {FULLMONTH_PT[today.month - 1]}"
     types = "".join(f'<option value="{k}">{v}</option>' for k, v in TYPE_PT.items())
-    week_cap = sum(m["capacity"].values())
 
     return f"""<title>Painel do Mestrado</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1329,7 +1507,7 @@ def render_html(m: dict) -> str:
   </section>
 
   <section class="px">
-    <h2>Plano de estudo <span class="sub">— {week_cap}h por semana disponíveis</span></h2>
+    <h2>Plano de estudo <span class="sub">— um foco por dia de estudo, pelo prazo mais próximo</span></h2>
     <div class="chart-card">
       <div class="legend" id="legend"></div>
       <div style="position:relative">
@@ -1376,8 +1554,12 @@ def render_html(m: dict) -> str:
           <input id="f-due" type="date">
         </div>
         <div class="field">
-          <label for="f-effort">Horas</label>
-          <input id="f-effort" type="number" min="0" max="99" step="1" value="2">
+          <label for="f-size">Tamanho</label>
+          <select id="f-size">
+            <option value="pequeno">Pequeno</option>
+            <option value="medio" selected>Médio</option>
+            <option value="grande">Grande</option>
+          </select>
         </div>
       </div>
       <div class="form-2">
@@ -1398,6 +1580,19 @@ def render_html(m: dict) -> str:
   </section>
 
   {render_timetable(m)}
+
+  <div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="mdtitle">
+    <div class="modal" id="daymodal">
+      <div class="md-head">
+        <button class="md-nav" id="mdprev" aria-label="Dia anterior com atividades">&#8249;</button>
+        <div class="md-title"><b id="mdtitle"></b><span id="mdsub"></span></div>
+        <button class="md-nav" id="mdnext" aria-label="Próximo dia com atividades">&#8250;</button>
+        <button class="md-x" id="mdclose" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="md-body" id="mdbody"></div>
+      <div class="md-hint">arraste para o lado para trocar de dia</div>
+    </div>
+  </div>
 
   <footer class="px">
     <button class="btn" id="exportbtn">Exportar alterações</button>
