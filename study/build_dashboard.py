@@ -354,7 +354,7 @@ h2 .sub { text-transform: none; letter-spacing: 0; font-weight: 500; color: var(
 
 /* ---------- carousels ---------- */
 .carousel {
-  display: flex; gap: 10px; scroll-snap-type: x mandatory; scrollbar-width: none;
+  display: flex; gap: 10px; align-items: stretch; scroll-snap-type: x mandatory; scrollbar-width: none;
   padding: 2px 16px 4px;
   /* An explicit width plus min-width:0 keeps this scroll container from sizing
      to its off-screen cards and widening the whole document. */
@@ -365,6 +365,7 @@ section { min-width: 0; }
 .carousel::-webkit-scrollbar { display: none; }
 /* ---- outer carousel: one card per discipline ---- */
 .disc-card {
+  height: auto;
   /* min-width:0 is required: without it the flex item refuses to shrink below
      its min-content width and clips its own header text. */
   flex: 0 0 calc(100% - 32px); min-width: 0; scroll-snap-align: center;
@@ -384,15 +385,21 @@ section { min-width: 0; }
 .dc-sep { height: 1px; background: var(--hair); margin: 1px 0; }
 
 /* ---- inner carousel: that discipline's activities ---- */
-.acts { display: flex; gap: 8px; scroll-snap-type: x mandatory; scrollbar-width: none;
-        overflow-x: auto; overflow-y: hidden; width: 100%; max-width: 100%; min-width: 0;
-        padding: 0 16px 2px; overscroll-behavior-x: contain; }
+/* Fixed strip height plus stretched cards: every discipline's carousel is the
+   same size, whatever its longest title happens to be. */
+.acts { display: flex; gap: 8px; align-items: stretch; scroll-snap-type: x mandatory;
+        scrollbar-width: none; overflow-x: auto; overflow-y: hidden; width: 100%;
+        max-width: 100%; min-width: 0; padding: 0 16px 2px; overscroll-behavior-x: contain;
+        height: 214px; }
 .acts::-webkit-scrollbar { display: none; }
 .act {
   flex: 0 0 calc(100% - 26px); scroll-snap-align: center; min-width: 0;
   background: var(--bg); border: 1px solid var(--line); border-radius: 11px;
   padding: 12px 13px; display: flex; flex-direction: column; gap: 8px;
 }
+.act-facts { flex: 1; }
+.act-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+             overflow: hidden; }
 .act-top { display: flex; align-items: center; gap: 8px; }
 .act-type { font-size: 11px; font-weight: 650; color: var(--muted); }
 .act-idx { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--faint); margin-left: auto; }
@@ -406,7 +413,10 @@ section { min-width: 0; }
 .sz-grande { background: var(--warn-soft); color: var(--warn); }
 .dc-tight, .dc-tight b { color: var(--danger); }
 .dr-tag { font-family: var(--mono); font-style: normal; font-size: 10px; font-weight: 700; color: var(--faint); }
-.dr-why { font-size: 11px; color: var(--faint); margin-top: 2px; }
+.dr-why { font-size: 11px; color: var(--faint); margin-top: 2px; margin-bottom: 6px; }
+.dr-item + .dr-why:last-child { margin-bottom: 0; }
+.dr-errand { font-size: 11.5px; color: var(--muted); font-style: italic; margin-top: 2px; }
+.it-peek { font-size: 11.5px; color: var(--faint); padding: 0 12px 11px; }
 .act-foot { display: flex; gap: 7px; align-items: center; }
 .act-done { font-size: 11.5px; color: var(--ok); font-weight: 600; }
 .act-empty { flex: 0 0 calc(100% - 26px); scroll-snap-align: center; font-size: 13px;
@@ -447,6 +457,10 @@ section { min-width: 0; }
 .fcell { aspect-ratio: 1 / 1.5; min-height: 34px; border-radius: 5px;
          background: var(--c); color: var(--on-c, #fff); display: grid; place-items: center;
          font-size: 8.5px; font-weight: 750; letter-spacing: .02em; }
+.fcell { position: relative; overflow: hidden; }
+.fbands { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.fbands i { flex: 1; display: block; }
+.flab { position: relative; z-index: 1; color: var(--on-c, #fff); }
 .fcell.empty { background: var(--sunken); color: var(--faint); font-size: 12px; }
 .fcell.off { background: repeating-linear-gradient(135deg, var(--sunken) 0 4px, transparent 4px 8px); color: var(--faint); }
 .paxis { display: grid; grid-template-columns: repeat(14, 1fr); gap: 3px; margin-top: 7px; }
@@ -597,15 +611,13 @@ section { min-width: 0; }
 
 /* ---------- day modal ---------- */
 .scrim { position: fixed; inset: 0; background: rgba(8,9,11,.55); z-index: 40;
-         display: none; align-items: flex-end; justify-content: center; }
+         display: none; align-items: center; justify-content: center; padding: 16px; }
 .scrim.on { display: flex; }
-@media (min-width: 640px) { .scrim { align-items: center; } }
 .modal {
-  background: var(--card); width: 100%; max-width: 520px; max-height: 82vh;
-  border-radius: 16px 16px 0 0; display: flex; flex-direction: column;
-  box-shadow: 0 -8px 40px rgba(0,0,0,.3); overflow: hidden;
+  background: var(--card); width: 100%; max-width: 520px; max-height: 80vh;
+  border-radius: 16px; display: flex; flex-direction: column;
+  box-shadow: 0 12px 48px rgba(0,0,0,.35); overflow: hidden;
 }
-@media (min-width: 640px) { .modal { border-radius: 16px; } }
 .md-head { display: flex; align-items: center; gap: 10px; padding: 15px 14px 12px; border-bottom: 1px solid var(--hair); }
 .md-nav { font: inherit; font-size: 16px; width: 34px; height: 34px; flex: none; border-radius: 50%;
           border: 1px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; }
@@ -746,14 +758,21 @@ var HORIZON = 200;
 /* Scheduler in STUDY DAYS, not hours. Each day with study time gets one focus,
    taken from the nearest deadline still unfinished; an activity occupies as
    many study days as its size implies. Nothing here claims to know how long
-   anything takes — it orders the work and shows when a deadline arrives before
+   anything takes; it orders the work and shows when a deadline arrives before
    enough study days do. */
 function sizeDays(t) { return DATA.sizeDays[t.size] || DATA.sizeDays.medio || 3; }
 
+/* How many activities a day can carry. A day with a full evening holds two;
+   Tuesday, with only the hour at work, holds one. */
+function slotsFor(day) { var c = capOf(day); return c <= 0 ? 0 : (c >= 3 ? 2 : 1); }
+
+/* Admin items are questions to ask in class, not study work. Scheduling them
+   as if they cost a study day each is what pushed the CD exam past its own
+   date: three of them ate Monday through Thursday. */
+function isStudyWork(t) { return t.status !== 'done' && t.due && t.type !== 'admin'; }
+
 function schedule() {
-  var queue = allTasks().filter(function (t) {
-    return t.status !== 'done' && t.due;
-  }).sort(function (a, b) {
+  var queue = allTasks().filter(isStudyWork).sort(function (a, b) {
     if (a.due !== b.due) return a.due < b.due ? -1 : 1;
     return (b.weight == null ? DEFAULT_WEIGHT : b.weight) - (a.weight == null ? DEFAULT_WEIGHT : a.weight);
   });
@@ -761,31 +780,46 @@ function schedule() {
   var need = {}, doneBy = {};
   queue.forEach(function (t) { need[t.id] = sizeDays(t); doneBy[t.id] = 0; });
 
-  var plan = {};                       // iso -> task id (one focus per study day)
+  /* Several deadlines run in parallel, so each day takes the nearest ones that
+     still have work left rather than finishing one activity before touching
+     the next. That is what puts exam prep in the days before the exam. */
+  var plan = {};
   for (var i = 0; i < HORIZON; i++) {
     var day = addDays(TODAY, i);
-    if (capOf(day) <= 0) continue;     // no study time that day
+    var slots = slotsFor(day);
+    if (!slots) continue;
     var iso = ymd(day);
-    for (var j = 0; j < queue.length; j++) {
+    var picked = [];
+    for (var j = 0; j < queue.length && picked.length < slots; j++) {
       var t = queue[j];
       if (need[t.id] <= 0) continue;
+      // Never plan work for a day after its deadline. Something already
+      // overdue is the exception: it still has to be done, as soon as possible.
+      if (t.due < iso && t.days >= 0) continue;
       need[t.id] -= 1;
-      plan[iso] = t.id;
+      picked.push(t.id);
       if (iso <= t.due) doneBy[t.id] += 1;
-      break;
     }
+    if (picked.length) plan[iso] = picked;
   }
   return { plan: plan, doneBy: doneBy };
 }
 
+/* Reminders that belong to a day but cost no study time. */
+function classErrands(iso) {
+  return allTasks().filter(function (t) {
+    return t.type === 'admin' && t.status !== 'done' && t.due === iso;
+  });
+}
+
 /* True when the deadline arrives before enough study days do. */
 function isTight(t, sch) {
-  if (!t.due || t.status === 'done') return false;
+  if (!t.due || t.status === 'done' || t.type === 'admin') return false;
   return (sch.doneBy[t.id] || 0) < sizeDays(t);
 }
 
 /* ---------- outer carousel: disciplines, each holding its own activity carousel
-   Order inside a discipline is simply by deadline — no invented score. The one
+   Order inside a discipline is simply by deadline, with no invented score. The one
    judgement shown is factual and comes from the scheduler: whether the hours
    still fit before the date. ---------- */
 function renderDisciplines(sch) {
@@ -826,7 +860,7 @@ function renderDisciplines(sch) {
            (t.due ? '&middot; ' + esc(fmtShort(t.due)) : '') + '</div>';
       f += '<div class="act-f"><b>' + (t.weight == null ? '?' : t.weight + '%') + '</b> da nota</div>';
       if (isTight(t, sch)) {
-        f += '<div class="act-f bad">prazo apertado — comece por esta</div>';
+        f += '<div class="act-f bad">prazo apertado, comece por esta</div>';
       } else if (!t.due) {
         f += '<div class="act-f">sem prazo definido</div>';
       } else {
@@ -895,7 +929,7 @@ function renderUpcoming() {
 }
 
 /* Nested horizontal scrollers swallow sideways swipes, so the outer carousel
-   also gets tappable dots and arrows — otherwise a swipe inside a discipline's
+   also gets tappable dots and arrows, since a swipe inside a discipline's
    activity strip would be the only gesture the page ever sees. */
 function wireCarousel(carId, dotId, n, prevId, nextId) {
   var car = document.getElementById(carId), dots = document.getElementById(dotId);
@@ -944,12 +978,18 @@ function renderChart(sch) {
   for (var i = 0; i < 14; i++) {
     var day = addDays(TODAY, i);
     var iso = ymd(day);
-    var t = sch.plan[iso] ? byId(sch.plan[iso]) : null;
+    var ids = sch.plan[iso] || [];
+    var picks = ids.map(byId).filter(Boolean);
     var studyDay = capOf(day) > 0;
 
-    if (t) {
-      cells += '<div class="fcell" style="--c:var(--c-' + esc(t.course) + ');--on-c:var(--on-' +
-               esc(t.course) + ')" data-tip="' + esc(t.title) + '">' + esc(t.abbr) + '</div>';
+    if (picks.length) {
+      var bands = picks.map(function (t) {
+        return '<i style="background:var(--c-' + esc(t.course) + ')"></i>';
+      }).join('');
+      cells += '<div class="fcell" style="--on-c:var(--on-' + esc(picks[0].course) + ')" data-tip="' +
+               esc(picks.map(function (x) { return x.title; }).join(' + ')) + '">' +
+               '<span class="fbands">' + bands + '</span>' +
+               '<span class="flab">' + esc(picks.map(function (x) { return x.abbr; }).join('/')) + '</span></div>';
     } else {
       cells += '<div class="fcell empty' + (studyDay ? '' : ' off') + '" data-tip="' +
                (studyDay ? 'livre' : 'sem horário de estudo') + '">' + (studyDay ? '' : '·') + '</div>';
@@ -973,7 +1013,7 @@ function renderChart(sch) {
     '<div>Esta semana: <b>' + counts[0] + '</b> entregas</div>' +
     '<div>Semana seguinte: <b>' + counts[1] + '</b> entregas</div>';
   document.getElementById('legend').innerHTML = DATA.courses.map(function (c) {
-    return '<span class="lg"><i style="--lc:var(--c-' + esc(c.id) + ')"></i>' + esc(c.abbr) + ' — ' + esc(c.name) + '</span>';
+    return '<span class="lg"><i style="--lc:var(--c-' + esc(c.id) + ')"></i>' + esc(c.abbr) + ': ' + esc(c.name) + '</span>';
   }).join('');
   wireTips();
 }
@@ -1001,24 +1041,30 @@ function wireTips() {
 function renderDays(sch) {
   var out = '';
   var tasks = allTasks();
+  function byId(id) { return tasks.filter(function (x) { return x.id === id; })[0]; }
+
   for (var i = 0; i < 7; i++) {
     var day = addDays(TODAY, i);
     var iso = ymd(day);
     var dow = day.getDay() === 0 ? 6 : day.getDay() - 1;
     var label = i === 0 ? 'HOJE' : (i === 1 ? 'AMANHÃ' : DOW[dow]);
-    var id = sch.plan[iso];
-    var t = id ? tasks.filter(function (x) { return x.id === id; })[0] : null;
+    var picks = (sch.plan[iso] || []).map(byId).filter(Boolean);
+    var errands = classErrands(iso);
     var studyDay = capOf(day) > 0;
 
-    var body;
-    if (t) {
-      body = '<div class="dr-item"><i style="--dc:var(--c-' + esc(t.course) + ')"></i>' +
-             '<span>' + esc(t.title) + '</span>' +
-             '<em class="dr-tag">' + esc(t.abbr) + '</em></div>' +
+    var body = picks.map(function (t) {
+      return '<div class="dr-item"><i style="--dc:var(--c-' + esc(t.course) + ')"></i>' +
+             '<span>' + esc(t.title) + '</span><em class="dr-tag">' + esc(t.abbr) + '</em></div>' +
              '<div class="dr-why">' + (isTight(t, sch) ? 'prazo apertado' : 'entrega ' + esc(countdown(t.days))) + '</div>';
-    } else {
+    }).join('');
+
+    if (!picks.length) {
       body = '<div class="dr-free">' + (studyDay ? 'sem nada pendente' : 'sem horário de estudo') + '</div>';
     }
+    errands.forEach(function (t) {
+      body += '<div class="dr-errand">na aula: ' + esc(t.title) + '</div>';
+    });
+
     out += '<div class="dayrow' + (studyDay ? '' : ' rest') + '">' +
       '<div class="dr-when"><b>' + label + '</b>' + day.getDate() + '/' + (day.getMonth() + 1) + '</div>' +
       '<div class="dr-items">' + body + '</div></div>';
@@ -1042,7 +1088,7 @@ function renderCal() {
     var items = byDay[iso] || [];
     var cls = 'cal-cell';
     if (items.length) cls += ' has';
-    // Urgency, not course identity — colour here would be identity by colour alone.
+    // Urgency, not course identity; colour here would be identity by colour alone.
     if (items.some(function (t) { return (t.weight == null ? 0 : t.weight) >= 25; })) cls += ' urg';
     if (iso === DATA.today) cls += ' today';
     if (d < TODAY) cls += ' past';
@@ -1320,17 +1366,20 @@ function renderModal() {
 
   var body = document.getElementById('mdbody');
   body.innerHTML = items.length ? items.map(function (t) {
-    return '<div class="item ' + t.sev + (t.status === 'done' ? ' done' : '') + ' open" ' +
+    return '<div class="item ' + t.sev + (t.status === 'done' ? ' done' : '') +
+      (openIds[t.id] ? ' open' : '') + '" ' +
       'style="--c:var(--c-' + esc(t.course) + ');--on-c:var(--on-' + esc(t.course) + ')">' +
       '<div class="it-row">' +
       '<button class="box" data-toggle="' + esc(t.id) + '" role="checkbox" aria-checked="' +
         (t.status === 'done') + '" aria-label="Concluir">' + CHECK + '</button>' +
-      '<div class="it-main"><div class="it-title">' + esc(t.title) + '</div>' +
+      '<div class="it-main" data-expand="' + esc(t.id) + '"><div class="it-title">' + esc(t.title) + '</div>' +
       '<div class="it-sub"><span class="cbadge">' + esc(t.abbr) + '</span>' +
       '<span>' + esc(TYPES[t.type] || '') + '</span>' +
       '<span>' + esc((SIZE_PT[t.size] || t.size).toLowerCase()) + '</span>' +
       (t.weight != null && t.weight > 0 ? '<span>' + t.weight + '% da nota</span>' : '') +
       '</div></div><span class="pill">' + esc(countdown(t.days)) + '</span></div>' +
+      (t.steps && t.steps.length && !openIds[t.id]
+        ? '<div class="it-peek">toque para ver o que fazer</div>' : '') +
       '<div class="it-foot">' + renderSteps(t) +
       '<div class="it-acts"><button class="tbtn" data-edit="' + esc(t.id) + '">Editar</button></div>' +
       '</div></div>';
@@ -1338,6 +1387,13 @@ function renderModal() {
 
   wireCardActions(body);
   wireSteps(body);
+  body.querySelectorAll('[data-expand]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var id = b.getAttribute('data-expand');
+      openIds[id] = !openIds[id];
+      renderModal();
+    });
+  });
 
   var list = daysWithActivities();
   var i = list.indexOf(modalDay);
@@ -1492,7 +1548,7 @@ def render_html(m: dict) -> str:
   <div class="px" id="banner"></div>
 
   <section>
-    <h2 class="px">Disciplinas <span class="sub">— deslize para trocar; dentro de cada uma, as 5 próximas</span></h2>
+    <h2 class="px">Disciplinas <span class="sub">deslize para trocar; dentro de cada uma, as 5 próximas</span></h2>
     <div class="carousel" id="disc"></div>
     <div class="carnav">
       <button class="arrow" id="discprev" aria-label="Disciplina anterior">&#8249;</button>
@@ -1507,7 +1563,7 @@ def render_html(m: dict) -> str:
   </section>
 
   <section class="px">
-    <h2>Plano de estudo <span class="sub">— um foco por dia de estudo, pelo prazo mais próximo</span></h2>
+    <h2>Plano de estudo <span class="sub">pelo prazo mais próximo</span></h2>
     <div class="chart-card">
       <div class="legend" id="legend"></div>
       <div style="position:relative">
@@ -1527,7 +1583,7 @@ def render_html(m: dict) -> str:
       <div class="cal-legend">
         O número no canto é quantas atividades vencem no dia &middot; fundo vermelho = tem item
         de peso alto &middot; dia <span style="text-decoration:underline dotted;text-underline-offset:3px">sublinhado</span>
-        = sem horário de estudo. Toque para filtrar a lista.
+        = sem horário de estudo. Toque para abrir o dia.
       </div>
     </div>
   </section>

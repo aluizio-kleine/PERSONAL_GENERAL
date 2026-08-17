@@ -1,5 +1,5 @@
 # =============================================================================
-# TASKS — 2026.2
+# TASKS, 2026.2
 #
 # CONFIRMED  = date came from the teaching plan's cronograma.
 # ESTIMATED  = derived from a week number, anchored to the 10 Aug term start.
@@ -61,7 +61,7 @@ tasks:
       - "Entregar"
     notes: >
       CONFIRMED. 30% of the grade. The paper is written about the seminário
-      final topic, so the seminar work and the paper share their research —
+      final topic, so the seminar work and the paper share their research ,
       do them as one effort, not two. Due one week after the prova, so it
       cannot start on 22/08.
 
@@ -96,11 +96,11 @@ tasks:
       - "Revisar redes neurais I"
       - "Revisar redes neurais II"
       - "Refazer os exercícios das aulas"
-    notes: "ESTIMATED — week 6 of 9, Wednesday slot. 40% of the grade. Covers regression, classification, regularization, neural networks I-II."
+    notes: "ESTIMATED, week 6 of 9, Wednesday slot. 40% of the grade. Covers regression, classification, regularization, neural networks I-II."
 
   - id: ml-project
     course: machine-learning
-    title: "Projeto final — desenvolver e escrever"
+    title: "Projeto final: desenvolver e escrever"
     type: paper
     due: 2026-10-05
     due_time: "23:59"
@@ -127,7 +127,7 @@ tasks:
     steps:
       - "Montar os slides a partir do relatório"
       - "Ensaiar a apresentação"
-    notes: "ESTIMATED — week 9 of 9, Wednesday slot."
+    notes: "ESTIMATED, week 9 of 9, Wednesday slot."
 
   - id: ml-assignments
     course: machine-learning
@@ -159,7 +159,7 @@ tasks:
       - "Levantar a bibliografia"
       - "Montar os slides"
       - "Ensaiar"
-    notes: "ESTIMATED — week 8 of 8, Tuesday slot. 25% of the grade."
+    notes: "ESTIMATED, week 8 of 8, Tuesday slot. 25% of the grade."
 
   - id: ia-trabalhos
     course: ia
@@ -174,11 +174,11 @@ tasks:
       - "Perguntar ao prof. Hübner na aula de terça"
       - "Anotar quantos são, datas e formato"
       - "Me mandar aqui no chat"
-    notes: "60% of this discipline is trabalhos práticos with no dates in the plan — the single largest unknown across all five courses. Ask Prof. Hubner Tuesday."
+    notes: "60% of this discipline is trabalhos práticos with no dates in the plan, the single largest unknown across all five courses. Ask Prof. Hubner Tuesday."
 
   - id: ia-quest-agi
     course: ia
-    title: "Questionário \"Limites da IA\" — 5 questões"
+    title: "Questionário \"Limites da IA\", 5 questões"
     type: reading
     due: 2026-08-20
     due_time: "23:59"
@@ -213,7 +213,7 @@ tasks:
       - "Escolher o artigo/tema"
       - "Montar os slides"
       - "Ensaiar"
-    notes: "ESTIMATED — seminars run in weeks 9-10 (09/10 and 16/10). 20% of the grade."
+    notes: "ESTIMATED, seminars run in weeks 9-10 (09/10 and 16/10). 20% of the grade."
 
   - id: sma-projeto
     course: sma
@@ -230,7 +230,7 @@ tasks:
       - "Implementar"
       - "Testar"
       - "Escrever a documentação"
-    notes: "ESTIMATED — week 16 of 16. 40% of the grade. Far away, but a big one: start it before the November crunch."
+    notes: "ESTIMATED, week 16 of 16. 40% of the grade. Far away, but a big one: start it before the November crunch."
 
   - id: sma-catchup
     course: sma
@@ -243,20 +243,20 @@ tasks:
     status: todo
     steps:
       - "Pedir material e gravações ao prof. Hübner"
-      - "Semana 1 — introdução a SMA"
-      - "Semana 2 — agentes e JaCaMo"
-      - "Semana 3 — comunicação de agentes"
-      - "Semanas 4 e 5 — arquitetura BDI"
+      - "Semana 1: introdução a SMA"
+      - "Semana 2: agentes e JaCaMo"
+      - "Semana 3: comunicação de agentes"
+      - "Semanas 4 e 5: arquitetura BDI"
     notes: >
       The Friday CD overlap covers ALL of SMA's only weekly slot, so weeks 1-5
       are missed entirely: introdução, agentes e JaCaMo, comunicação de agentes,
       and BDI twice. That is the whole foundation for the 40% projeto final.
       Jomi Hubner also teaches IA, so ask him for materials/recordings in
-      Tuesday's IA class — one conversation covers both courses.
+      Tuesday's IA class, one conversation covers both courses.
 
   - id: sma-quest-mas
     course: sma
-    title: "Questionário \"Abordagem MAS\" — 5 questões"
+    title: "Questionário \"Abordagem MAS\", 5 questões"
     type: reading
     due: 2026-08-27
     due_time: "23:59"
@@ -264,7 +264,7 @@ tasks:
     weight: 10
     status: todo
     steps:
-      - "Ler Dresner & Stone (2008) — 65 páginas, comece cedo"
+      - "Ler Dresner & Stone (2008), 65 páginas, comece cedo"
       - "1. Por que SMA é uma boa abordagem para transporte inteligente?"
       - "2. Qual propriedade de SMA tem maior impacto? Foi validada experimentalmente?"
       - "3. Descrever brevemente o funcionamento do agente proposto"
@@ -272,7 +272,7 @@ tasks:
       - "5. Há espaço para IA generativa? Vantagens e desvantagens"
     notes: >
       CONFIRMED. Article: Dresner & Stone, "A multiagent approach to autonomous
-      intersection management", JAIR vol. 31, pp. 591-656 (2008) — that is a
+      intersection management", JAIR vol. 31, pp. 591-656 (2008), that is a
       65-page paper, which is why it is sized medium rather than small. Questions: why MAS suits intelligent
       transport; which MAS property helps most and was it validated
       experimentally; how the agent works; what was considered beyond the agent
@@ -306,7 +306,7 @@ tasks:
       - "Revisar o conteúdo da aula"
       - "Fazer o teste online"
     notes: >
-      Tomorrow, in Tuesday's class. Deadline for submission not yet known —
+      Tomorrow, in Tuesday's class. Deadline for submission not yet known ,
       the due time is a placeholder set to the end of class. Find out the real
       prazo and tell me.
 
@@ -337,7 +337,7 @@ tasks:
       - "Confirmar o prazo real de entrega"
       - "Revisar o conteúdo"
       - "Fazer o teste online"
-    notes: "Prazo not yet known — placeholder at end of class. Same day as the correlação/regressão trabalho."
+    notes: "Prazo not yet known, placeholder at end of class. Same day as the correlação/regressão trabalho."
 
   - id: est-plano
     course: estatistica
@@ -353,5 +353,5 @@ tasks:
       - "Me mandar o arquivo aqui no chat"
     notes: >
       Highest-leverage hour of the week. One of five disciplines is completely
-      invisible here — ask in Tuesday's class, or email the professor, or check
+      invisible here, ask in Tuesday's class, or email the professor, or check
       the Moodle/CAGR page. Send me whatever you get.

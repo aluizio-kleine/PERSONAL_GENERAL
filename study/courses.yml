@@ -1,9 +1,9 @@
 # =============================================================================
-# COURSES — 2026.2
+# COURSES, 2026.2
 #
 # Sources: teaching plans for Ciência de Dados (ESE410031), Machine Learning
 # (DAS410058), Inteligência Artificial (DAS410057) and Sistemas Multiagentes
-# (DAS410059). Estatística has no plan yet — see the open admin task.
+# (DAS410059). Estatística has no plan yet, see the open admin task.
 #
 # Florianópolis (PPGEAS/DAS) classes started Mon 10 Aug 2026. That date anchors
 # every week-numbered milestone in tasks.yml.
@@ -16,7 +16,7 @@ term_start: 2026-08-10
 # Study hours actually available per weekday, outside class and work.
 #   1h/day at WEG  +  18:00-20:00 at home (2h), except Tuesday, which is
 #   taken by the Estatística class from 17:15 to 20:30.
-# Weekends are 0 until told otherwise — say the word and I will change them.
+# Weekends are 0 until told otherwise, say the word and I will change them.
 study_capacity:
   mon: 3
   tue: 1
@@ -40,7 +40,7 @@ courses:
       - day: fri
         start: "08:15"
         end: "12:15"
-        where: "PPGESE Joinville — presencial + remoto"
+        where: "PPGESE Joinville, presencial + remoto"
     grading:
       - item: "Artigo científico"
         weight: 30
@@ -51,7 +51,7 @@ courses:
       - item: "Seminário parcial"
         weight: 10
     notes: >
-      Trimestre course, started 12/06 — already two thirds done. Dates in the
+      Trimestre course, started 12/06, already two thirds done. Dates in the
       cronograma are explicit and confirmed, unlike the Floripa courses.
       Overlaps SMA on Friday mornings until it ends on 11/09.
 
@@ -128,7 +128,7 @@ courses:
       - item: "Questionários de leitura"
         weight: 10
     notes: >
-      Semestral, 16 weeks — the long one, runs to late Nov/Dec. Only 2h/week,
+      Semestral, 16 weeks, the long one, runs to late Nov/Dec. Only 2h/week,
       but the 40% final project needs sustained work, not a sprint.
 
   - id: estatistica
@@ -144,5 +144,5 @@ courses:
         end: "20:30"
     grading: []
     notes: >
-      No teaching plan yet. Until it arrives this course is a blind spot —
+      No teaching plan yet. Until it arrives this course is a blind spot ,
       every deadline in it is invisible to this tracker.
