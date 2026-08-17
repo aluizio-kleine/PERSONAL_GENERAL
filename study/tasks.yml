@@ -145,6 +145,21 @@ tasks:
     status: todo
     notes: "ESTIMATED — week 16 of 16. 40% of the grade. Far away, but 30h of work: start it before the November crunch."
 
+  - id: sma-catchup
+    course: sma
+    title: "Catch up SMA weeks 1-5 (JaCaMo, comunicação, BDI)"
+    type: reading
+    due: 2026-09-18
+    due_time: "12:00"
+    effort: 8
+    status: todo
+    notes: >
+      The Friday CD overlap covers ALL of SMA's only weekly slot, so weeks 1-5
+      are missed entirely: introdução, agentes e JaCaMo, comunicação de agentes,
+      and BDI twice. That is the whole foundation for the 40% projeto final.
+      Jomi Hubner also teaches IA, so ask him for materials/recordings in
+      Tuesday's IA class — one conversation covers both courses.
+
   - id: sma-experimentos
     course: sma
     title: "Experimentos práticos (ongoing)"
