@@ -19,6 +19,7 @@ tasks:
     due: 2026-08-14
     due_time: "12:15"
     effort: 0
+    weight: 10
     status: done
     notes: "Apresentado em 14/08/2026 (síncrono remoto). 10% da nota."
 
@@ -29,6 +30,7 @@ tasks:
     due: 2026-08-21
     due_time: "12:15"
     effort: 10
+    weight: 30
     status: todo
     notes: "CONFIRMED. 30% of the grade. Covers everything from 12/06 onward: coleta e armazenamento, pré-processamento, modelos, visualização, análise espacial, séries temporais."
 
@@ -39,6 +41,7 @@ tasks:
     due: 2026-08-28
     due_time: "23:59"
     effort: 20
+    weight: 30
     status: todo
     notes: >
       CONFIRMED. 30% of the grade. The paper is written about the seminário
@@ -53,6 +56,7 @@ tasks:
     due: 2026-09-11
     due_time: "12:15"
     effort: 8
+    weight: 30
     status: todo
     notes: "CONFIRMED. 30% of the grade. Last session of the discipline."
 
@@ -64,6 +68,7 @@ tasks:
     due: 2026-09-16
     due_time: "12:00"
     effort: 12
+    weight: 40
     status: todo
     notes: "ESTIMATED — week 6 of 9, Wednesday slot. 40% of the grade. Covers regression, classification, regularization, neural networks I-II."
 
@@ -74,6 +79,7 @@ tasks:
     due: 2026-10-05
     due_time: "23:59"
     effort: 25
+    weight: 30
     status: todo
     notes: "ESTIMATED. 40% of the grade. Deliberately dated two days before the presentation so the work is finished before the slides."
 
@@ -84,6 +90,7 @@ tasks:
     due: 2026-10-07
     due_time: "12:00"
     effort: 4
+    weight: 10
     status: todo
     notes: "ESTIMATED — week 9 of 9, Wednesday slot."
 
@@ -94,6 +101,7 @@ tasks:
     due: 2026-08-19
     due_time: "12:00"
     effort: 1
+    weight: 0
     status: todo
     notes: "20% of the grade sits in up to three assignments with no dates in the plan. Ask Prof. Antonelo on Wednesday, then I will add them."
 
@@ -105,6 +113,7 @@ tasks:
     due: 2026-09-29
     due_time: "12:00"
     effort: 10
+    weight: 25
     status: todo
     notes: "ESTIMATED — week 8 of 8, Tuesday slot. 25% of the grade."
 
@@ -115,6 +124,7 @@ tasks:
     due: 2026-08-18
     due_time: "12:00"
     effort: 1
+    weight: 0
     status: todo
     notes: "60% of this discipline is trabalhos práticos with no dates in the plan — the single largest unknown across all five courses. Ask Prof. Hubner Tuesday."
 
@@ -125,6 +135,7 @@ tasks:
     due: 2026-08-20
     due_time: "23:59"
     effort: 4
+    weight: 8
     status: todo
     notes: >
       CONFIRMED. Article: Agüera y Arcas & Norvig, "Artificial General
@@ -141,6 +152,7 @@ tasks:
     due: 2026-10-09
     due_time: "12:00"
     effort: 10
+    weight: 20
     status: todo
     notes: "ESTIMATED — seminars run in weeks 9-10 (09/10 and 16/10). 20% of the grade."
 
@@ -151,6 +163,7 @@ tasks:
     due: 2026-11-27
     due_time: "23:59"
     effort: 30
+    weight: 40
     status: todo
     notes: "ESTIMATED — week 16 of 16. 40% of the grade. Far away, but 30h of work: start it before the November crunch."
 
@@ -161,6 +174,7 @@ tasks:
     due: 2026-09-18
     due_time: "12:00"
     effort: 8
+    weight: 0
     status: todo
     notes: >
       The Friday CD overlap covers ALL of SMA's only weekly slot, so weeks 1-5
@@ -176,6 +190,7 @@ tasks:
     due: 2026-08-27
     due_time: "23:59"
     effort: 6
+    weight: 10
     status: todo
     notes: >
       CONFIRMED. Article: Dresner & Stone, "A multiagent approach to autonomous
@@ -192,6 +207,7 @@ tasks:
     due:
     due_time: ""
     effort: 3
+    weight: 30
     status: doing
     notes: "30% of the grade, spread across the semester in JaCaMo. Tell me when each is assigned."
 
