@@ -40,7 +40,11 @@ tasks:
     due_time: "23:59"
     effort: 20
     status: todo
-    notes: "CONFIRMED. 30% of the grade. Due one week after the prova — the two overlap, so this cannot start on 22/08."
+    notes: >
+      CONFIRMED. 30% of the grade. The paper is written about the seminário
+      final topic, so the seminar work and the paper share their research —
+      do them as one effort, not two. Due one week after the prova, so it
+      cannot start on 22/08.
 
   - id: cd-sf
     course: ciencia-dados
@@ -55,7 +59,7 @@ tasks:
   # ------------------------------------------------- Machine Learning (40/40/20)
   - id: ml-exam
     course: machine-learning
-    title: "Exam (oral or written)"
+    title: "Prova (oral ou escrita)"
     type: exam
     due: 2026-09-16
     due_time: "12:00"
@@ -65,7 +69,7 @@ tasks:
 
   - id: ml-project
     course: machine-learning
-    title: "Final project — build and write up"
+    title: "Projeto final — desenvolver e escrever"
     type: paper
     due: 2026-10-05
     due_time: "23:59"
@@ -75,7 +79,7 @@ tasks:
 
   - id: ml-project-pres
     course: machine-learning
-    title: "Project presentation"
+    title: "Apresentação do projeto"
     type: presentation
     due: 2026-10-07
     due_time: "12:00"
@@ -85,7 +89,7 @@ tasks:
 
   - id: ml-assignments
     course: machine-learning
-    title: "Confirm dates for the 3 practical assignments"
+    title: "Confirmar as datas dos 3 practical assignments"
     type: admin
     due: 2026-08-19
     due_time: "12:00"
@@ -106,7 +110,7 @@ tasks:
 
   - id: ia-trabalhos
     course: ia
-    title: "Confirm the trabalhos práticos and their dates"
+    title: "Confirmar os trabalhos práticos e suas datas"
     type: admin
     due: 2026-08-18
     due_time: "12:00"
@@ -114,15 +118,20 @@ tasks:
     status: todo
     notes: "60% of this discipline is trabalhos práticos with no dates in the plan — the single largest unknown across all five courses. Ask Prof. Hubner Tuesday."
 
-  - id: ia-questionarios
+  - id: ia-quest-agi
     course: ia
-    title: "Questionários de leitura de artigos (ongoing)"
+    title: "Questionário \"Limites da IA\" — 5 questões"
     type: reading
-    due:
-    due_time: ""
-    effort: 2
-    status: doing
-    notes: "15% of the grade, recurring throughout. No fixed dates — one paper questionnaire per topic. Tell me when each is assigned."
+    due: 2026-08-20
+    due_time: "23:59"
+    effort: 4
+    status: todo
+    notes: >
+      CONFIRMED. Article: Agüera y Arcas & Norvig, "Artificial General
+      Intelligence Is Already Here" (2023). Questions: what AGI is and what
+      characterises it; the problem of testing intelligence; fluency vs
+      intelligence (Chinese Room); natural vs artificial intelligence; is AI
+      dangerous. Counts toward the 15% questionários.
 
   # ------------------------------------------------- Sistemas Multiagentes (40/30/20/10)
   - id: sma-seminario
@@ -147,7 +156,7 @@ tasks:
 
   - id: sma-catchup
     course: sma
-    title: "Catch up SMA weeks 1-5 (JaCaMo, comunicação, BDI)"
+    title: "Recuperar as semanas 1-5 de SMA (JaCaMo, comunicação, BDI)"
     type: reading
     due: 2026-09-18
     due_time: "12:00"
@@ -160,6 +169,22 @@ tasks:
       Jomi Hubner also teaches IA, so ask him for materials/recordings in
       Tuesday's IA class — one conversation covers both courses.
 
+  - id: sma-quest-mas
+    course: sma
+    title: "Questionário \"Abordagem MAS\" — 5 questões"
+    type: reading
+    due: 2026-08-27
+    due_time: "23:59"
+    effort: 6
+    status: todo
+    notes: >
+      CONFIRMED. Article: Dresner & Stone, "A multiagent approach to autonomous
+      intersection management", JAIR vol. 31, pp. 591-656 (2008) — that is a
+      65-page paper, so 6h is not padding. Questions: why MAS suits intelligent
+      transport; which MAS property helps most and was it validated
+      experimentally; how the agent works; what was considered beyond the agent
+      dimension; room for generative AI. Counts toward the 10% questionários.
+
   - id: sma-experimentos
     course: sma
     title: "Experimentos práticos (ongoing)"
@@ -171,9 +196,42 @@ tasks:
     notes: "30% of the grade, spread across the semester in JaCaMo. Tell me when each is assigned."
 
   # ------------------------------------------------- Estatística
+  - id: est-teste-1
+    course: estatistica
+    title: "Teste online 1"
+    type: exam
+    due: 2026-08-18
+    due_time: "20:30"
+    effort: 2
+    status: todo
+    notes: >
+      Tomorrow, in Tuesday's class. Deadline for submission not yet known —
+      the due time is a placeholder set to the end of class. Find out the real
+      prazo and tell me.
+
+  - id: est-trabalho
+    course: estatistica
+    title: "Trabalho: correlação e regressão linear"
+    type: assignment
+    due: 2026-08-25
+    due_time: "23:59"
+    effort: 8
+    status: todo
+    notes: "CONFIRMED date. Lands the same day as the second online test."
+
+  - id: est-teste-2
+    course: estatistica
+    title: "Teste online 2"
+    type: exam
+    due: 2026-08-25
+    due_time: "20:30"
+    effort: 2
+    status: todo
+    notes: "Prazo not yet known — placeholder at end of class. Same day as the correlação/regressão trabalho."
+
   - id: est-plano
     course: estatistica
-    title: "Get the plano de ensino for Estatística"
+    title: "Conseguir o plano de ensino de Estatística"
     type: admin
     due: 2026-08-18
     due_time: "20:30"

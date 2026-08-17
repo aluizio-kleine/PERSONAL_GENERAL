@@ -13,9 +13,14 @@ term: "2026.2"
 timezone: "America/Sao_Paulo"
 term_start: 2026-08-10
 
+# Realistic study hours per week outside class. Drives the workload bars.
+weekly_capacity: 20
+
 courses:
   # ---------------------------------------------------------------- Joinville
   - id: ciencia-dados
+    color: "#0F766E"
+    color_dark: "#5EEAD4"
     name: "Ciência de Dados"
     code: "ESE410031"
     professor: "Ricardo Pfitscher / Benjamin Grando Moreira"
@@ -41,6 +46,8 @@ courses:
 
   # ---------------------------------------------------- Florianópolis (PPGEAS)
   - id: machine-learning
+    color: "#4338CA"
+    color_dark: "#A5B4FC"
     name: "Machine Learning"
     code: "DAS410058"
     professor: "Eric Aislan Antonelo"
@@ -64,6 +71,8 @@ courses:
     notes: "Bimestral, 9 weeks. Exam in week 6, project presentation in week 9."
 
   - id: ia
+    color: "#7E22CE"
+    color_dark: "#D8B4FE"
     name: "Inteligência Artificial"
     code: "DAS410057"
     professor: "Jomi F. Hubner"
@@ -85,6 +94,8 @@ courses:
     notes: "Bimestral, 8 weeks. Seminários in week 8."
 
   - id: sma
+    color: "#A16207"
+    color_dark: "#FCD34D"
     name: "Sistemas Multiagentes"
     code: "DAS410059"
     professor: "Jomi F. Hubner"
@@ -107,6 +118,8 @@ courses:
       but the 40% final project needs sustained work, not a sprint.
 
   - id: estatistica
+    color: "#BE123C"
+    color_dark: "#FDA4AF"
     name: "Estatística para Análise de Dados"
     code: ""
     professor: ""

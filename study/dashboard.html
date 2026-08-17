@@ -1,68 +1,73 @@
-<title>Master's Term Board</title>
+<title>Painel do Mestrado</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F6F4">
 <style>
 *, *::before, *::after { box-sizing: border-box; }
 
 :root {
   color-scheme: light;
-  --bg:      #EFF1F5;
-  --surface: #FFFFFF;
-  --sunken:  #E4E7EE;
-  --ink:     #14161D;
-  --muted:   #5B6274;
-  --faint:   #878FA3;
-  --line:    #D8DCE5;
-  --accent:  #3F51C4;
+  --bg:      #F6F6F4;
+  --card:    #FFFFFF;
+  --sunken:  #ECECE8;
+  --ink:     #1A1A18;
+  --muted:   #63635E;
+  --faint:   #93938C;
+  --line:    #E2E2DC;
+  --hair:    #EEEEE9;
 
-  --late-fg: #A6301C;  --late-bg: #F7DED8;
-  --now-fg:  #A6301C;  --now-bg:  #F7DED8;
-  --soon-fg: #8A5606;  --soon-bg: #F8E7C9;
-  --week-fg: #2C4499;  --week-bg: #DFE4F8;
-  --calm-fg: #5B6274;  --calm-bg: #E4E7EE;
-  --done-fg: #2C6A4F;  --done-bg: #D9EBE1;
+  --danger:  #B3261E;
+  --danger-soft: #FBE9E7;
+  --warn:    #8A5A00;
+  --warn-soft:   #FBF0DA;
+  --ok:      #1F6D4A;
 
-  --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Roboto Mono", Menlo, Consolas, monospace;
-  --sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --shadow: 0 1px 2px rgba(20,20,18,.05), 0 6px 16px -8px rgba(20,20,18,.10);
+  --r: 14px;
+  --hour: 27px;
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg:      #0F1118;
-    --surface: #171A23;
-    --sunken:  #1E222D;
-    --ink:     #E7EAF2;
-    --muted:   #969DB1;
-    --faint:   #6C7386;
-    --line:    #262B38;
-    --accent:  #8494F2;
+    --bg:      #131315;
+    --card:    #1C1C1F;
+    --sunken:  #26262A;
+    --ink:     #EDEDEA;
+    --muted:   #A3A39C;
+    --faint:   #74746E;
+    --line:    #2E2E33;
+    --hair:    #26262A;
 
-    --late-fg: #F0A08D;  --late-bg: #3B1F1A;
-    --now-fg:  #F0A08D;  --now-bg:  #3B1F1A;
-    --soon-fg: #E5B871;  --soon-bg: #382A14;
-    --week-fg: #A8B4F7;  --week-bg: #202741;
-    --calm-fg: #969DB1;  --calm-bg: #1E222D;
-    --done-fg: #85C7A6;  --done-bg: #172B22;
+    --danger:  #FF9B8F;
+    --danger-soft: #3A1E1B;
+    --warn:    #F0C070;
+    --warn-soft:   #35290F;
+    --ok:      #6FD39B;
+
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 20px -10px rgba(0,0,0,.55);
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg:      #0F1118;
-  --surface: #171A23;
-  --sunken:  #1E222D;
-  --ink:     #E7EAF2;
-  --muted:   #969DB1;
-  --faint:   #6C7386;
-  --line:    #262B38;
-  --accent:  #8494F2;
+  --bg:      #131315;
+  --card:    #1C1C1F;
+  --sunken:  #26262A;
+  --ink:     #EDEDEA;
+  --muted:   #A3A39C;
+  --faint:   #74746E;
+  --line:    #2E2E33;
+  --hair:    #26262A;
 
-  --late-fg: #F0A08D;  --late-bg: #3B1F1A;
-  --now-fg:  #F0A08D;  --now-bg:  #3B1F1A;
-  --soon-fg: #E5B871;  --soon-bg: #382A14;
-  --week-fg: #A8B4F7;  --week-bg: #202741;
-  --calm-fg: #969DB1;  --calm-bg: #1E222D;
-  --done-fg: #85C7A6;  --done-bg: #172B22;
+  --danger:  #FF9B8F;
+  --danger-soft: #3A1E1B;
+  --warn:    #F0C070;
+  --warn-soft:   #35290F;
+  --ok:      #6FD39B;
+
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 20px -10px rgba(0,0,0,.55);
 }
 
 body {
@@ -70,294 +75,316 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
 }
 
-.wrap {
-  max-width: 980px;
+.page {
+  max-width: 720px;
   margin: 0 auto;
-  padding: 20px 16px 64px;
+  padding: 22px 16px 72px;
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  gap: 30px;
 }
 
-.eyebrow {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--faint);
-  margin: 0;
-}
-
-h1 {
-  font-family: var(--mono);
-  font-size: clamp(24px, 6vw, 34px);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  margin: 4px 0 0;
-  text-wrap: balance;
-}
-
-h2 {
-  font-family: var(--mono);
+.term {
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--muted);
-  margin: 0 0 10px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--line);
+  color: var(--faint);
 }
-
+h1 {
+  font-size: clamp(22px, 5.6vw, 28px);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 2px 0 0;
+  text-wrap: balance;
+}
+h2 {
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: 0 0 12px;
+}
 section { display: block; }
 
-/* ---- status strip ---- */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 8px;
-  margin-top: 16px;
-}
-.stat {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  padding: 12px 14px;
+/* ---------- hero ---------- */
+.hero {
+  background: var(--card);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 16px;
+  border-top: 4px solid var(--c, var(--line));
 }
-.stat .n {
+.hero-label {
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--c, var(--muted));
+}
+.hero-main { display: flex; gap: 18px; align-items: center; }
+.hero-num {
   font-family: var(--mono);
-  font-size: 26px;
+  font-size: clamp(44px, 13vw, 62px);
   font-weight: 600;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
-  line-height: 1.1;
+  color: var(--c, var(--ink));
 }
-.stat .k {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
+.hero-unit {
+  display: block;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--faint);
+  margin-top: 6px;
 }
-.stat.alarm { border-color: var(--late-fg); }
-.stat.alarm .n { color: var(--late-fg); }
+.hero-title { font-size: 18px; font-weight: 600; line-height: 1.3; text-wrap: pretty; }
+.hero-meta { font-size: 14px; color: var(--muted); margin-top: 5px; }
 
-/* ---- board rows ---- */
-.board { display: flex; flex-direction: column; gap: 6px; }
-
-.row {
-  position: relative;
-  display: grid;
-  grid-template-columns: 84px 1fr;
-  gap: 12px;
-  align-items: start;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--stripe, var(--line));
-  border-radius: 3px;
-  padding: 11px 13px;
-}
-.row .cd {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--chip-fg, var(--muted));
-  background: var(--chip-bg, var(--sunken));
-  border-radius: 2px;
-  padding: 4px 6px;
-  text-align: center;
-  white-space: nowrap;
-}
-.row .title { font-weight: 500; text-wrap: pretty; }
-.row .meta {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.03em;
-  color: var(--faint);
-  margin-top: 3px;
+.alert {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 10px;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--danger-soft);
+  color: var(--danger);
+  border-radius: 10px;
+  padding: 11px 13px;
+  font-size: 14px;
+  font-weight: 500;
 }
-.row .note {
+.alert svg { flex: none; margin-top: 2px; }
+
+/* ---------- workload chart ---------- */
+.chart {
+  background: var(--card);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 18px 16px 14px;
+}
+.cap-note { font-size: 12px; color: var(--faint); margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
+.cap-swatch { width: 16px; height: 0; border-top: 2px dashed var(--faint); flex: none; }
+
+.bars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; align-items: end; height: 132px; position: relative; }
+.capline { position: absolute; left: 0; right: 0; border-top: 2px dashed var(--faint); opacity: .55; }
+.bar-col { display: flex; flex-direction: column; justify-content: flex-end; height: 100%; gap: 5px; position: relative; }
+.bar {
+  border-radius: 6px 6px 3px 3px;
+  background: linear-gradient(180deg, var(--sunken), var(--sunken));
+  min-height: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+.bar span { display: block; }
+.bar-h { font-family: var(--mono); font-size: 11px; font-weight: 600; text-align: center; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bar-col.over .bar-h { color: var(--danger); }
+.xaxis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 9px; }
+.xlab { font-size: 10px; text-align: center; color: var(--faint); letter-spacing: .02em; line-height: 1.3; }
+.xlab.now { color: var(--ink); font-weight: 700; }
+
+/* ---------- filters ---------- */
+.chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+.chip {
+  font: inherit;
   font-size: 13px;
+  font-weight: 550;
   color: var(--muted);
-  margin-top: 5px;
-}
-.row.is-done .title { text-decoration: line-through; color: var(--faint); }
-
-.sev-late { --stripe: var(--late-fg); --chip-fg: var(--late-fg); --chip-bg: var(--late-bg); }
-.sev-now  { --stripe: var(--now-fg);  --chip-fg: var(--now-fg);  --chip-bg: var(--now-bg); }
-.sev-soon { --stripe: var(--soon-fg); --chip-fg: var(--soon-fg); --chip-bg: var(--soon-bg); }
-.sev-week { --stripe: var(--week-fg); --chip-fg: var(--week-fg); --chip-bg: var(--week-bg); }
-.sev-calm { --stripe: var(--line);    --chip-fg: var(--calm-fg); --chip-bg: var(--calm-bg); }
-.sev-done { --stripe: var(--done-fg); --chip-fg: var(--done-fg); --chip-bg: var(--done-bg); }
-
-/* ---- today ---- */
-.today-card {
-  background: var(--surface);
+  background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 3px;
-  padding: 14px;
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+  min-height: 36px;
+}
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.chip:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ---------- task list ---------- */
+.list { display: flex; flex-direction: column; gap: 8px; }
+.item {
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border-left: 4px solid var(--c, var(--line));
+}
+.item > summary {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+  padding: 14px 15px;
+  cursor: pointer;
+  list-style: none;
+  min-height: 56px;
+}
+.item > summary::-webkit-details-marker { display: none; }
+.item > summary:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.ico { flex: none; color: var(--c, var(--muted)); opacity: .9; }
+.it-body { flex: 1; min-width: 0; }
+.it-title { font-size: 15px; font-weight: 550; line-height: 1.35; text-wrap: pretty; }
+.it-sub { font-size: 12.5px; color: var(--faint); margin-top: 3px; }
+.pill {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--sunken);
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.sev-late .pill, .sev-now .pill { background: var(--danger-soft); color: var(--danger); }
+.sev-soon .pill { background: var(--warn-soft); color: var(--warn); }
+.it-note {
+  font-size: 14px;
+  color: var(--muted);
+  padding: 0 15px 15px 15px;
+  margin: 0;
+  border-top: 1px solid var(--hair);
+  padding-top: 12px;
+  line-height: 1.55;
+}
+.item.is-done { opacity: .55; }
+.item.is-done .it-title { text-decoration: line-through; }
+.list[data-filter="7"]  .item:not([data-in7])  { display: none; }
+.list[data-filter="14"] .item:not([data-in14]) { display: none; }
+.list[data-filter="late"] .item:not([data-late]) { display: none; }
+.empty { font-size: 14px; color: var(--faint); padding: 18px 2px; }
+
+/* ---------- timetable ---------- */
+.tt-wrap { background: var(--card); border-radius: var(--r); box-shadow: var(--shadow); padding: 14px 12px 12px; overflow-x: auto; }
+.tt { display: grid; grid-template-columns: 32px repeat(5, minmax(52px, 1fr)); gap: 4px; min-width: 300px; }
+.tt-head { font-size: 10px; font-weight: 700; letter-spacing: .08em; color: var(--faint); text-align: center; padding-bottom: 6px; }
+.tt-head.now { color: var(--ink); }
+.tt-hours { position: relative; }
+.tt-hours i {
+  position: absolute;
+  right: 3px;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-style: normal;
+  color: var(--faint);
+}
+.tt-col { position: relative; border-left: 1px solid var(--hair); }
+.tt-col.now { background: var(--sunken); border-radius: 5px; }
+.blk {
+  position: absolute;
+  left: 1px; right: 1px;
+  border-radius: 5px;
+  background: var(--c);
+  color: #fff;
+  padding: 4px 3px 0;
+  font-size: 9.5px;
+  font-weight: 650;
+  line-height: 1.15;
+  overflow: hidden;
+}
+.blk b { display: block; font-family: var(--mono); font-weight: 600; opacity: .85; font-size: 9px; }
+:root[data-theme="dark"] .blk, :root:not([data-theme="light"]) .blk { color: #16161A; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .blk { color: #fff; } }
+.clash-note {
+  display: flex; gap: 8px; align-items: flex-start;
+  margin-top: 12px; padding: 10px 12px;
+  background: var(--warn-soft); color: var(--warn);
+  border-radius: 10px; font-size: 13px; font-weight: 500;
+}
+.clash-note svg { flex: none; margin-top: 2px; }
+
+/* ---------- courses ---------- */
+.courses { display: flex; flex-direction: column; gap: 8px; }
+.course {
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 14px 15px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  border-left: 4px solid var(--c, var(--line));
 }
-.classline {
-  display: flex;
-  gap: 12px;
-  align-items: baseline;
-  padding-bottom: 10px;
-  border-bottom: 1px dashed var(--line);
-}
-.classline:last-child { border-bottom: 0; padding-bottom: 0; }
-.classline .t {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  color: var(--accent);
-  white-space: nowrap;
-}
-.classline .w {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--faint);
-}
-.empty {
-  font-size: 14px;
-  color: var(--muted);
-  font-style: italic;
-}
+.c-top { display: flex; align-items: baseline; gap: 10px; }
+.c-name { font-size: 15px; font-weight: 600; flex: 1; line-height: 1.3; }
+.c-count { font-family: var(--mono); font-size: 11px; color: var(--faint); white-space: nowrap; }
+.c-meta { font-size: 12.5px; color: var(--faint); }
+.wbar { display: flex; height: 7px; border-radius: 4px; overflow: hidden; background: var(--sunken); }
+.wbar span { display: block; }
+.wleg { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11px; color: var(--faint); }
+.wleg i { font-style: normal; font-family: var(--mono); }
 
-/* ---- week grid ---- */
-.week {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 6px;
-}
-@media (min-width: 760px) {
-  .week { grid-template-columns: repeat(7, 1fr); }
-}
-.day {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  padding: 9px 10px;
-  min-height: 62px;
-}
-.day.is-today { border-color: var(--accent); background: var(--sunken); }
-.day .dh {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--faint);
-  margin-bottom: 6px;
-}
-.day.is-today .dh { color: var(--accent); font-weight: 600; }
-.day .ev { font-size: 12px; line-height: 1.35; margin-bottom: 7px; }
-.day .ev:last-child { margin-bottom: 0; }
-.day .ev b { display: block; font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--muted); }
-.day.has-clash { border-color: var(--soon-fg); }
-.day .clash {
-  font-family: var(--mono);
-  font-size: 10px;
-  line-height: 1.35;
-  color: var(--soon-fg);
-  background: var(--soon-bg);
-  border-radius: 2px;
-  padding: 4px 5px;
-  margin-top: 2px;
-}
+footer { font-size: 12px; color: var(--faint); line-height: 1.7; border-top: 1px solid var(--line); padding-top: 14px; }
 
-/* ---- courses ---- */
-.courses {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 8px;
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
 }
-.course {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  padding: 13px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
+:root {
+  --c-ciencia-dados: #0F766E;
+  --c-machine-learning: #4338CA;
+  --c-ia: #7E22CE;
+  --c-sma: #A16207;
+  --c-estatistica: #BE123C;
 }
-.course .cn { font-weight: 600; line-height: 1.3; }
-.course .cm {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--faint);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px 10px;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --c-ciencia-dados: #5EEAD4;
+    --c-machine-learning: #A5B4FC;
+    --c-ia: #D8B4FE;
+    --c-sma: #FCD34D;
+    --c-estatistica: #FDA4AF;
+  }
 }
-.weights { display: flex; height: 6px; border-radius: 2px; overflow: hidden; background: var(--sunken); }
-.weights span { display: block; }
-.wlegend {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--faint);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px 10px;
-}
-
-footer {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--faint);
-  border-top: 1px solid var(--line);
-  padding-top: 12px;
-  line-height: 1.6;
+:root[data-theme="dark"] {
+  --c-ciencia-dados: #5EEAD4;
+  --c-machine-learning: #A5B4FC;
+  --c-ia: #D8B4FE;
+  --c-sma: #FCD34D;
+  --c-estatistica: #FDA4AF;
 }
 </style>
-<div class="wrap">
+<div class="page">
   <header>
-    <p class="eyebrow">Term 2026.2 &middot; America/Sao_Paulo</p>
-    <h1>Monday, 17 August 2026</h1>
-    <div class="stats"><div class="stat alarm"><span class="n">1</span><span class="k">overdue</span></div><div class="stat "><span class="n">4</span><span class="k">due in 7 days</span></div><div class="stat "><span class="n">13h</span><span class="k">queued 7 days</span></div><div class="stat alarm"><span class="n">33h</span><span class="k">queued 14 days</span></div><div class="stat "><span class="n">16</span><span class="k">open total</span></div></div>
+    <div class="term">2026.2 &middot; UFSC &middot; 5 disciplinas</div>
+    <h1>Segunda, 17 de agosto</h1>
   </header>
 
-  <section>
-    <h2>Today</h2>
-    <div class="today-card">
-      <div class="empty">No classes scheduled today.</div>
-      
-    </div>
-  </section>
-
-  <section>
-    <h2>Deadline board</h2>
-    <div class="board"><div class="row sev-late"><div class="cd">3d late</div><div><div class="title">Seminário parcial</div><div class="meta"><span>Presentation</span><span>Ciência de Dados</span><span>Fri 14 Aug 12:15</span></div><div class="note">CONFIRMED. Was scheduled for Fri 14/08 (síncrono remoto). Tell me if you already presented and I will archive it.</div></div></div><div class="row sev-soon"><div class="cd">tomorrow</div><div><div class="title">Confirm the trabalhos práticos and their dates</div><div class="meta"><span>Admin</span><span>Inteligência Artificial</span><span>Tue 18 Aug 12:00</span><span>1h</span></div><div class="note">60% of this discipline is trabalhos práticos with no dates in the plan — the single largest unknown across all five courses. Ask Prof. Hubner Tuesday.</div></div></div><div class="row sev-soon"><div class="cd">tomorrow</div><div><div class="title">Get the plano de ensino for Estatística</div><div class="meta"><span>Admin</span><span>Estatística para Análise de Dados</span><span>Tue 18 Aug 20:30</span><span>1h</span></div><div class="note">Highest-leverage hour of the week. One of five disciplines is completely invisible here — ask in Tuesday&#x27;s class, or email the professor, or check the Moodle/CAGR page. Send me whatever you get.
-</div></div></div><div class="row sev-soon"><div class="cd">2d</div><div><div class="title">Confirm dates for the 3 practical assignments</div><div class="meta"><span>Admin</span><span>Machine Learning</span><span>Wed 19 Aug 12:00</span><span>1h</span></div><div class="note">20% of the grade sits in up to three assignments with no dates in the plan. Ask Prof. Antonelo on Wednesday, then I will add them.</div></div></div><div class="row sev-week"><div class="cd">4d</div><div><div class="title">Prova de Conhecimentos</div><div class="meta"><span>Exam</span><span>Ciência de Dados</span><span>Fri 21 Aug 12:15</span><span>10h</span></div><div class="note">CONFIRMED. 30% of the grade. Covers everything from 12/06 onward: coleta e armazenamento, pré-processamento, modelos, visualização, análise espacial, séries temporais.</div></div></div><div class="row sev-calm"><div class="cd">11d</div><div><div class="title">Entrega do artigo científico</div><div class="meta"><span>Paper</span><span>Ciência de Dados</span><span>Fri 28 Aug 23:59</span><span>20h</span></div><div class="note">CONFIRMED. 30% of the grade. Due one week after the prova — the two overlap, so this cannot start on 22/08.</div></div></div><div class="row sev-calm"><div class="cd">25d</div><div><div class="title">Seminário final</div><div class="meta"><span>Presentation</span><span>Ciência de Dados</span><span>Fri 11 Sep 12:15</span><span>8h</span></div><div class="note">CONFIRMED. 30% of the grade. Last session of the discipline.</div></div></div><div class="row sev-calm"><div class="cd">30d</div><div><div class="title">Exam (oral or written)</div><div class="meta"><span>Exam</span><span>Machine Learning</span><span>Wed 16 Sep 12:00</span><span>12h</span></div><div class="note">ESTIMATED — week 6 of 9, Wednesday slot. 40% of the grade. Covers regression, classification, regularization, neural networks I-II.</div></div></div><div class="row sev-calm"><div class="cd">32d</div><div><div class="title">Catch up SMA weeks 1-5 (JaCaMo, comunicação, BDI)</div><div class="meta"><span>Reading</span><span>Sistemas Multiagentes</span><span>Fri 18 Sep 12:00</span><span>8h</span></div><div class="note">The Friday CD overlap covers ALL of SMA&#x27;s only weekly slot, so weeks 1-5 are missed entirely: introdução, agentes e JaCaMo, comunicação de agentes, and BDI twice. That is the whole foundation for the 40% projeto final. Jomi Hubner also teaches IA, so ask him for materials/recordings in Tuesday&#x27;s IA class — one conversation covers both courses.
-</div></div></div><div class="row sev-calm"><div class="cd">43d</div><div><div class="title">Seminário</div><div class="meta"><span>Presentation</span><span>Inteligência Artificial</span><span>Tue 29 Sep 12:00</span><span>10h</span></div><div class="note">ESTIMATED — week 8 of 8, Tuesday slot. 25% of the grade.</div></div></div><div class="row sev-calm"><div class="cd">49d</div><div><div class="title">Final project — build and write up</div><div class="meta"><span>Paper</span><span>Machine Learning</span><span>Mon 05 Oct 23:59</span><span>25h</span></div><div class="note">ESTIMATED. 40% of the grade. Deliberately dated two days before the presentation so the work is finished before the slides.</div></div></div><div class="row sev-calm"><div class="cd">51d</div><div><div class="title">Project presentation</div><div class="meta"><span>Presentation</span><span>Machine Learning</span><span>Wed 07 Oct 12:00</span><span>4h</span></div><div class="note">ESTIMATED — week 9 of 9, Wednesday slot.</div></div></div><div class="row sev-calm"><div class="cd">53d</div><div><div class="title">Seminário</div><div class="meta"><span>Presentation</span><span>Sistemas Multiagentes</span><span>Fri 09 Oct 12:00</span><span>10h</span></div><div class="note">ESTIMATED — seminars run in weeks 9-10 (09/10 and 16/10). 20% of the grade.</div></div></div><div class="row sev-calm"><div class="cd">102d</div><div><div class="title">Projeto final (JaCaMo)</div><div class="meta"><span>Paper</span><span>Sistemas Multiagentes</span><span>Fri 27 Nov 23:59</span><span>30h</span></div><div class="note">ESTIMATED — week 16 of 16. 40% of the grade. Far away, but 30h of work: start it before the November crunch.</div></div></div><div class="row sev-calm"><div class="cd">no date</div><div><div class="title">Questionários de leitura de artigos (ongoing)</div><div class="meta"><span>Reading</span><span>Inteligência Artificial</span><span>2h</span><span>in progress</span></div><div class="note">15% of the grade, recurring throughout. No fixed dates — one paper questionnaire per topic. Tell me when each is assigned.</div></div></div><div class="row sev-calm"><div class="cd">no date</div><div><div class="title">Experimentos práticos (ongoing)</div><div class="meta"><span>Assignment</span><span>Sistemas Multiagentes</span><span>3h</span><span>in progress</span></div><div class="note">30% of the grade, spread across the semester in JaCaMo. Tell me when each is assigned.</div></div></div></div>
-  </section>
-
-  <section>
-    <h2>Week</h2>
-    <div class="week"><div class="day is-today"><div class="dh">MON</div></div><div class="day"><div class="dh">TUE</div><div class="ev"><b>10:10</b>Inteligência Artificial</div><div class="ev"><b>17:15</b>Estatística para Análise de Dados</div></div><div class="day"><div class="dh">WED</div><div class="ev"><b>10:10</b>Machine Learning</div></div><div class="day"><div class="dh">THU</div><div class="ev"><b>13:30</b>Inteligência Artificial</div></div><div class="day has-clash"><div class="dh">FRI</div><div class="ev"><b>08:15</b>Ciência de Dados</div><div class="ev"><b>10:10</b>Sistemas Multiagentes</div><div class="ev"><b>13:30</b>Machine Learning</div><div class="clash">Overlap: Ciência de Dados / Sistemas Multiagentes</div></div><div class="day"><div class="dh">SAT</div></div><div class="day"><div class="dh">SUN</div></div></div>
-  </section>
-
-  <section>
-    <h2>Disciplines</h2>
-    <div class="courses"><div class="course"><div class="cn">Ciência de Dados</div><div class="cm"><span>ESE410031</span><span>Ricardo Pfitscher / Benjamin Grando Moreira</span><span>FRI 08:15</span><span>ends 11 Sep</span><span>4 open / 0 done</span></div><div class="weights"><span style="width:30.0000%;background:var(--accent)"></span><span style="width:30.0000%;background:var(--week-fg)"></span><span style="width:30.0000%;background:var(--soon-fg)"></span><span style="width:10.0000%;background:var(--done-fg)"></span></div><div class="wlegend"><span>Artigo científico 30%</span><span>Seminário final 30%</span><span>Prova 30%</span><span>Seminário parcial 10%</span></div></div><div class="course"><div class="cn">Machine Learning</div><div class="cm"><span>DAS410058</span><span>Eric Aislan Antonelo</span><span>WED 10:10</span><span>FRI 13:30</span><span>ends 09 Oct</span><span>4 open / 0 done</span></div><div class="weights"><span style="width:40.0000%;background:var(--accent)"></span><span style="width:40.0000%;background:var(--week-fg)"></span><span style="width:20.0000%;background:var(--soon-fg)"></span></div><div class="wlegend"><span>Project 40%</span><span>Exam 40%</span><span>Practical assignments 20%</span></div></div><div class="course"><div class="cn">Inteligência Artificial</div><div class="cm"><span>DAS410057</span><span>Jomi F. Hubner</span><span>TUE 10:10</span><span>THU 13:30</span><span>ends 01 Oct</span><span>3 open / 0 done</span></div><div class="weights"><span style="width:60.0000%;background:var(--accent)"></span><span style="width:25.0000%;background:var(--week-fg)"></span><span style="width:15.0000%;background:var(--soon-fg)"></span></div><div class="wlegend"><span>Trabalhos práticos 60%</span><span>Seminários 25%</span><span>Questionários de leitura 15%</span></div></div><div class="course"><div class="cn">Sistemas Multiagentes</div><div class="cm"><span>DAS410059</span><span>Jomi F. Hubner</span><span>FRI 10:10</span><span>ends 27 Nov</span><span>4 open / 0 done</span></div><div class="weights"><span style="width:40.0000%;background:var(--accent)"></span><span style="width:30.0000%;background:var(--week-fg)"></span><span style="width:20.0000%;background:var(--soon-fg)"></span><span style="width:10.0000%;background:var(--done-fg)"></span></div><div class="wlegend"><span>Projeto final 40%</span><span>Experimentos práticos 30%</span><span>Seminários 20%</span><span>Questionários de leitura 10%</span></div></div><div class="course"><div class="cn">Estatística para Análise de Dados</div><div class="cm"><span>TUE 17:15</span><span>1 open / 0 done</span></div></div></div>
-  </section>
+  <section class="hero" style="--c: var(--c-ciencia-dados)"><div class="hero-label">Próxima entrega</div><div class="hero-main"><div><div class="hero-num" style="">3</div><span class="hero-unit">dias atrasado</span></div><div class="hero-body"><div class="hero-title">Seminário parcial</div><div class="hero-meta">Ciência de Dados &middot; sex 14 ago &middot; 12:15</div></div></div><div class="alert"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4"/><path d="M12 17v.4"/></svg><span>55h de trabalho nos próximos 14 dias, contra ~40h de capacidade. Algo precisa começar hoje.</span></div></section>
+  <section><h2>Carga de trabalho por semana</h2><div class="chart"><div class="cap-note"><span class="cap-swatch"></span>linha = sua capacidade de 20h/semana &middot; cores = disciplinas</div><div class="bars"><div class="capline" style="bottom:47.081%"></div><div class="bar-col"><div class="bar-h">19</div><div class="bar" style="height:44.727%"><span style="height:52.632%;background:var(--c-ciencia-dados)"></span><span style="height:5.263%;background:var(--c-machine-learning)"></span><span style="height:26.316%;background:var(--c-ia)"></span><span style="height:15.789%;background:var(--c-estatistica)"></span></div></div><div class="bar-col over"><div class="bar-h">36</div><div class="bar" style="height:84.746%"><span style="height:55.556%;background:var(--c-ciencia-dados)"></span><span style="height:16.667%;background:var(--c-sma)"></span><span style="height:27.778%;background:var(--c-estatistica)"></span></div></div><div class="bar-col"><div class="bar-h"></div><div class="bar" style="height:0.000%"></div></div><div class="bar-col"><div class="bar-h">8</div><div class="bar" style="height:18.832%"><span style="height:100.000%;background:var(--c-ciencia-dados)"></span></div></div><div class="bar-col"><div class="bar-h">20</div><div class="bar" style="height:47.081%"><span style="height:60.000%;background:var(--c-machine-learning)"></span><span style="height:40.000%;background:var(--c-sma)"></span></div></div><div class="bar-col"><div class="bar-h"></div><div class="bar" style="height:0.000%"></div></div></div><div class="xaxis"><div class="xlab now">17/08</div><div class="xlab">24/08</div><div class="xlab">31/08</div><div class="xlab">7/09</div><div class="xlab">14/09</div><div class="xlab">21/09</div></div></div></section>
+  <section><h2>Entregas</h2><div class="chips"><button class="chip" data-filterbtn="all" aria-pressed="true">Tudo</button><button class="chip" data-filterbtn="7" aria-pressed="false">7 dias</button><button class="chip" data-filterbtn="14" aria-pressed="false">14 dias</button><button class="chip" data-filterbtn="late" aria-pressed="false">Atrasado</button></div><div class="list" id="tasklist" data-filter="all"><details class="item sev-late" data-late style="--c: var(--c-ciencia-dados)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v11H3z M12 15v5 M8 20h8"/></svg><div class="it-body"><div class="it-title">Seminário parcial</div><div class="it-sub">Seminário &middot; Ciência de Dados &middot; sex 14 ago</div></div><span class="pill">3d atrasado</span></summary><p class="it-note">CONFIRMED. Was scheduled for Fri 14/08 (síncrono remoto). Tell me if you already presented and I will archive it.</p></details><details class="item sev-soon" data-in7 data-in14 style="--c: var(--c-ia)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 100 18 9 9 0 000-18z M12 8v5 M12 16v.5"/></svg><div class="it-body"><div class="it-title">Confirmar os trabalhos práticos e suas datas</div><div class="it-sub">Pendência &middot; Inteligência Artificial &middot; ter 18 ago &middot; 1h</div></div><span class="pill">amanhã</span></summary><p class="it-note">60% of this discipline is trabalhos práticos with no dates in the plan — the single largest unknown across all five courses. Ask Prof. Hubner Tuesday.</p></details><details class="item sev-soon" data-in7 data-in14 style="--c: var(--c-estatistica)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h14v18l-7-4-7 4z"/></svg><div class="it-body"><div class="it-title">Teste online 1</div><div class="it-sub">Prova &middot; Estatística para Análise de Dados &middot; ter 18 ago &middot; 2h</div></div><span class="pill">amanhã</span></summary><p class="it-note">Tomorrow, in Tuesday&#x27;s class. Deadline for submission not yet known — the due time is a placeholder set to the end of class. Find out the real prazo and tell me.</p></details><details class="item sev-soon" data-in7 data-in14 style="--c: var(--c-estatistica)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 100 18 9 9 0 000-18z M12 8v5 M12 16v.5"/></svg><div class="it-body"><div class="it-title">Conseguir o plano de ensino de Estatística</div><div class="it-sub">Pendência &middot; Estatística para Análise de Dados &middot; ter 18 ago &middot; 1h</div></div><span class="pill">amanhã</span></summary><p class="it-note">Highest-leverage hour of the week. One of five disciplines is completely invisible here — ask in Tuesday&#x27;s class, or email the professor, or check the Moodle/CAGR page. Send me whatever you get.</p></details><details class="item sev-soon" data-in7 data-in14 style="--c: var(--c-machine-learning)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 100 18 9 9 0 000-18z M12 8v5 M12 16v.5"/></svg><div class="it-body"><div class="it-title">Confirmar as datas dos 3 practical assignments</div><div class="it-sub">Pendência &middot; Machine Learning &middot; qua 19 ago &middot; 1h</div></div><span class="pill">2 dias</span></summary><p class="it-note">20% of the grade sits in up to three assignments with no dates in the plan. Ask Prof. Antonelo on Wednesday, then I will add them.</p></details><details class="item sev-soon" data-in7 data-in14 style="--c: var(--c-ia)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h8v15H3z M13 5h8v15h-8z"/></svg><div class="it-body"><div class="it-title">Questionário &quot;Limites da IA&quot; — 5 questões</div><div class="it-sub">Leitura &middot; Inteligência Artificial &middot; qui 20 ago &middot; 4h</div></div><span class="pill">3 dias</span></summary><p class="it-note">CONFIRMED. Article: Agüera y Arcas &amp; Norvig, &quot;Artificial General Intelligence Is Already Here&quot; (2023). Questions: what AGI is and what characterises it; the problem of testing intelligence; fluency vs intelligence (Chinese Room); natural vs artificial intelligence; is AI dangerous. Counts toward the 15% questionários.</p></details><details class="item sev-week" data-in7 data-in14 style="--c: var(--c-ciencia-dados)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h14v18l-7-4-7 4z"/></svg><div class="it-body"><div class="it-title">Prova de Conhecimentos</div><div class="it-sub">Prova &middot; Ciência de Dados &middot; sex 21 ago &middot; 10h</div></div><span class="pill">4 dias</span></summary><p class="it-note">CONFIRMED. 30% of the grade. Covers everything from 12/06 onward: coleta e armazenamento, pré-processamento, modelos, visualização, análise espacial, séries temporais.</p></details><details class="item sev-calm" data-in14 style="--c: var(--c-estatistica)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h10l4 4v12H4z M14 4v4h4"/></svg><div class="it-body"><div class="it-title">Trabalho: correlação e regressão linear</div><div class="it-sub">Trabalho &middot; Estatística para Análise de Dados &middot; ter 25 ago &middot; 8h</div></div><span class="pill">8 dias</span></summary><p class="it-note">CONFIRMED date. Lands the same day as the second online test.</p></details><details class="item sev-calm" data-in14 style="--c: var(--c-estatistica)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h14v18l-7-4-7 4z"/></svg><div class="it-body"><div class="it-title">Teste online 2</div><div class="it-sub">Prova &middot; Estatística para Análise de Dados &middot; ter 25 ago &middot; 2h</div></div><span class="pill">8 dias</span></summary><p class="it-note">Prazo not yet known — placeholder at end of class. Same day as the correlação/regressão trabalho.</p></details><details class="item sev-calm" data-in14 style="--c: var(--c-sma)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h8v15H3z M13 5h8v15h-8z"/></svg><div class="it-body"><div class="it-title">Questionário &quot;Abordagem MAS&quot; — 5 questões</div><div class="it-sub">Leitura &middot; Sistemas Multiagentes &middot; qui 27 ago &middot; 6h</div></div><span class="pill">10 dias</span></summary><p class="it-note">CONFIRMED. Article: Dresner &amp; Stone, &quot;A multiagent approach to autonomous intersection management&quot;, JAIR vol. 31, pp. 591-656 (2008) — that is a 65-page paper, so 6h is not padding. Questions: why MAS suits intelligent transport; which MAS property helps most and was it validated experimentally; how the agent works; what was considered beyond the agent dimension; room for generative AI. Counts toward the 10% questionários.</p></details><details class="item sev-calm" data-in14 style="--c: var(--c-ciencia-dados)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z M6 11h12 M6 15h12"/></svg><div class="it-body"><div class="it-title">Entrega do artigo científico</div><div class="it-sub">Artigo &middot; Ciência de Dados &middot; sex 28 ago &middot; 20h</div></div><span class="pill">11 dias</span></summary><p class="it-note">CONFIRMED. 30% of the grade. The paper is written about the seminário final topic, so the seminar work and the paper share their research — do them as one effort, not two. Due one week after the prova, so it cannot start on 22/08.</p></details><details class="item sev-calm" style="--c: var(--c-ciencia-dados)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v11H3z M12 15v5 M8 20h8"/></svg><div class="it-body"><div class="it-title">Seminário final</div><div class="it-sub">Seminário &middot; Ciência de Dados &middot; sex 11 set &middot; 8h</div></div><span class="pill">25 dias</span></summary><p class="it-note">CONFIRMED. 30% of the grade. Last session of the discipline.</p></details><details class="item sev-calm" style="--c: var(--c-machine-learning)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h14v18l-7-4-7 4z"/></svg><div class="it-body"><div class="it-title">Prova (oral ou escrita)</div><div class="it-sub">Prova &middot; Machine Learning &middot; qua 16 set &middot; 12h</div></div><span class="pill">30 dias</span></summary><p class="it-note">ESTIMATED — week 6 of 9, Wednesday slot. 40% of the grade. Covers regression, classification, regularization, neural networks I-II.</p></details><details class="item sev-calm" style="--c: var(--c-sma)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h8v15H3z M13 5h8v15h-8z"/></svg><div class="it-body"><div class="it-title">Recuperar as semanas 1-5 de SMA (JaCaMo, comunicação, BDI)</div><div class="it-sub">Leitura &middot; Sistemas Multiagentes &middot; sex 18 set &middot; 8h</div></div><span class="pill">32 dias</span></summary><p class="it-note">The Friday CD overlap covers ALL of SMA&#x27;s only weekly slot, so weeks 1-5 are missed entirely: introdução, agentes e JaCaMo, comunicação de agentes, and BDI twice. That is the whole foundation for the 40% projeto final. Jomi Hubner also teaches IA, so ask him for materials/recordings in Tuesday&#x27;s IA class — one conversation covers both courses.</p></details><details class="item sev-calm" style="--c: var(--c-ia)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v11H3z M12 15v5 M8 20h8"/></svg><div class="it-body"><div class="it-title">Seminário</div><div class="it-sub">Seminário &middot; Inteligência Artificial &middot; ter 29 set &middot; 10h</div></div><span class="pill">43 dias</span></summary><p class="it-note">ESTIMATED — week 8 of 8, Tuesday slot. 25% of the grade.</p></details><details class="item sev-calm" style="--c: var(--c-machine-learning)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z M6 11h12 M6 15h12"/></svg><div class="it-body"><div class="it-title">Projeto final — desenvolver e escrever</div><div class="it-sub">Artigo &middot; Machine Learning &middot; seg 5 out &middot; 25h</div></div><span class="pill">49 dias</span></summary><p class="it-note">ESTIMATED. 40% of the grade. Deliberately dated two days before the presentation so the work is finished before the slides.</p></details><details class="item sev-calm" style="--c: var(--c-machine-learning)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v11H3z M12 15v5 M8 20h8"/></svg><div class="it-body"><div class="it-title">Apresentação do projeto</div><div class="it-sub">Seminário &middot; Machine Learning &middot; qua 7 out &middot; 4h</div></div><span class="pill">51 dias</span></summary><p class="it-note">ESTIMATED — week 9 of 9, Wednesday slot.</p></details><details class="item sev-calm" style="--c: var(--c-sma)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v11H3z M12 15v5 M8 20h8"/></svg><div class="it-body"><div class="it-title">Seminário</div><div class="it-sub">Seminário &middot; Sistemas Multiagentes &middot; sex 9 out &middot; 10h</div></div><span class="pill">53 dias</span></summary><p class="it-note">ESTIMATED — seminars run in weeks 9-10 (09/10 and 16/10). 20% of the grade.</p></details><details class="item sev-calm" style="--c: var(--c-sma)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z M6 11h12 M6 15h12"/></svg><div class="it-body"><div class="it-title">Projeto final (JaCaMo)</div><div class="it-sub">Artigo &middot; Sistemas Multiagentes &middot; sex 27 nov &middot; 30h</div></div><span class="pill">102 dias</span></summary><p class="it-note">ESTIMATED — week 16 of 16. 40% of the grade. Far away, but 30h of work: start it before the November crunch.</p></details><details class="item sev-calm" style="--c: var(--c-sma)"><summary><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h10l4 4v12H4z M14 4v4h4"/></svg><div class="it-body"><div class="it-title">Experimentos práticos (ongoing)</div><div class="it-sub">Trabalho &middot; Sistemas Multiagentes &middot; 3h</div></div><span class="pill">sem data</span></summary><p class="it-note">30% of the grade, spread across the semester in JaCaMo. Tell me when each is assigned.</p></details></div></section>
+  <section><h2>Semana de aulas</h2><div class="tt-wrap"><div class="tt"><div class="tt-head"></div><div class="tt-head now">SEG</div><div class="tt-head">TER</div><div class="tt-head">QUA</div><div class="tt-head">QUI</div><div class="tt-head">SEX</div><div class="tt-hours" style="height:351px"><i style="top:0.000%">8h</i><i style="top:15.385%">10h</i><i style="top:30.769%">12h</i><i style="top:46.154%">14h</i><i style="top:61.538%">16h</i><i style="top:76.923%">18h</i><i style="top:92.308%">20h</i></div><div class="tt-col now" style="height:351px"></div><div class="tt-col" style="height:351px"><div class="blk" style="--c:var(--c-ia);top:16.667%;height:14.103%;left:0.000%;width:100.000%"><b>10:10</b>Inteligência Artificial</div><div class="blk" style="--c:var(--c-estatistica);top:71.154%;height:25.000%;left:0.000%;width:100.000%"><b>17:15</b>Estatística para Análise de Dados</div></div><div class="tt-col" style="height:351px"><div class="blk" style="--c:var(--c-machine-learning);top:16.667%;height:14.103%;left:0.000%;width:100.000%"><b>10:10</b>Machine Learning</div></div><div class="tt-col" style="height:351px"><div class="blk" style="--c:var(--c-ia);top:42.308%;height:11.538%;left:0.000%;width:100.000%"><b>13:30</b>Inteligência Artificial</div></div><div class="tt-col" style="height:351px"><div class="blk" style="--c:var(--c-ciencia-dados);top:1.923%;height:30.769%;left:0.000%;width:50.000%"><b>08:15</b>Ciência de Dados</div><div class="blk" style="--c:var(--c-sma);top:16.667%;height:14.103%;left:50.000%;width:50.000%"><b>10:10</b>Sistemas Multiagentes</div><div class="blk" style="--c:var(--c-machine-learning);top:42.308%;height:11.538%;left:0.000%;width:50.000%"><b>13:30</b>Machine Learning</div></div></div><div class="clash-note"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4"/><path d="M12 17v.4"/></svg><span>Choque de horário: Ciência de Dados × Sistemas Multiagentes</span></div></div></section>
+  <section><h2>Disciplinas</h2><div class="courses"><div class="course" style="--c: var(--c-ciencia-dados)"><div class="c-top"><div class="c-name">Ciência de Dados</div><div class="c-count">4 abertos</div></div><div class="c-meta">Ricardo Pfitscher / Benjamin Grando Moreira &middot; SEX 08:15 &middot; até sex 11 set</div><div class="wbar"><span style="width:30.000%;background:var(--c-ciencia-dados);opacity:1.00"></span><span style="width:30.000%;background:var(--c-ciencia-dados);opacity:0.81"></span><span style="width:30.000%;background:var(--c-ciencia-dados);opacity:0.62"></span><span style="width:10.000%;background:var(--c-ciencia-dados);opacity:0.43"></span></div><div class="wleg"><span>Artigo científico <i>30%</i></span><span>Seminário final <i>30%</i></span><span>Prova <i>30%</i></span><span>Seminário parcial <i>10%</i></span></div></div><div class="course" style="--c: var(--c-machine-learning)"><div class="c-top"><div class="c-name">Machine Learning</div><div class="c-count">4 abertos</div></div><div class="c-meta">Eric Aislan Antonelo &middot; QUA 10:10 &middot; SEX 13:30 &middot; até sex 9 out</div><div class="wbar"><span style="width:40.000%;background:var(--c-machine-learning);opacity:1.00"></span><span style="width:40.000%;background:var(--c-machine-learning);opacity:0.81"></span><span style="width:20.000%;background:var(--c-machine-learning);opacity:0.62"></span></div><div class="wleg"><span>Project <i>40%</i></span><span>Exam <i>40%</i></span><span>Practical assignments <i>20%</i></span></div></div><div class="course" style="--c: var(--c-ia)"><div class="c-top"><div class="c-name">Inteligência Artificial</div><div class="c-count">3 abertos</div></div><div class="c-meta">Jomi F. Hubner &middot; TER 10:10 &middot; QUI 13:30 &middot; até qui 1 out</div><div class="wbar"><span style="width:60.000%;background:var(--c-ia);opacity:1.00"></span><span style="width:25.000%;background:var(--c-ia);opacity:0.81"></span><span style="width:15.000%;background:var(--c-ia);opacity:0.62"></span></div><div class="wleg"><span>Trabalhos práticos <i>60%</i></span><span>Seminários <i>25%</i></span><span>Questionários de leitura <i>15%</i></span></div></div><div class="course" style="--c: var(--c-sma)"><div class="c-top"><div class="c-name">Sistemas Multiagentes</div><div class="c-count">5 abertos</div></div><div class="c-meta">Jomi F. Hubner &middot; SEX 10:10 &middot; até sex 27 nov</div><div class="wbar"><span style="width:40.000%;background:var(--c-sma);opacity:1.00"></span><span style="width:30.000%;background:var(--c-sma);opacity:0.81"></span><span style="width:20.000%;background:var(--c-sma);opacity:0.62"></span><span style="width:10.000%;background:var(--c-sma);opacity:0.43"></span></div><div class="wleg"><span>Projeto final <i>40%</i></span><span>Experimentos práticos <i>30%</i></span><span>Seminários <i>20%</i></span><span>Questionários de leitura <i>10%</i></span></div></div><div class="course" style="--c: var(--c-estatistica)"><div class="c-top"><div class="c-name">Estatística para Análise de Dados</div><div class="c-count">4 abertos</div></div><div class="c-meta">TER 17:15</div></div></div></section>
 
   <footer>
-    Generated 2026-08-17 12:48 UTC from study/courses.yml and study/tasks.yml.<br>
-    Countdowns are relative to 2026-08-17 in America/Sao_Paulo.
+    Atualizado em 17/08/2026 12:58 UTC a partir de
+    study/courses.yml e study/tasks.yml.<br>
+    Contagens relativas a 17/08/2026 em America/Sao_Paulo.
   </footer>
 </div>
+<script>
+document.querySelectorAll('[data-filterbtn]').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var list = document.getElementById('tasklist');
+    document.querySelectorAll('[data-filterbtn]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b === btn));
+    });
+    list.setAttribute('data-filter', btn.getAttribute('data-filterbtn'));
+  });
+});
+</script>
