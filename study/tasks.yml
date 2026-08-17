@@ -1,51 +1,170 @@
 # =============================================================================
-# TASKS — every deliverable, exam, reading and errand you need to remember.
+# TASKS — 2026.2
 #
-# SAMPLE DATA. Tell me what you actually have due and I will rewrite this.
+# CONFIRMED  = date came from the teaching plan's cronograma.
+# ESTIMATED  = derived from a week number, anchored to the 10 Aug term start.
+#              The plans say the cronograma "may be modified", so confirm these
+#              in class and tell me the real dates.
 #
-# status:  todo | doing | done | blocked
-# type:    assignment | exam | reading | paper | presentation | admin
-# effort:  your honest guess, in hours. Used to warn you when a week is
-#          overloaded BEFORE the week starts.
+# Effort figures are deliberate guesses, sized so the 7-day workload warning
+# means something. Correct them whenever one feels wrong.
 # =============================================================================
 
 tasks:
-  - id: t-001
-    course: sample-ml
-    title: "SAMPLE — Assignment 2: gradient descent from scratch"
-    type: assignment
-    due: 2026-08-21
-    due_time: "23:59"
-    effort: 6
+  # ------------------------------------------------- Ciência de Dados (30/30/30/10)
+  - id: cd-sp
+    course: ciencia-dados
+    title: "Seminário parcial"
+    type: presentation
+    due: 2026-08-14
+    due_time: "12:15"
+    effort: 0
     status: todo
-    notes: "Replace with a real deliverable."
+    notes: "CONFIRMED. Was scheduled for Fri 14/08 (síncrono remoto). Tell me if you already presented and I will archive it."
 
-  - id: t-002
-    course: sample-stats
-    title: "SAMPLE — Problem set 3"
-    type: assignment
-    due: 2026-08-25
-    due_time: "23:59"
-    effort: 4
-    status: doing
-    notes: ""
-
-  - id: t-003
-    course: sample-ml
-    title: "SAMPLE — Read Bishop ch. 4"
-    type: reading
-    due: 2026-08-18
-    due_time: "19:00"
-    effort: 2
-    status: todo
-    notes: "Before Tuesday's class."
-
-  - id: t-004
-    course: sample-stats
-    title: "SAMPLE — Midterm exam"
+  - id: cd-pc
+    course: ciencia-dados
+    title: "Prova de Conhecimentos"
     type: exam
-    due: 2026-09-10
-    due_time: "19:00"
+    due: 2026-08-21
+    due_time: "12:15"
+    effort: 10
+    status: todo
+    notes: "CONFIRMED. 30% of the grade. Covers everything from 12/06 onward: coleta e armazenamento, pré-processamento, modelos, visualização, análise espacial, séries temporais."
+
+  - id: cd-ac
+    course: ciencia-dados
+    title: "Entrega do artigo científico"
+    type: paper
+    due: 2026-08-28
+    due_time: "23:59"
+    effort: 20
+    status: todo
+    notes: "CONFIRMED. 30% of the grade. Due one week after the prova — the two overlap, so this cannot start on 22/08."
+
+  - id: cd-sf
+    course: ciencia-dados
+    title: "Seminário final"
+    type: presentation
+    due: 2026-09-11
+    due_time: "12:15"
+    effort: 8
+    status: todo
+    notes: "CONFIRMED. 30% of the grade. Last session of the discipline."
+
+  # ------------------------------------------------- Machine Learning (40/40/20)
+  - id: ml-exam
+    course: machine-learning
+    title: "Exam (oral or written)"
+    type: exam
+    due: 2026-09-16
+    due_time: "12:00"
     effort: 12
     status: todo
-    notes: ""
+    notes: "ESTIMATED — week 6 of 9, Wednesday slot. 40% of the grade. Covers regression, classification, regularization, neural networks I-II."
+
+  - id: ml-project
+    course: machine-learning
+    title: "Final project — build and write up"
+    type: paper
+    due: 2026-10-05
+    due_time: "23:59"
+    effort: 25
+    status: todo
+    notes: "ESTIMATED. 40% of the grade. Deliberately dated two days before the presentation so the work is finished before the slides."
+
+  - id: ml-project-pres
+    course: machine-learning
+    title: "Project presentation"
+    type: presentation
+    due: 2026-10-07
+    due_time: "12:00"
+    effort: 4
+    status: todo
+    notes: "ESTIMATED — week 9 of 9, Wednesday slot."
+
+  - id: ml-assignments
+    course: machine-learning
+    title: "Confirm dates for the 3 practical assignments"
+    type: admin
+    due: 2026-08-19
+    due_time: "12:00"
+    effort: 1
+    status: todo
+    notes: "20% of the grade sits in up to three assignments with no dates in the plan. Ask Prof. Antonelo on Wednesday, then I will add them."
+
+  # ------------------------------------------------- Inteligência Artificial (60/25/15)
+  - id: ia-seminario
+    course: ia
+    title: "Seminário"
+    type: presentation
+    due: 2026-09-29
+    due_time: "12:00"
+    effort: 10
+    status: todo
+    notes: "ESTIMATED — week 8 of 8, Tuesday slot. 25% of the grade."
+
+  - id: ia-trabalhos
+    course: ia
+    title: "Confirm the trabalhos práticos and their dates"
+    type: admin
+    due: 2026-08-18
+    due_time: "12:00"
+    effort: 1
+    status: todo
+    notes: "60% of this discipline is trabalhos práticos with no dates in the plan — the single largest unknown across all five courses. Ask Prof. Hubner Tuesday."
+
+  - id: ia-questionarios
+    course: ia
+    title: "Questionários de leitura de artigos (ongoing)"
+    type: reading
+    due:
+    due_time: ""
+    effort: 2
+    status: doing
+    notes: "15% of the grade, recurring throughout. No fixed dates — one paper questionnaire per topic. Tell me when each is assigned."
+
+  # ------------------------------------------------- Sistemas Multiagentes (40/30/20/10)
+  - id: sma-seminario
+    course: sma
+    title: "Seminário"
+    type: presentation
+    due: 2026-10-09
+    due_time: "12:00"
+    effort: 10
+    status: todo
+    notes: "ESTIMATED — seminars run in weeks 9-10 (09/10 and 16/10). 20% of the grade."
+
+  - id: sma-projeto
+    course: sma
+    title: "Projeto final (JaCaMo)"
+    type: paper
+    due: 2026-11-27
+    due_time: "23:59"
+    effort: 30
+    status: todo
+    notes: "ESTIMATED — week 16 of 16. 40% of the grade. Far away, but 30h of work: start it before the November crunch."
+
+  - id: sma-experimentos
+    course: sma
+    title: "Experimentos práticos (ongoing)"
+    type: assignment
+    due:
+    due_time: ""
+    effort: 3
+    status: doing
+    notes: "30% of the grade, spread across the semester in JaCaMo. Tell me when each is assigned."
+
+  # ------------------------------------------------- Estatística
+  - id: est-plano
+    course: estatistica
+    title: "Get the plano de ensino for Estatística"
+    type: admin
+    due: 2026-08-18
+    due_time: "20:30"
+    effort: 1
+    status: todo
+    notes: >
+      Highest-leverage hour of the week. One of five disciplines is completely
+      invisible here — ask in Tuesday's class, or email the professor, or check
+      the Moodle/CAGR page. Send me whatever you get.

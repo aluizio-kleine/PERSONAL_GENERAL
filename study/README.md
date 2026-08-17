@@ -34,6 +34,21 @@ python3 study/build_dashboard.py --brief    # plain-text summary, no HTML
 
 Requires `pyyaml`.
 
+## Confirmed vs estimated dates
+
+Only Ciência de Dados publishes real dates — its cronograma lists them
+explicitly, and those are marked `CONFIRMED` in `tasks.yml`.
+
+The three PPGEAS courses (ML, IA, SMA) number their weeks instead of dating
+them, so their milestones are `ESTIMATED`: derived from the week number,
+anchored to the 10 Aug term start, and every plan warns the cronograma "may be
+modified". Treat them as placeholders that keep the work visible until a real
+date replaces them. When a professor names a date, tell me and I will promote
+it to confirmed.
+
+Estatística para Análise de Dados has no teaching plan at all. One of the five
+disciplines is invisible here, and that is the biggest gap in this tracker.
+
 ## How urgency is computed
 
 Every open task gets a countdown relative to today in the timezone set in

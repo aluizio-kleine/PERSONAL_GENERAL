@@ -1,49 +1,120 @@
 # =============================================================================
-# COURSES — the five disciplines you are taking this term.
+# COURSES — 2026.2
 #
-# This file is SAMPLE DATA so you can see the dashboard working. Send me your
-# real schedule / syllabi and I will replace all of it.
+# Sources: teaching plans for Ciência de Dados (ESE410031), Machine Learning
+# (DAS410058), Inteligência Artificial (DAS410057) and Sistemas Multiagentes
+# (DAS410059). Estatística has no plan yet — see the open admin task.
 #
-# You never have to edit this by hand: just tell me "Tuesday's class moved to
-# 20:00" or paste a syllabus, and I will update it.
+# Florianópolis (PPGEAS/DAS) classes started Mon 10 Aug 2026. That date anchors
+# every week-numbered milestone in tasks.yml.
 # =============================================================================
 
 term: "2026.2"
-timezone: "America/Sao_Paulo"   # tell me if this is wrong — it drives every reminder
+timezone: "America/Sao_Paulo"
+term_start: 2026-08-10
 
 courses:
-  - id: sample-ml
-    name: "SAMPLE — Machine Learning"
-    code: "PPG-501"
-    professor: "TBD"
-    # day: mon tue wed thu fri sat sun
+  # ---------------------------------------------------------------- Joinville
+  - id: ciencia-dados
+    name: "Ciência de Dados"
+    code: "ESE410031"
+    professor: "Ricardo Pfitscher / Benjamin Grando Moreira"
+    ends: 2026-09-11
+    schedule:
+      - day: fri
+        start: "08:15"
+        end: "12:15"
+        where: "PPGESE Joinville — presencial + remoto"
+    grading:
+      - item: "Artigo científico"
+        weight: 30
+      - item: "Seminário final"
+        weight: 30
+      - item: "Prova"
+        weight: 30
+      - item: "Seminário parcial"
+        weight: 10
+    notes: >
+      Trimestre course, started 12/06 — already two thirds done. Dates in the
+      cronograma are explicit and confirmed, unlike the Floripa courses.
+      Overlaps SMA on Friday mornings until it ends on 11/09.
+
+  # ---------------------------------------------------- Florianópolis (PPGEAS)
+  - id: machine-learning
+    name: "Machine Learning"
+    code: "DAS410058"
+    professor: "Eric Aislan Antonelo"
+    ends: 2026-10-09
+    schedule:
+      - day: wed
+        start: "10:10"
+        end: "12:00"
+        where: "Sala PosAuto 1"
+      - day: fri
+        start: "13:30"
+        end: "15:00"
+        where: "Sala PosAuto 1"
+    grading:
+      - item: "Project"
+        weight: 40
+      - item: "Exam"
+        weight: 40
+      - item: "Practical assignments"
+        weight: 20
+    notes: "Bimestral, 9 weeks. Exam in week 6, project presentation in week 9."
+
+  - id: ia
+    name: "Inteligência Artificial"
+    code: "DAS410057"
+    professor: "Jomi F. Hubner"
+    ends: 2026-10-01
     schedule:
       - day: tue
-        start: "19:00"
-        end: "22:00"
-        where: "Room B-204"
-    # How the final grade is composed. Weights should add to 100.
-    grading:
-      - item: "Assignments"
-        weight: 40
-      - item: "Midterm"
-        weight: 25
-      - item: "Final project"
-        weight: 35
-    notes: "Replace this course with a real one."
-
-  - id: sample-stats
-    name: "SAMPLE — Statistical Inference"
-    code: "PPG-502"
-    professor: "TBD"
-    schedule:
+        start: "10:10"
+        end: "12:00"
       - day: thu
-        start: "19:00"
-        end: "22:00"
-        where: "Online"
+        start: "13:30"
+        end: "15:00"
     grading:
-      - item: "Problem sets"
-        weight: 50
-      - item: "Final exam"
-        weight: 50
-    notes: ""
+      - item: "Trabalhos práticos"
+        weight: 60
+      - item: "Seminários"
+        weight: 25
+      - item: "Questionários de leitura"
+        weight: 15
+    notes: "Bimestral, 8 weeks. Seminários in week 8."
+
+  - id: sma
+    name: "Sistemas Multiagentes"
+    code: "DAS410059"
+    professor: "Jomi F. Hubner"
+    ends: 2026-11-27
+    schedule:
+      - day: fri
+        start: "10:10"
+        end: "12:00"
+    grading:
+      - item: "Projeto final"
+        weight: 40
+      - item: "Experimentos práticos"
+        weight: 30
+      - item: "Seminários"
+        weight: 20
+      - item: "Questionários de leitura"
+        weight: 10
+    notes: >
+      Semestral, 16 weeks — the long one, runs to late Nov/Dec. Only 2h/week,
+      but the 40% final project needs sustained work, not a sprint.
+
+  - id: estatistica
+    name: "Estatística para Análise de Dados"
+    code: ""
+    professor: ""
+    schedule:
+      - day: tue
+        start: "17:15"
+        end: "20:30"
+    grading: []
+    notes: >
+      No teaching plan yet. Until it arrives this course is a blind spot —
+      every deadline in it is invisible to this tracker.

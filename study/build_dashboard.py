@@ -54,6 +54,15 @@ def today_in(tzname: str) -> dt.date:
         return (dt.datetime.utcnow() - dt.timedelta(hours=3)).date()
 
 
+def minutes(hhmm) -> int:
+    """'13:30' -> 810. Unparseable or missing times sort to 0."""
+    try:
+        h, m = str(hhmm).split(":")
+        return int(h) * 60 + int(m)
+    except (ValueError, AttributeError):
+        return 0
+
+
 def as_date(value) -> dt.date | None:
     if isinstance(value, dt.date):
         return value
@@ -147,6 +156,23 @@ def build_model(courses_doc: dict, tasks_doc: dict) -> dict:
         week[key].sort(key=lambda x: x["slot"].get("start") or "")
 
     horizon = [t for t in open_tasks if t["days"] is not None and 0 <= t["days"] <= 7]
+    horizon14 = [t for t in open_tasks if t["days"] is not None and 0 <= t["days"] <= 14]
+
+    # Two classes booked over the same minutes is worth flagging loudly — it is
+    # the kind of thing you discover by walking into the wrong room.
+    clashes = {}
+    for key in DAY_KEYS:
+        items = week[key]
+        names = []
+        for i in range(len(items)):
+            for j in range(i + 1, len(items)):
+                a, b = items[i]["slot"], items[j]["slot"]
+                if minutes(a.get("start")) < minutes(b.get("end")) and \
+                   minutes(b.get("start")) < minutes(a.get("end")):
+                    names.append((items[i]["course"].get("name", ""), items[j]["course"].get("name", "")))
+        if names:
+            clashes[key] = names
+
     return {
         "today": today,
         "tz": tz,
@@ -161,6 +187,9 @@ def build_model(courses_doc: dict, tasks_doc: dict) -> dict:
         "late": [t for t in open_tasks if t["days"] is not None and t["days"] < 0],
         "next7": horizon,
         "hours7": sum(t["effort"] for t in horizon),
+        "next14": horizon14,
+        "hours14": sum(t["effort"] for t in horizon14),
+        "clashes": clashes,
     }
 
 
@@ -198,6 +227,12 @@ def brief(m: dict) -> str:
     else:
         lines.append("")
         lines.append("Nothing due in the next 7 days.")
+
+    # The 7-day figure hides a big deliverable sitting on day 8-14, which is
+    # exactly when it is still cheap to start.
+    if m["hours14"] > m["hours7"]:
+        lines.append("")
+        lines.append(f"Next 14 days: {m['hours14']}h queued across {len(m['next14'])} item(s).")
 
     return "\n".join(lines)
 
@@ -474,6 +509,17 @@ section { display: block; }
 .day .ev { font-size: 12px; line-height: 1.35; margin-bottom: 7px; }
 .day .ev:last-child { margin-bottom: 0; }
 .day .ev b { display: block; font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--muted); }
+.day.has-clash { border-color: var(--soon-fg); }
+.day .clash {
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.35;
+  color: var(--soon-fg);
+  background: var(--soon-bg);
+  border-radius: 2px;
+  padding: 4px 5px;
+  margin-top: 2px;
+}
 
 /* ---- courses ---- */
 .courses {
@@ -568,6 +614,9 @@ def render_course(c: dict, model: dict) -> str:
     for s in slots:
         key = (s.get("day") or "").lower()
         meta.append(f"{DAY_SHORT.get(key, key.upper())} {esc(s.get('start',''))}")
+    ends = as_date(c.get("ends"))
+    if ends:
+        meta.append(f"ends {ends.strftime('%d %b')}")
     meta.append(f"{open_n} open / {done_n} done")
 
     grading = c.get("grading") or []
@@ -599,9 +648,9 @@ def render_html(m: dict) -> str:
 
     stats = [
         ("alarm" if late_n else "", late_n, "overdue"),
-        ("", len(m["todays_tasks"]), "due today"),
         ("", len(m["next7"]), "due in 7 days"),
-        ("", f"{m['hours7']}h", "work queued"),
+        ("", f"{m['hours7']}h", "queued 7 days"),
+        ("alarm" if m["hours14"] > 30 else "", f"{m['hours14']}h", "queued 14 days"),
         ("", len(m["open"]), "open total"),
     ]
     stats_html = "".join(
@@ -629,10 +678,15 @@ def render_html(m: dict) -> str:
     todays_key = DAY_KEYS[today.weekday()]
     for key in DAY_KEYS:
         cls = " is-today" if key == todays_key else ""
+        if key in m["clashes"]:
+            cls += " has-clash"
         evs = "".join(
             f'<div class="ev"><b>{esc(i["slot"].get("start",""))}</b>{esc(i["course"].get("name",""))}</div>'
             for i in m["week"][key]
         )
+        if key in m["clashes"]:
+            pairs = "; ".join(f"{a} / {b}" for a, b in m["clashes"][key])
+            evs += f'<div class="clash">Overlap: {esc(pairs)}</div>'
         week_html += f'<div class="day{cls}"><div class="dh">{DAY_SHORT[key]}</div>{evs}</div>'
 
     courses_html = "".join(render_course(c, m) for c in m["courses"]) or \
