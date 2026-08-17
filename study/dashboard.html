@@ -95,31 +95,61 @@ h2 .sub { text-transform: none; letter-spacing: 0; font-weight: 500; color: var(
 }
 section { min-width: 0; }
 .carousel::-webkit-scrollbar { display: none; }
-.crit-card {
-  flex: 0 0 calc(100% - 32px); scroll-snap-align: center;
+/* ---- outer carousel: one card per discipline ---- */
+.disc-card {
+  /* min-width:0 is required: without it the flex item refuses to shrink below
+     its min-content width and clips its own header text. */
+  flex: 0 0 calc(100% - 32px); min-width: 0; scroll-snap-align: center;
   background: var(--card); border-radius: var(--r); box-shadow: var(--shadow);
-  padding: 17px; display: flex; flex-direction: column; gap: 13px;
+  padding: 16px 0 12px; display: flex; flex-direction: column; gap: 12px;
   border-top: 3px solid var(--c, var(--line));
 }
-.cc-top { display: flex; align-items: center; gap: 9px; }
-.cc-tag {
-  font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
-  background: var(--c); color: var(--on-c, #fff); padding: 3px 7px; border-radius: 5px;
+.dc-head { padding: 0 16px; display: flex; flex-direction: column; gap: 7px; }
+.dc-top { display: flex; align-items: center; gap: 9px; }
+.dc-tag { font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+          background: var(--c); color: var(--on-c, #fff); padding: 3px 7px; border-radius: 5px; }
+.dc-name { font-size: 16.5px; font-weight: 630; line-height: 1.25; flex: 1; text-wrap: pretty; }
+.dc-meta { font-size: 11.5px; color: var(--faint); line-height: 1.5; }
+.dc-stats { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--muted); }
+.dc-stats b { font-family: var(--mono); font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
+.dc-grade { display: flex; flex-direction: column; gap: 5px; padding: 0 16px; }
+.dc-sep { height: 1px; background: var(--hair); margin: 1px 0; }
+
+/* ---- inner carousel: that discipline's activities ---- */
+.acts { display: flex; gap: 8px; scroll-snap-type: x mandatory; scrollbar-width: none;
+        overflow-x: auto; overflow-y: hidden; width: 100%; max-width: 100%; min-width: 0;
+        padding: 0 16px 2px; overscroll-behavior-x: contain; }
+.acts::-webkit-scrollbar { display: none; }
+.act {
+  flex: 0 0 calc(100% - 26px); scroll-snap-align: center; min-width: 0;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 11px;
+  padding: 12px 13px; display: flex; flex-direction: column; gap: 8px;
 }
-.cc-rank { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: var(--faint); margin-left: auto; }
-.cc-title { font-size: 17px; font-weight: 620; line-height: 1.28; text-wrap: pretty; }
-.cc-why { display: flex; flex-direction: column; gap: 6px; }
-.cc-fact { display: flex; align-items: baseline; gap: 7px; font-size: 13px; color: var(--muted); }
-.cc-fact b { font-family: var(--mono); font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
-.cc-fact.bad b { color: var(--danger); }
-.cc-bar { height: 7px; border-radius: 4px; background: var(--sunken); overflow: hidden; display: flex; }
-.cc-bar i { display: block; height: 100%; }
-.cc-bar .fit { background: var(--ok); }
-.cc-bar .gap { background: var(--danger); }
-.cc-legend { font-size: 11.5px; color: var(--faint); }
+.act-top { display: flex; align-items: center; gap: 8px; }
+.act-type { font-size: 11px; font-weight: 650; color: var(--muted); }
+.act-idx { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--faint); margin-left: auto; }
+.act-title { font-size: 14.5px; font-weight: 600; line-height: 1.3; text-wrap: pretty; }
+.act-facts { display: flex; flex-direction: column; gap: 4px; }
+.act-f { display: flex; align-items: baseline; gap: 6px; font-size: 12.5px; color: var(--muted); }
+.act-f b { font-family: var(--mono); font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
+.act-f.bad, .act-f.bad b { color: var(--danger); }
+.act-f .est { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+              color: var(--faint); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+.act-foot { display: flex; gap: 7px; align-items: center; }
+.act-done { font-size: 11.5px; color: var(--ok); font-weight: 600; }
+.act-empty { flex: 0 0 calc(100% - 26px); scroll-snap-align: center; font-size: 13px;
+             color: var(--faint); padding: 14px 2px; font-style: italic; }
+
+/* ---- carousel navigation ---- */
+.carnav { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 9px; }
+.arrow { font: inherit; font-size: 15px; line-height: 1; width: 34px; height: 34px; border-radius: 50%;
+         border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer;
+         display: grid; place-items: center; }
+.arrow:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.arrow[disabled] { opacity: .35; cursor: default; }
 
 .mini-card {
-  flex: 0 0 74%; scroll-snap-align: start; background: var(--card); border-radius: 12px;
+  flex: 0 0 74%; min-width: 0; scroll-snap-align: start; background: var(--card); border-radius: 12px;
   box-shadow: var(--shadow); padding: 12px 13px; border-left: 3px solid var(--c, var(--line));
   display: flex; flex-direction: column; gap: 5px;
 }
@@ -127,9 +157,14 @@ section { min-width: 0; }
 .mini-title { font-size: 13.5px; font-weight: 550; line-height: 1.3; }
 .mini-sub { font-size: 11.5px; color: var(--faint); }
 
-.dots { display: flex; gap: 5px; justify-content: center; margin-top: 9px; }
+.dots { display: flex; gap: 5px; justify-content: center; }
+.dots button { width: 18px; height: 18px; padding: 0; border: 0; background: none; cursor: pointer;
+               display: grid; place-items: center; }
+.dots button:focus-visible { outline: 2px solid var(--ink); outline-offset: 0; border-radius: 4px; }
 .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line); display: block; transition: background .15s; }
-.dots i.on { background: var(--ink); }
+.dots button[aria-current="true"] i { background: var(--ink); }
+.dots.inner { margin-top: 7px; }
+.dots.inner i { width: 5px; height: 5px; }
 
 /* ---------- plan chart ---------- */
 .chart-card { background: var(--card); border-radius: var(--r); box-shadow: var(--shadow); padding: 16px 14px 12px; }
@@ -342,9 +377,13 @@ footer .btn { margin-bottom: 11px; }
   <div class="px" id="banner"></div>
 
   <section>
-    <h2 class="px">Mais críticas <span class="sub">— por peso na nota e por não caberem no prazo</span></h2>
-    <div class="carousel" id="crit"></div>
-    <div class="dots" id="critdots"></div>
+    <h2 class="px">Disciplinas <span class="sub">— deslize para trocar; dentro de cada uma, as 5 próximas</span></h2>
+    <div class="carousel" id="disc"></div>
+    <div class="carnav">
+      <button class="arrow" id="discprev" aria-label="Disciplina anterior">&#8249;</button>
+      <div class="dots" id="discdots"></div>
+      <button class="arrow" id="discnext" aria-label="Próxima disciplina">&#8250;</button>
+    </div>
   </section>
 
   <section>
@@ -422,18 +461,17 @@ footer .btn { margin-bottom: 11px; }
   </section>
 
   <section class="px"><h2>Semana de aulas</h2><div class="tt-wrap"><div class="tt"><div class="tt-head"></div><div class="tt-head now">SEG</div><div class="tt-head">TER</div><div class="tt-head">QUA</div><div class="tt-head">QUI</div><div class="tt-head">SEX</div><div class="tt-hours" style="height:338px"><i style="top:0.000%">8h</i><i style="top:15.385%">10h</i><i style="top:30.769%">12h</i><i style="top:46.154%">14h</i><i style="top:61.538%">16h</i><i style="top:76.923%">18h</i><i style="top:92.308%">20h</i></div><div class="tt-col now" style="height:338px"></div><div class="tt-col" style="height:338px"><div class="blk" style="--c:var(--c-ia);--on-c:var(--on-ia);top:16.667%;height:14.103%;left:0.000%;width:100.000%"><b>10:10</b>IA</div><div class="blk" style="--c:var(--c-estatistica);--on-c:var(--on-estatistica);top:71.154%;height:25.000%;left:0.000%;width:100.000%"><b>17:15</b>EST</div></div><div class="tt-col" style="height:338px"><div class="blk" style="--c:var(--c-machine-learning);--on-c:var(--on-machine-learning);top:16.667%;height:14.103%;left:0.000%;width:100.000%"><b>10:10</b>ML</div></div><div class="tt-col" style="height:338px"><div class="blk" style="--c:var(--c-ia);--on-c:var(--on-ia);top:42.308%;height:11.538%;left:0.000%;width:100.000%"><b>13:30</b>IA</div></div><div class="tt-col" style="height:338px"><div class="blk" style="--c:var(--c-ciencia-dados);--on-c:var(--on-ciencia-dados);top:1.923%;height:30.769%;left:0.000%;width:50.000%"><b>08:15</b>CD</div><div class="blk" style="--c:var(--c-sma);--on-c:var(--on-sma);top:16.667%;height:14.103%;left:50.000%;width:50.000%"><b>10:10</b>SMA</div><div class="blk" style="--c:var(--c-machine-learning);--on-c:var(--on-machine-learning);top:42.308%;height:11.538%;left:0.000%;width:50.000%"><b>13:30</b>ML</div></div></div><div class="note-box warn" style="margin-top:12px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4"/><path d="M12 17v.4"/></svg><span>Choque de horário: Ciência de Dados × Sistemas Multiagentes</span></div></div></section>
-  <section class="px"><h2>Disciplinas</h2><div class="courses"><div class="course" style="--c: var(--c-ciencia-dados);--on-c:var(--on-ciencia-dados)"><div class="c-top"><span class="cbadge">CD</span><div class="c-name">Ciência de Dados</div><div class="c-count">3 abertos</div></div><div class="c-meta">Ricardo Pfitscher / Benjamin Grando Moreira &middot; SEX 08:15 &middot; até sex 11 set</div><div class="wbar"><span style="width:30.000%;background:var(--c-ciencia-dados);opacity:1.00"></span><span style="width:30.000%;background:var(--c-ciencia-dados);opacity:0.83"></span><span style="width:30.000%;background:var(--c-ciencia-dados);opacity:0.66"></span><span style="width:10.000%;background:var(--c-ciencia-dados);opacity:0.49"></span></div><div class="wleg"><span>Artigo científico <i>30%</i></span><span>Seminário final <i>30%</i></span><span>Prova <i>30%</i></span><span>Seminário parcial <i>10%</i></span></div></div><div class="course" style="--c: var(--c-machine-learning);--on-c:var(--on-machine-learning)"><div class="c-top"><span class="cbadge">ML</span><div class="c-name">Machine Learning</div><div class="c-count">4 abertos</div></div><div class="c-meta">Eric Aislan Antonelo &middot; QUA 10:10 &middot; SEX 13:30 &middot; até sex 9 out</div><div class="wbar"><span style="width:40.000%;background:var(--c-machine-learning);opacity:1.00"></span><span style="width:40.000%;background:var(--c-machine-learning);opacity:0.83"></span><span style="width:20.000%;background:var(--c-machine-learning);opacity:0.66"></span></div><div class="wleg"><span>Project <i>40%</i></span><span>Exam <i>40%</i></span><span>Practical assignments <i>20%</i></span></div></div><div class="course" style="--c: var(--c-ia);--on-c:var(--on-ia)"><div class="c-top"><span class="cbadge">IA</span><div class="c-name">Inteligência Artificial</div><div class="c-count">3 abertos</div></div><div class="c-meta">Jomi F. Hubner &middot; TER 10:10 &middot; QUI 13:30 &middot; até qui 1 out</div><div class="wbar"><span style="width:60.000%;background:var(--c-ia);opacity:1.00"></span><span style="width:25.000%;background:var(--c-ia);opacity:0.83"></span><span style="width:15.000%;background:var(--c-ia);opacity:0.66"></span></div><div class="wleg"><span>Trabalhos práticos <i>60%</i></span><span>Seminários <i>25%</i></span><span>Questionários de leitura <i>15%</i></span></div></div><div class="course" style="--c: var(--c-sma);--on-c:var(--on-sma)"><div class="c-top"><span class="cbadge">SMA</span><div class="c-name">Sistemas Multiagentes</div><div class="c-count">5 abertos</div></div><div class="c-meta">Jomi F. Hubner &middot; SEX 10:10 &middot; até sex 27 nov</div><div class="wbar"><span style="width:40.000%;background:var(--c-sma);opacity:1.00"></span><span style="width:30.000%;background:var(--c-sma);opacity:0.83"></span><span style="width:20.000%;background:var(--c-sma);opacity:0.66"></span><span style="width:10.000%;background:var(--c-sma);opacity:0.49"></span></div><div class="wleg"><span>Projeto final <i>40%</i></span><span>Experimentos práticos <i>30%</i></span><span>Seminários <i>20%</i></span><span>Questionários de leitura <i>10%</i></span></div></div><div class="course" style="--c: var(--c-estatistica);--on-c:var(--on-estatistica)"><div class="c-top"><span class="cbadge">EST</span><div class="c-name">Estatística para Análise de Dados</div><div class="c-count">4 abertos</div></div><div class="c-meta">TER 17:15</div><div class="wleg"><span>pesos ainda desconhecidos</span></div></div></div></section>
 
   <footer class="px">
     <button class="btn" id="exportbtn">Exportar alterações</button>
     <div id="fallback"></div>
     O que você marca, edita e adiciona aqui fica salvo <b>neste aparelho</b>. Para gravar
     no repositório de vez, exporte e me envie o arquivo no chat.<br>
-    Atualizado em 17/08/2026 14:15 UTC &middot;
+    Atualizado em 17/08/2026 15:06 UTC &middot;
     contagens relativas a 17/08/2026 em America/Sao_Paulo.
   </footer>
 </div>
-<script>var DATA = {"today":"2026-08-17","capacity":{"mon":3,"tue":1,"wed":3,"thu":3,"fri":3,"sat":0,"sun":0},"courses":[{"id":"ciencia-dados","name":"Ciência de Dados","abbr":"CD"},{"id":"machine-learning","name":"Machine Learning","abbr":"ML"},{"id":"ia","name":"Inteligência Artificial","abbr":"IA"},{"id":"sma","name":"Sistemas Multiagentes","abbr":"SMA"},{"id":"estatistica","name":"Estatística para Análise de Dados","abbr":"EST"}],"tasks":[{"id":"cd-sp","title":"Seminário parcial","type":"presentation","course":"ciencia-dados","course_name":"Ciência de Dados","due":"2026-08-14","due_time":"12:15","effort":0,"weight":10,"status":"done","notes":"Apresentado em 14/08/2026 (síncrono remoto). 10% da nota."},{"id":"cd-pc","title":"Prova de Conhecimentos","type":"exam","course":"ciencia-dados","course_name":"Ciência de Dados","due":"2026-08-21","due_time":"12:15","effort":10,"weight":30,"status":"todo","notes":"CONFIRMED. 30% of the grade. Covers everything from 12/06 onward: coleta e armazenamento, pré-processamento, modelos, visualização, análise espacial, séries temporais."},{"id":"cd-ac","title":"Entrega do artigo científico","type":"paper","course":"ciencia-dados","course_name":"Ciência de Dados","due":"2026-08-28","due_time":"23:59","effort":20,"weight":30,"status":"todo","notes":"CONFIRMED. 30% of the grade. The paper is written about the seminário final topic, so the seminar work and the paper share their research — do them as one effort, not two. Due one week after the prova, so it cannot start on 22/08."},{"id":"cd-sf","title":"Seminário final","type":"presentation","course":"ciencia-dados","course_name":"Ciência de Dados","due":"2026-09-11","due_time":"12:15","effort":8,"weight":30,"status":"todo","notes":"CONFIRMED. 30% of the grade. Last session of the discipline."},{"id":"ml-exam","title":"Prova (oral ou escrita)","type":"exam","course":"machine-learning","course_name":"Machine Learning","due":"2026-09-16","due_time":"12:00","effort":12,"weight":40,"status":"todo","notes":"ESTIMATED — week 6 of 9, Wednesday slot. 40% of the grade. Covers regression, classification, regularization, neural networks I-II."},{"id":"ml-project","title":"Projeto final — desenvolver e escrever","type":"paper","course":"machine-learning","course_name":"Machine Learning","due":"2026-10-05","due_time":"23:59","effort":25,"weight":30,"status":"todo","notes":"ESTIMATED. 40% of the grade. Deliberately dated two days before the presentation so the work is finished before the slides."},{"id":"ml-project-pres","title":"Apresentação do projeto","type":"presentation","course":"machine-learning","course_name":"Machine Learning","due":"2026-10-07","due_time":"12:00","effort":4,"weight":10,"status":"todo","notes":"ESTIMATED — week 9 of 9, Wednesday slot."},{"id":"ml-assignments","title":"Confirmar as datas dos 3 practical assignments","type":"admin","course":"machine-learning","course_name":"Machine Learning","due":"2026-08-19","due_time":"12:00","effort":1,"weight":0,"status":"todo","notes":"20% of the grade sits in up to three assignments with no dates in the plan. Ask Prof. Antonelo on Wednesday, then I will add them."},{"id":"ia-seminario","title":"Seminário","type":"presentation","course":"ia","course_name":"Inteligência Artificial","due":"2026-09-29","due_time":"12:00","effort":10,"weight":25,"status":"todo","notes":"ESTIMATED — week 8 of 8, Tuesday slot. 25% of the grade."},{"id":"ia-trabalhos","title":"Confirmar os trabalhos práticos e suas datas","type":"admin","course":"ia","course_name":"Inteligência Artificial","due":"2026-08-18","due_time":"12:00","effort":1,"weight":0,"status":"todo","notes":"60% of this discipline is trabalhos práticos with no dates in the plan — the single largest unknown across all five courses. Ask Prof. Hubner Tuesday."},{"id":"ia-quest-agi","title":"Questionário \"Limites da IA\" — 5 questões","type":"reading","course":"ia","course_name":"Inteligência Artificial","due":"2026-08-20","due_time":"23:59","effort":4,"weight":8,"status":"todo","notes":"CONFIRMED. Article: Agüera y Arcas & Norvig, \"Artificial General Intelligence Is Already Here\" (2023). Questions: what AGI is and what characterises it; the problem of testing intelligence; fluency vs intelligence (Chinese Room); natural vs artificial intelligence; is AI dangerous. Counts toward the 15% questionários."},{"id":"sma-seminario","title":"Seminário","type":"presentation","course":"sma","course_name":"Sistemas Multiagentes","due":"2026-10-09","due_time":"12:00","effort":10,"weight":20,"status":"todo","notes":"ESTIMATED — seminars run in weeks 9-10 (09/10 and 16/10). 20% of the grade."},{"id":"sma-projeto","title":"Projeto final (JaCaMo)","type":"paper","course":"sma","course_name":"Sistemas Multiagentes","due":"2026-11-27","due_time":"23:59","effort":30,"weight":40,"status":"todo","notes":"ESTIMATED — week 16 of 16. 40% of the grade. Far away, but 30h of work: start it before the November crunch."},{"id":"sma-catchup","title":"Recuperar as semanas 1-5 de SMA (JaCaMo, comunicação, BDI)","type":"reading","course":"sma","course_name":"Sistemas Multiagentes","due":"2026-09-18","due_time":"12:00","effort":8,"weight":0,"status":"todo","notes":"The Friday CD overlap covers ALL of SMA's only weekly slot, so weeks 1-5 are missed entirely: introdução, agentes e JaCaMo, comunicação de agentes, and BDI twice. That is the whole foundation for the 40% projeto final. Jomi Hubner also teaches IA, so ask him for materials/recordings in Tuesday's IA class — one conversation covers both courses."},{"id":"sma-quest-mas","title":"Questionário \"Abordagem MAS\" — 5 questões","type":"reading","course":"sma","course_name":"Sistemas Multiagentes","due":"2026-08-27","due_time":"23:59","effort":6,"weight":10,"status":"todo","notes":"CONFIRMED. Article: Dresner & Stone, \"A multiagent approach to autonomous intersection management\", JAIR vol. 31, pp. 591-656 (2008) — that is a 65-page paper, so 6h is not padding. Questions: why MAS suits intelligent transport; which MAS property helps most and was it validated experimentally; how the agent works; what was considered beyond the agent dimension; room for generative AI. Counts toward the 10% questionários."},{"id":"sma-experimentos","title":"Experimentos práticos (ongoing)","type":"assignment","course":"sma","course_name":"Sistemas Multiagentes","due":null,"due_time":"","effort":3,"weight":30,"status":"doing","notes":"30% of the grade, spread across the semester in JaCaMo. Tell me when each is assigned."},{"id":"est-teste-1","title":"Teste online 1","type":"exam","course":"estatistica","course_name":"Estatística para Análise de Dados","due":"2026-08-18","due_time":"20:30","effort":2,"weight":null,"status":"todo","notes":"Tomorrow, in Tuesday's class. Deadline for submission not yet known — the due time is a placeholder set to the end of class. Find out the real prazo and tell me."},{"id":"est-trabalho","title":"Trabalho: correlação e regressão linear","type":"assignment","course":"estatistica","course_name":"Estatística para Análise de Dados","due":"2026-08-25","due_time":"23:59","effort":8,"weight":null,"status":"todo","notes":"CONFIRMED date. Lands the same day as the second online test."},{"id":"est-teste-2","title":"Teste online 2","type":"exam","course":"estatistica","course_name":"Estatística para Análise de Dados","due":"2026-08-25","due_time":"20:30","effort":2,"weight":null,"status":"todo","notes":"Prazo not yet known — placeholder at end of class. Same day as the correlação/regressão trabalho."},{"id":"est-plano","title":"Conseguir o plano de ensino de Estatística","type":"admin","course":"estatistica","course_name":"Estatística para Análise de Dados","due":"2026-08-18","due_time":"20:30","effort":1,"weight":null,"status":"todo","notes":"Highest-leverage hour of the week. One of five disciplines is completely invisible here — ask in Tuesday's class, or email the professor, or check the Moodle/CAGR page. Send me whatever you get."}]};</script>
+<script>var DATA = {"today":"2026-08-17","capacity":{"mon":3,"tue":1,"wed":3,"thu":3,"fri":3,"sat":0,"sun":0},"courses":[{"id":"ciencia-dados","name":"Ciência de Dados","abbr":"CD","professor":"Ricardo Pfitscher / Benjamin Grando Moreira","ends":"2026-09-11","schedule":[{"day":"SEX","start":"08:15"}],"grading":[{"item":"Artigo científico","weight":30},{"item":"Seminário final","weight":30},{"item":"Prova","weight":30},{"item":"Seminário parcial","weight":10}]},{"id":"machine-learning","name":"Machine Learning","abbr":"ML","professor":"Eric Aislan Antonelo","ends":"2026-10-09","schedule":[{"day":"QUA","start":"10:10"},{"day":"SEX","start":"13:30"}],"grading":[{"item":"Project","weight":40},{"item":"Exam","weight":40},{"item":"Practical assignments","weight":20}]},{"id":"ia","name":"Inteligência Artificial","abbr":"IA","professor":"Jomi F. Hubner","ends":"2026-10-01","schedule":[{"day":"TER","start":"10:10"},{"day":"QUI","start":"13:30"}],"grading":[{"item":"Trabalhos práticos","weight":60},{"item":"Seminários","weight":25},{"item":"Questionários de leitura","weight":15}]},{"id":"sma","name":"Sistemas Multiagentes","abbr":"SMA","professor":"Jomi F. Hubner","ends":"2026-11-27","schedule":[{"day":"SEX","start":"10:10"}],"grading":[{"item":"Projeto final","weight":40},{"item":"Experimentos práticos","weight":30},{"item":"Seminários","weight":20},{"item":"Questionários de leitura","weight":10}]},{"id":"estatistica","name":"Estatística para Análise de Dados","abbr":"EST","professor":"","ends":null,"schedule":[{"day":"TER","start":"17:15"}],"grading":[]}],"tasks":[{"id":"cd-sp","title":"Seminário parcial","type":"presentation","course":"ciencia-dados","course_name":"Ciência de Dados","due":"2026-08-14","due_time":"12:15","effort":0,"weight":10,"status":"done","notes":"Apresentado em 14/08/2026 (síncrono remoto). 10% da nota."},{"id":"cd-pc","title":"Prova de Conhecimentos","type":"exam","course":"ciencia-dados","course_name":"Ciência de Dados","due":"2026-08-21","due_time":"12:15","effort":10,"weight":30,"status":"todo","notes":"CONFIRMED. 30% of the grade. Covers everything from 12/06 onward: coleta e armazenamento, pré-processamento, modelos, visualização, análise espacial, séries temporais."},{"id":"cd-ac","title":"Entrega do artigo científico","type":"paper","course":"ciencia-dados","course_name":"Ciência de Dados","due":"2026-08-28","due_time":"23:59","effort":20,"weight":30,"status":"todo","notes":"CONFIRMED. 30% of the grade. The paper is written about the seminário final topic, so the seminar work and the paper share their research — do them as one effort, not two. Due one week after the prova, so it cannot start on 22/08."},{"id":"cd-sf","title":"Seminário final","type":"presentation","course":"ciencia-dados","course_name":"Ciência de Dados","due":"2026-09-11","due_time":"12:15","effort":8,"weight":30,"status":"todo","notes":"CONFIRMED. 30% of the grade. Last session of the discipline."},{"id":"ml-exam","title":"Prova (oral ou escrita)","type":"exam","course":"machine-learning","course_name":"Machine Learning","due":"2026-09-16","due_time":"12:00","effort":12,"weight":40,"status":"todo","notes":"ESTIMATED — week 6 of 9, Wednesday slot. 40% of the grade. Covers regression, classification, regularization, neural networks I-II."},{"id":"ml-project","title":"Projeto final — desenvolver e escrever","type":"paper","course":"machine-learning","course_name":"Machine Learning","due":"2026-10-05","due_time":"23:59","effort":25,"weight":30,"status":"todo","notes":"ESTIMATED. 40% of the grade. Deliberately dated two days before the presentation so the work is finished before the slides."},{"id":"ml-project-pres","title":"Apresentação do projeto","type":"presentation","course":"machine-learning","course_name":"Machine Learning","due":"2026-10-07","due_time":"12:00","effort":4,"weight":10,"status":"todo","notes":"ESTIMATED — week 9 of 9, Wednesday slot."},{"id":"ml-assignments","title":"Confirmar as datas dos 3 practical assignments","type":"admin","course":"machine-learning","course_name":"Machine Learning","due":"2026-08-19","due_time":"12:00","effort":1,"weight":0,"status":"todo","notes":"20% of the grade sits in up to three assignments with no dates in the plan. Ask Prof. Antonelo on Wednesday, then I will add them."},{"id":"ia-seminario","title":"Seminário","type":"presentation","course":"ia","course_name":"Inteligência Artificial","due":"2026-09-29","due_time":"12:00","effort":10,"weight":25,"status":"todo","notes":"ESTIMATED — week 8 of 8, Tuesday slot. 25% of the grade."},{"id":"ia-trabalhos","title":"Confirmar os trabalhos práticos e suas datas","type":"admin","course":"ia","course_name":"Inteligência Artificial","due":"2026-08-18","due_time":"12:00","effort":1,"weight":0,"status":"todo","notes":"60% of this discipline is trabalhos práticos with no dates in the plan — the single largest unknown across all five courses. Ask Prof. Hubner Tuesday."},{"id":"ia-quest-agi","title":"Questionário \"Limites da IA\" — 5 questões","type":"reading","course":"ia","course_name":"Inteligência Artificial","due":"2026-08-20","due_time":"23:59","effort":4,"weight":8,"status":"todo","notes":"CONFIRMED. Article: Agüera y Arcas & Norvig, \"Artificial General Intelligence Is Already Here\" (2023). Questions: what AGI is and what characterises it; the problem of testing intelligence; fluency vs intelligence (Chinese Room); natural vs artificial intelligence; is AI dangerous. Counts toward the 15% questionários."},{"id":"sma-seminario","title":"Seminário","type":"presentation","course":"sma","course_name":"Sistemas Multiagentes","due":"2026-10-09","due_time":"12:00","effort":10,"weight":20,"status":"todo","notes":"ESTIMATED — seminars run in weeks 9-10 (09/10 and 16/10). 20% of the grade."},{"id":"sma-projeto","title":"Projeto final (JaCaMo)","type":"paper","course":"sma","course_name":"Sistemas Multiagentes","due":"2026-11-27","due_time":"23:59","effort":30,"weight":40,"status":"todo","notes":"ESTIMATED — week 16 of 16. 40% of the grade. Far away, but 30h of work: start it before the November crunch."},{"id":"sma-catchup","title":"Recuperar as semanas 1-5 de SMA (JaCaMo, comunicação, BDI)","type":"reading","course":"sma","course_name":"Sistemas Multiagentes","due":"2026-09-18","due_time":"12:00","effort":8,"weight":0,"status":"todo","notes":"The Friday CD overlap covers ALL of SMA's only weekly slot, so weeks 1-5 are missed entirely: introdução, agentes e JaCaMo, comunicação de agentes, and BDI twice. That is the whole foundation for the 40% projeto final. Jomi Hubner also teaches IA, so ask him for materials/recordings in Tuesday's IA class — one conversation covers both courses."},{"id":"sma-quest-mas","title":"Questionário \"Abordagem MAS\" — 5 questões","type":"reading","course":"sma","course_name":"Sistemas Multiagentes","due":"2026-08-27","due_time":"23:59","effort":6,"weight":10,"status":"todo","notes":"CONFIRMED. Article: Dresner & Stone, \"A multiagent approach to autonomous intersection management\", JAIR vol. 31, pp. 591-656 (2008) — that is a 65-page paper, so 6h is not padding. Questions: why MAS suits intelligent transport; which MAS property helps most and was it validated experimentally; how the agent works; what was considered beyond the agent dimension; room for generative AI. Counts toward the 10% questionários."},{"id":"sma-experimentos","title":"Experimentos práticos (ongoing)","type":"assignment","course":"sma","course_name":"Sistemas Multiagentes","due":null,"due_time":"","effort":3,"weight":30,"status":"doing","notes":"30% of the grade, spread across the semester in JaCaMo. Tell me when each is assigned."},{"id":"est-teste-1","title":"Teste online 1","type":"exam","course":"estatistica","course_name":"Estatística para Análise de Dados","due":"2026-08-18","due_time":"20:30","effort":2,"weight":null,"status":"todo","notes":"Tomorrow, in Tuesday's class. Deadline for submission not yet known — the due time is a placeholder set to the end of class. Find out the real prazo and tell me."},{"id":"est-trabalho","title":"Trabalho: correlação e regressão linear","type":"assignment","course":"estatistica","course_name":"Estatística para Análise de Dados","due":"2026-08-25","due_time":"23:59","effort":8,"weight":null,"status":"todo","notes":"CONFIRMED date. Lands the same day as the second online test."},{"id":"est-teste-2","title":"Teste online 2","type":"exam","course":"estatistica","course_name":"Estatística para Análise de Dados","due":"2026-08-25","due_time":"20:30","effort":2,"weight":null,"status":"todo","notes":"Prazo not yet known — placeholder at end of class. Same day as the correlação/regressão trabalho."},{"id":"est-plano","title":"Conseguir o plano de ensino de Estatística","type":"admin","course":"estatistica","course_name":"Estatística para Análise de Dados","due":"2026-08-18","due_time":"20:30","effort":1,"weight":null,"status":"todo","notes":"Highest-leverage hour of the week. One of five disciplines is completely invisible here — ask in Tuesday's class, or email the professor, or check the Moodle/CAGR page. Send me whatever you get."}]};</script>
 <script>
 'use strict';
 var K = 'mestrado-2026-2';
@@ -567,66 +605,101 @@ function schedule() {
   return { plan: plan, doneBy: doneBy, left: left };
 }
 
-/* Criticality: three signals, not one. How much of the task cannot fit before
-   its deadline, how much of the grade rides on it, and how close it is.
-   Urgency has to be in the mix: the schedule saturates every near day, so
-   "doesn't fit" alone is true of everything distant and would rank a far-off
-   exam above the paper due next week. Undated work is never "impossible to
-   fit" — it has no deadline to miss — so it scores on weight alone. */
-function critical(sch) {
-  return allTasks().filter(function (t) {
-    return t.status !== 'done' && (t.effort || 0) > 0;
-  }).map(function (t) {
-    var dated = !!t.due;
-    var fitted = dated ? (sch.doneBy[t.id] || 0) : t.effort;
-    var gap = Math.max(0, t.effort - fitted);
-    var gapRatio = (dated && t.effort) ? gap / t.effort : 0;
-    var w = t.weight == null ? DEFAULT_WEIGHT : t.weight;
-    var wN = Math.min(w / 40, 1);
-    var urg = (dated && t.days != null) ? Math.max(0, Math.min(1, 1 - t.days / 30)) : 0;
-    var score = 0.45 * gapRatio + 0.30 * wN + 0.25 * urg;
-    if (t.days != null && t.days < 0) score += 1;
-    return { t: t, gap: gap, fitted: fitted, gapRatio: gapRatio, weight: w, dated: dated, score: score };
-  }).sort(function (a, b) { return b.score - a.score; }).slice(0, 5);
-}
+/* ---------- outer carousel: disciplines, each holding its own activity carousel
+   Order inside a discipline is simply by deadline — no invented score. The one
+   judgement shown is factual and comes from the scheduler: whether the hours
+   still fit before the date. ---------- */
+function renderDisciplines(sch) {
+  var tasks = allTasks();
+  var el = document.getElementById('disc');
 
-/* ---------- critical carousel ---------- */
-function renderCritical(sch) {
-  var top = critical(sch);
-  var el = document.getElementById('crit');
-  if (!top.length) {
-    el.innerHTML = '<div class="crit-card"><div class="cc-title">Nada em aberto.</div></div>';
-    document.getElementById('critdots').innerHTML = '';
-    return;
-  }
-  el.innerHTML = top.map(function (c, i) {
-    var t = c.t;
-    var fitPct = t.effort ? 100 * c.fitted / t.effort : 0;
-    var facts = '';
-    facts += '<div class="cc-fact"><b>' + (t.weight == null ? '?' : t.weight + '%') + '</b> da nota final</div>';
-    facts += '<div class="cc-fact"><b>' + t.effort + 'h</b> de trabalho estimado</div>';
-    facts += '<div class="cc-fact"><b>' + countdown(t.days) + '</b>' +
-             (t.due ? ' &middot; ' + fmtShort(t.due) : '') + '</div>';
-    if (!c.dated) {
-      facts += '<div class="cc-fact">sem prazo definido — me avise quando souber</div>';
-    } else if (c.gap > 0) {
-      facts += '<div class="cc-fact bad">só <b>' + c.fitted + 'h</b> cabem antes do prazo — ' +
-               'faltam <b>' + c.gap + 'h</b></div>';
+  el.innerHTML = DATA.courses.map(function (c) {
+    var mine = tasks.filter(function (t) { return t.course === c.id; });
+    var open = mine.filter(function (t) { return t.status !== 'done'; });
+    var hours = open.reduce(function (a, t) { return a + (t.effort || 0); }, 0);
+    var nextT = open.filter(function (t) { return t.due; })[0];
+
+    var meta = [];
+    if (c.professor) meta.push(esc(c.professor));
+    (c.schedule || []).forEach(function (s) { meta.push(esc(s.day) + ' ' + esc(s.start)); });
+    if (c.ends) meta.push('até ' + fmtShort(c.ends));
+
+    var grade = '';
+    if (c.grading && c.grading.length) {
+      var tot = c.grading.reduce(function (a, g) { return a + (g.weight || 0); }, 0);
+      if (tot > 0) {
+        grade = '<div class="dc-grade"><div class="wbar">' + c.grading.map(function (g, i) {
+          return '<span style="width:' + (100 * (g.weight || 0) / tot).toFixed(2) +
+                 '%;background:var(--c-' + esc(c.id) + ');opacity:' + (1 - i * 0.17).toFixed(2) + '"></span>';
+        }).join('') + '</div><div class="wleg">' + c.grading.map(function (g) {
+          return '<span>' + esc(g.item) + ' <i>' + (g.weight || 0) + '%</i></span>';
+        }).join('') + '</div></div>';
+      }
     } else {
-      facts += '<div class="cc-fact">cabe nas suas horas disponíveis</div>';
+      grade = '<div class="dc-grade"><div class="wleg"><span>pesos da nota ainda desconhecidos</span></div></div>';
     }
-    return '<article class="crit-card" style="--c:var(--c-' + esc(t.course) + ');--on-c:var(--on-' + esc(t.course) + ')">' +
-      '<div class="cc-top"><span class="cc-tag">' + esc(t.abbr) + '</span>' +
-      '<span style="font-size:12px;color:var(--muted)">' + esc(TYPES[t.type] || '') + '</span>' +
-      '<span class="cc-rank">' + (i+1) + '/' + top.length + '</span></div>' +
-      '<div class="cc-title">' + esc(t.title) + '</div>' +
-      '<div class="cc-why">' + facts + '</div>' +
-      '<div class="cc-bar"><i class="fit" style="width:' + fitPct.toFixed(1) + '%"></i>' +
-      '<i class="gap" style="width:' + (100-fitPct).toFixed(1) + '%"></i></div>' +
-      '<div class="cc-legend">verde = horas que cabem antes do prazo &middot; vermelho = o que não cabe</div>' +
+
+    // Up to five, soonest deadline first; undated fall to the end.
+    var top5 = open.slice(0, 5);
+    var acts = top5.length ? top5.map(function (t, i) {
+      var fitted = t.due ? (sch.doneBy[t.id] || 0) : null;
+      var gap = fitted == null ? 0 : Math.max(0, (t.effort || 0) - fitted);
+      var f = '';
+      f += '<div class="act-f"><b>' + esc(countdown(t.days)) + '</b>' +
+           (t.due ? '&middot; ' + esc(fmtShort(t.due)) : '') + '</div>';
+      f += '<div class="act-f"><b>' + (t.effort || 0) + 'h</b> previstas ' +
+           '<span class="est" title="estimativa minha, não do plano de ensino">est.</span></div>';
+      f += '<div class="act-f"><b>' + (t.weight == null ? '?' : t.weight + '%') + '</b> da nota</div>';
+      if (gap > 0) {
+        f += '<div class="act-f bad">cabem <b>' + fitted + 'h</b> antes do prazo, faltam <b>' + gap + 'h</b></div>';
+      } else if (t.due && t.effort) {
+        f += '<div class="act-f">cabe nas horas disponíveis</div>';
+      }
+      return '<article class="act">' +
+        '<div class="act-top"><span class="act-type">' + esc(TYPES[t.type] || 'Item') + '</span>' +
+        '<span class="act-idx">' + (i + 1) + '/' + top5.length + '</span></div>' +
+        '<div class="act-title">' + esc(t.title) + '</div>' +
+        '<div class="act-facts">' + f + '</div>' +
+        '<div class="act-foot"><button class="tbtn" data-edit="' + esc(t.id) + '">Editar</button>' +
+        '<button class="tbtn" data-toggle="' + esc(t.id) + '">Concluir</button></div>' +
+        '</article>';
+    }).join('') : '<div class="act-empty">Nenhuma atividade em aberto nesta disciplina.</div>';
+
+    return '<article class="disc-card" style="--c:var(--c-' + esc(c.id) + ');--on-c:var(--on-' + esc(c.id) + ')">' +
+      '<div class="dc-head"><div class="dc-top"><span class="dc-tag">' + esc(c.abbr) + '</span>' +
+      '<span class="dc-name">' + esc(c.name) + '</span></div>' +
+      '<div class="dc-meta">' + meta.join(' &middot; ') + '</div>' +
+      '<div class="dc-stats"><span><b>' + open.length + '</b> em aberto</span>' +
+      '<span><b>' + hours + 'h</b> previstas</span>' +
+      (nextT ? '<span>próxima <b>' + esc(countdown(nextT.days)) + '</b></span>' : '') +
+      '</div></div>' + grade + '<div class="dc-sep"></div>' +
+      '<div class="acts" id="acts-' + esc(c.id) + '">' + acts + '</div>' +
+      '<div class="dots inner" id="dots-' + esc(c.id) + '"></div>' +
       '</article>';
   }).join('');
-  wireDots('crit', 'critdots', top.length);
+
+  wireCarousel('disc', 'discdots', DATA.courses.length, 'discprev', 'discnext');
+  DATA.courses.forEach(function (c) {
+    var n = document.querySelectorAll('#acts-' + c.id + ' .act').length;
+    wireCarousel('acts-' + c.id, 'dots-' + c.id, n);
+  });
+  wireCardActions(el);
+}
+
+/* Buttons live inside both carousels, so the same handlers are wired there. */
+function wireCardActions(scope) {
+  scope.querySelectorAll('[data-edit]').forEach(function (b) {
+    b.addEventListener('click', function (ev) { ev.stopPropagation(); openForm(b.getAttribute('data-edit')); });
+  });
+  scope.querySelectorAll('[data-toggle]').forEach(function (b) {
+    b.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      var id = b.getAttribute('data-toggle');
+      var cur = allTasks().filter(function (x) { return x.id === id; })[0];
+      store.override[id] = (cur && cur.status === 'done') ? 'todo' : 'done';
+      saveStore(); render();
+    });
+  });
 }
 
 /* ---------- upcoming mini carousel ---------- */
@@ -643,16 +716,45 @@ function renderUpcoming() {
   }).join('');
 }
 
-function wireDots(carId, dotId, n) {
+/* Nested horizontal scrollers swallow sideways swipes, so the outer carousel
+   also gets tappable dots and arrows — otherwise a swipe inside a discipline's
+   activity strip would be the only gesture the page ever sees. */
+function wireCarousel(carId, dotId, n, prevId, nextId) {
   var car = document.getElementById(carId), dots = document.getElementById(dotId);
-  dots.innerHTML = Array.from({ length: n }, function (_, i) {
-    return '<i class="' + (i === 0 ? 'on' : '') + '"></i>';
-  }).join('');
-  car.onscroll = function () {
-    var w = car.scrollWidth / n;
-    var i = Math.min(n - 1, Math.max(0, Math.round(car.scrollLeft / w)));
-    dots.querySelectorAll('i').forEach(function (d, j) { d.classList.toggle('on', j === i); });
-  };
+  if (!car || !dots) return;
+  if (n <= 1) { dots.innerHTML = ''; }
+  else {
+    dots.innerHTML = Array.from({ length: n }, function (_, i) {
+      return '<button type="button" aria-label="Ir para ' + (i + 1) + '" aria-current="' +
+             (i === 0) + '" data-go="' + i + '"><i></i></button>';
+    }).join('');
+  }
+  function stepWidth() {
+    var first = car.firstElementChild;
+    if (!first) return car.clientWidth;
+    var gap = parseFloat(getComputedStyle(car).columnGap || getComputedStyle(car).gap) || 0;
+    return first.getBoundingClientRect().width + gap;
+  }
+  function index() { return Math.min(n - 1, Math.max(0, Math.round(car.scrollLeft / stepWidth()))); }
+  function goTo(i) { car.scrollTo({ left: i * stepWidth(), behavior: 'smooth' }); }
+
+  dots.querySelectorAll('[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () { goTo(Number(b.getAttribute('data-go'))); });
+  });
+  var prev = prevId && document.getElementById(prevId);
+  var next = nextId && document.getElementById(nextId);
+  function sync() {
+    var i = index();
+    dots.querySelectorAll('[data-go]').forEach(function (b, j) {
+      b.setAttribute('aria-current', String(j === i));
+    });
+    if (prev) prev.disabled = i <= 0;
+    if (next) next.disabled = i >= n - 1;
+  }
+  if (prev) prev.onclick = function () { goTo(Math.max(0, index() - 1)); };
+  if (next) next.onclick = function () { goTo(Math.min(n - 1, index() + 1)); };
+  car.onscroll = sync;
+  sync();
 }
 
 /* ---------- plan chart ---------- */
@@ -821,14 +923,7 @@ function renderList() {
       '<div class="it-foot">' + note + acts + '</div></div>';
   }).join('');
 
-  el.querySelectorAll('[data-toggle]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var id = b.getAttribute('data-toggle');
-      var cur = allTasks().filter(function (x) { return x.id === id; })[0];
-      store.override[id] = (cur && cur.status === 'done') ? 'todo' : 'done';
-      saveStore(); render();
-    });
-  });
+  wireCardActions(el);
   el.querySelectorAll('[data-expand]').forEach(function (b) {
     b.addEventListener('click', function () {
       var id = b.getAttribute('data-expand');
@@ -848,9 +943,6 @@ function renderList() {
       delete store.edits[b.getAttribute('data-reset')];
       saveStore(); render();
     });
-  });
-  el.querySelectorAll('[data-edit]').forEach(function (b) {
-    b.addEventListener('click', function () { openForm(b.getAttribute('data-edit')); });
   });
 }
 
@@ -978,7 +1070,7 @@ function showFallback(data) {
 /* ---------- boot ---------- */
 function render() {
   var sch = schedule();
-  renderCritical(sch);
+  renderDisciplines(sch);
   renderUpcoming();
   renderChart(sch);
   renderDays(sch);

@@ -360,31 +360,61 @@ h2 .sub { text-transform: none; letter-spacing: 0; font-weight: 500; color: var(
 }
 section { min-width: 0; }
 .carousel::-webkit-scrollbar { display: none; }
-.crit-card {
-  flex: 0 0 calc(100% - 32px); scroll-snap-align: center;
+/* ---- outer carousel: one card per discipline ---- */
+.disc-card {
+  /* min-width:0 is required: without it the flex item refuses to shrink below
+     its min-content width and clips its own header text. */
+  flex: 0 0 calc(100% - 32px); min-width: 0; scroll-snap-align: center;
   background: var(--card); border-radius: var(--r); box-shadow: var(--shadow);
-  padding: 17px; display: flex; flex-direction: column; gap: 13px;
+  padding: 16px 0 12px; display: flex; flex-direction: column; gap: 12px;
   border-top: 3px solid var(--c, var(--line));
 }
-.cc-top { display: flex; align-items: center; gap: 9px; }
-.cc-tag {
-  font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
-  background: var(--c); color: var(--on-c, #fff); padding: 3px 7px; border-radius: 5px;
+.dc-head { padding: 0 16px; display: flex; flex-direction: column; gap: 7px; }
+.dc-top { display: flex; align-items: center; gap: 9px; }
+.dc-tag { font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+          background: var(--c); color: var(--on-c, #fff); padding: 3px 7px; border-radius: 5px; }
+.dc-name { font-size: 16.5px; font-weight: 630; line-height: 1.25; flex: 1; text-wrap: pretty; }
+.dc-meta { font-size: 11.5px; color: var(--faint); line-height: 1.5; }
+.dc-stats { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--muted); }
+.dc-stats b { font-family: var(--mono); font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
+.dc-grade { display: flex; flex-direction: column; gap: 5px; padding: 0 16px; }
+.dc-sep { height: 1px; background: var(--hair); margin: 1px 0; }
+
+/* ---- inner carousel: that discipline's activities ---- */
+.acts { display: flex; gap: 8px; scroll-snap-type: x mandatory; scrollbar-width: none;
+        overflow-x: auto; overflow-y: hidden; width: 100%; max-width: 100%; min-width: 0;
+        padding: 0 16px 2px; overscroll-behavior-x: contain; }
+.acts::-webkit-scrollbar { display: none; }
+.act {
+  flex: 0 0 calc(100% - 26px); scroll-snap-align: center; min-width: 0;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 11px;
+  padding: 12px 13px; display: flex; flex-direction: column; gap: 8px;
 }
-.cc-rank { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: var(--faint); margin-left: auto; }
-.cc-title { font-size: 17px; font-weight: 620; line-height: 1.28; text-wrap: pretty; }
-.cc-why { display: flex; flex-direction: column; gap: 6px; }
-.cc-fact { display: flex; align-items: baseline; gap: 7px; font-size: 13px; color: var(--muted); }
-.cc-fact b { font-family: var(--mono); font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
-.cc-fact.bad b { color: var(--danger); }
-.cc-bar { height: 7px; border-radius: 4px; background: var(--sunken); overflow: hidden; display: flex; }
-.cc-bar i { display: block; height: 100%; }
-.cc-bar .fit { background: var(--ok); }
-.cc-bar .gap { background: var(--danger); }
-.cc-legend { font-size: 11.5px; color: var(--faint); }
+.act-top { display: flex; align-items: center; gap: 8px; }
+.act-type { font-size: 11px; font-weight: 650; color: var(--muted); }
+.act-idx { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--faint); margin-left: auto; }
+.act-title { font-size: 14.5px; font-weight: 600; line-height: 1.3; text-wrap: pretty; }
+.act-facts { display: flex; flex-direction: column; gap: 4px; }
+.act-f { display: flex; align-items: baseline; gap: 6px; font-size: 12.5px; color: var(--muted); }
+.act-f b { font-family: var(--mono); font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
+.act-f.bad, .act-f.bad b { color: var(--danger); }
+.act-f .est { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+              color: var(--faint); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+.act-foot { display: flex; gap: 7px; align-items: center; }
+.act-done { font-size: 11.5px; color: var(--ok); font-weight: 600; }
+.act-empty { flex: 0 0 calc(100% - 26px); scroll-snap-align: center; font-size: 13px;
+             color: var(--faint); padding: 14px 2px; font-style: italic; }
+
+/* ---- carousel navigation ---- */
+.carnav { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 9px; }
+.arrow { font: inherit; font-size: 15px; line-height: 1; width: 34px; height: 34px; border-radius: 50%;
+         border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer;
+         display: grid; place-items: center; }
+.arrow:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.arrow[disabled] { opacity: .35; cursor: default; }
 
 .mini-card {
-  flex: 0 0 74%; scroll-snap-align: start; background: var(--card); border-radius: 12px;
+  flex: 0 0 74%; min-width: 0; scroll-snap-align: start; background: var(--card); border-radius: 12px;
   box-shadow: var(--shadow); padding: 12px 13px; border-left: 3px solid var(--c, var(--line));
   display: flex; flex-direction: column; gap: 5px;
 }
@@ -392,9 +422,14 @@ section { min-width: 0; }
 .mini-title { font-size: 13.5px; font-weight: 550; line-height: 1.3; }
 .mini-sub { font-size: 11.5px; color: var(--faint); }
 
-.dots { display: flex; gap: 5px; justify-content: center; margin-top: 9px; }
+.dots { display: flex; gap: 5px; justify-content: center; }
+.dots button { width: 18px; height: 18px; padding: 0; border: 0; background: none; cursor: pointer;
+               display: grid; place-items: center; }
+.dots button:focus-visible { outline: 2px solid var(--ink); outline-offset: 0; border-radius: 4px; }
 .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line); display: block; transition: background .15s; }
-.dots i.on { background: var(--ink); }
+.dots button[aria-current="true"] i { background: var(--ink); }
+.dots.inner { margin-top: 7px; }
+.dots.inner i { width: 5px; height: 5px; }
 
 /* ---------- plan chart ---------- */
 .chart-card { background: var(--card); border-radius: var(--r); box-shadow: var(--shadow); padding: 16px 14px 12px; }
@@ -697,66 +732,101 @@ function schedule() {
   return { plan: plan, doneBy: doneBy, left: left };
 }
 
-/* Criticality: three signals, not one. How much of the task cannot fit before
-   its deadline, how much of the grade rides on it, and how close it is.
-   Urgency has to be in the mix: the schedule saturates every near day, so
-   "doesn't fit" alone is true of everything distant and would rank a far-off
-   exam above the paper due next week. Undated work is never "impossible to
-   fit" — it has no deadline to miss — so it scores on weight alone. */
-function critical(sch) {
-  return allTasks().filter(function (t) {
-    return t.status !== 'done' && (t.effort || 0) > 0;
-  }).map(function (t) {
-    var dated = !!t.due;
-    var fitted = dated ? (sch.doneBy[t.id] || 0) : t.effort;
-    var gap = Math.max(0, t.effort - fitted);
-    var gapRatio = (dated && t.effort) ? gap / t.effort : 0;
-    var w = t.weight == null ? DEFAULT_WEIGHT : t.weight;
-    var wN = Math.min(w / 40, 1);
-    var urg = (dated && t.days != null) ? Math.max(0, Math.min(1, 1 - t.days / 30)) : 0;
-    var score = 0.45 * gapRatio + 0.30 * wN + 0.25 * urg;
-    if (t.days != null && t.days < 0) score += 1;
-    return { t: t, gap: gap, fitted: fitted, gapRatio: gapRatio, weight: w, dated: dated, score: score };
-  }).sort(function (a, b) { return b.score - a.score; }).slice(0, 5);
-}
+/* ---------- outer carousel: disciplines, each holding its own activity carousel
+   Order inside a discipline is simply by deadline — no invented score. The one
+   judgement shown is factual and comes from the scheduler: whether the hours
+   still fit before the date. ---------- */
+function renderDisciplines(sch) {
+  var tasks = allTasks();
+  var el = document.getElementById('disc');
 
-/* ---------- critical carousel ---------- */
-function renderCritical(sch) {
-  var top = critical(sch);
-  var el = document.getElementById('crit');
-  if (!top.length) {
-    el.innerHTML = '<div class="crit-card"><div class="cc-title">Nada em aberto.</div></div>';
-    document.getElementById('critdots').innerHTML = '';
-    return;
-  }
-  el.innerHTML = top.map(function (c, i) {
-    var t = c.t;
-    var fitPct = t.effort ? 100 * c.fitted / t.effort : 0;
-    var facts = '';
-    facts += '<div class="cc-fact"><b>' + (t.weight == null ? '?' : t.weight + '%') + '</b> da nota final</div>';
-    facts += '<div class="cc-fact"><b>' + t.effort + 'h</b> de trabalho estimado</div>';
-    facts += '<div class="cc-fact"><b>' + countdown(t.days) + '</b>' +
-             (t.due ? ' &middot; ' + fmtShort(t.due) : '') + '</div>';
-    if (!c.dated) {
-      facts += '<div class="cc-fact">sem prazo definido — me avise quando souber</div>';
-    } else if (c.gap > 0) {
-      facts += '<div class="cc-fact bad">só <b>' + c.fitted + 'h</b> cabem antes do prazo — ' +
-               'faltam <b>' + c.gap + 'h</b></div>';
+  el.innerHTML = DATA.courses.map(function (c) {
+    var mine = tasks.filter(function (t) { return t.course === c.id; });
+    var open = mine.filter(function (t) { return t.status !== 'done'; });
+    var hours = open.reduce(function (a, t) { return a + (t.effort || 0); }, 0);
+    var nextT = open.filter(function (t) { return t.due; })[0];
+
+    var meta = [];
+    if (c.professor) meta.push(esc(c.professor));
+    (c.schedule || []).forEach(function (s) { meta.push(esc(s.day) + ' ' + esc(s.start)); });
+    if (c.ends) meta.push('até ' + fmtShort(c.ends));
+
+    var grade = '';
+    if (c.grading && c.grading.length) {
+      var tot = c.grading.reduce(function (a, g) { return a + (g.weight || 0); }, 0);
+      if (tot > 0) {
+        grade = '<div class="dc-grade"><div class="wbar">' + c.grading.map(function (g, i) {
+          return '<span style="width:' + (100 * (g.weight || 0) / tot).toFixed(2) +
+                 '%;background:var(--c-' + esc(c.id) + ');opacity:' + (1 - i * 0.17).toFixed(2) + '"></span>';
+        }).join('') + '</div><div class="wleg">' + c.grading.map(function (g) {
+          return '<span>' + esc(g.item) + ' <i>' + (g.weight || 0) + '%</i></span>';
+        }).join('') + '</div></div>';
+      }
     } else {
-      facts += '<div class="cc-fact">cabe nas suas horas disponíveis</div>';
+      grade = '<div class="dc-grade"><div class="wleg"><span>pesos da nota ainda desconhecidos</span></div></div>';
     }
-    return '<article class="crit-card" style="--c:var(--c-' + esc(t.course) + ');--on-c:var(--on-' + esc(t.course) + ')">' +
-      '<div class="cc-top"><span class="cc-tag">' + esc(t.abbr) + '</span>' +
-      '<span style="font-size:12px;color:var(--muted)">' + esc(TYPES[t.type] || '') + '</span>' +
-      '<span class="cc-rank">' + (i+1) + '/' + top.length + '</span></div>' +
-      '<div class="cc-title">' + esc(t.title) + '</div>' +
-      '<div class="cc-why">' + facts + '</div>' +
-      '<div class="cc-bar"><i class="fit" style="width:' + fitPct.toFixed(1) + '%"></i>' +
-      '<i class="gap" style="width:' + (100-fitPct).toFixed(1) + '%"></i></div>' +
-      '<div class="cc-legend">verde = horas que cabem antes do prazo &middot; vermelho = o que não cabe</div>' +
+
+    // Up to five, soonest deadline first; undated fall to the end.
+    var top5 = open.slice(0, 5);
+    var acts = top5.length ? top5.map(function (t, i) {
+      var fitted = t.due ? (sch.doneBy[t.id] || 0) : null;
+      var gap = fitted == null ? 0 : Math.max(0, (t.effort || 0) - fitted);
+      var f = '';
+      f += '<div class="act-f"><b>' + esc(countdown(t.days)) + '</b>' +
+           (t.due ? '&middot; ' + esc(fmtShort(t.due)) : '') + '</div>';
+      f += '<div class="act-f"><b>' + (t.effort || 0) + 'h</b> previstas ' +
+           '<span class="est" title="estimativa minha, não do plano de ensino">est.</span></div>';
+      f += '<div class="act-f"><b>' + (t.weight == null ? '?' : t.weight + '%') + '</b> da nota</div>';
+      if (gap > 0) {
+        f += '<div class="act-f bad">cabem <b>' + fitted + 'h</b> antes do prazo, faltam <b>' + gap + 'h</b></div>';
+      } else if (t.due && t.effort) {
+        f += '<div class="act-f">cabe nas horas disponíveis</div>';
+      }
+      return '<article class="act">' +
+        '<div class="act-top"><span class="act-type">' + esc(TYPES[t.type] || 'Item') + '</span>' +
+        '<span class="act-idx">' + (i + 1) + '/' + top5.length + '</span></div>' +
+        '<div class="act-title">' + esc(t.title) + '</div>' +
+        '<div class="act-facts">' + f + '</div>' +
+        '<div class="act-foot"><button class="tbtn" data-edit="' + esc(t.id) + '">Editar</button>' +
+        '<button class="tbtn" data-toggle="' + esc(t.id) + '">Concluir</button></div>' +
+        '</article>';
+    }).join('') : '<div class="act-empty">Nenhuma atividade em aberto nesta disciplina.</div>';
+
+    return '<article class="disc-card" style="--c:var(--c-' + esc(c.id) + ');--on-c:var(--on-' + esc(c.id) + ')">' +
+      '<div class="dc-head"><div class="dc-top"><span class="dc-tag">' + esc(c.abbr) + '</span>' +
+      '<span class="dc-name">' + esc(c.name) + '</span></div>' +
+      '<div class="dc-meta">' + meta.join(' &middot; ') + '</div>' +
+      '<div class="dc-stats"><span><b>' + open.length + '</b> em aberto</span>' +
+      '<span><b>' + hours + 'h</b> previstas</span>' +
+      (nextT ? '<span>próxima <b>' + esc(countdown(nextT.days)) + '</b></span>' : '') +
+      '</div></div>' + grade + '<div class="dc-sep"></div>' +
+      '<div class="acts" id="acts-' + esc(c.id) + '">' + acts + '</div>' +
+      '<div class="dots inner" id="dots-' + esc(c.id) + '"></div>' +
       '</article>';
   }).join('');
-  wireDots('crit', 'critdots', top.length);
+
+  wireCarousel('disc', 'discdots', DATA.courses.length, 'discprev', 'discnext');
+  DATA.courses.forEach(function (c) {
+    var n = document.querySelectorAll('#acts-' + c.id + ' .act').length;
+    wireCarousel('acts-' + c.id, 'dots-' + c.id, n);
+  });
+  wireCardActions(el);
+}
+
+/* Buttons live inside both carousels, so the same handlers are wired there. */
+function wireCardActions(scope) {
+  scope.querySelectorAll('[data-edit]').forEach(function (b) {
+    b.addEventListener('click', function (ev) { ev.stopPropagation(); openForm(b.getAttribute('data-edit')); });
+  });
+  scope.querySelectorAll('[data-toggle]').forEach(function (b) {
+    b.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      var id = b.getAttribute('data-toggle');
+      var cur = allTasks().filter(function (x) { return x.id === id; })[0];
+      store.override[id] = (cur && cur.status === 'done') ? 'todo' : 'done';
+      saveStore(); render();
+    });
+  });
 }
 
 /* ---------- upcoming mini carousel ---------- */
@@ -773,16 +843,45 @@ function renderUpcoming() {
   }).join('');
 }
 
-function wireDots(carId, dotId, n) {
+/* Nested horizontal scrollers swallow sideways swipes, so the outer carousel
+   also gets tappable dots and arrows — otherwise a swipe inside a discipline's
+   activity strip would be the only gesture the page ever sees. */
+function wireCarousel(carId, dotId, n, prevId, nextId) {
   var car = document.getElementById(carId), dots = document.getElementById(dotId);
-  dots.innerHTML = Array.from({ length: n }, function (_, i) {
-    return '<i class="' + (i === 0 ? 'on' : '') + '"></i>';
-  }).join('');
-  car.onscroll = function () {
-    var w = car.scrollWidth / n;
-    var i = Math.min(n - 1, Math.max(0, Math.round(car.scrollLeft / w)));
-    dots.querySelectorAll('i').forEach(function (d, j) { d.classList.toggle('on', j === i); });
-  };
+  if (!car || !dots) return;
+  if (n <= 1) { dots.innerHTML = ''; }
+  else {
+    dots.innerHTML = Array.from({ length: n }, function (_, i) {
+      return '<button type="button" aria-label="Ir para ' + (i + 1) + '" aria-current="' +
+             (i === 0) + '" data-go="' + i + '"><i></i></button>';
+    }).join('');
+  }
+  function stepWidth() {
+    var first = car.firstElementChild;
+    if (!first) return car.clientWidth;
+    var gap = parseFloat(getComputedStyle(car).columnGap || getComputedStyle(car).gap) || 0;
+    return first.getBoundingClientRect().width + gap;
+  }
+  function index() { return Math.min(n - 1, Math.max(0, Math.round(car.scrollLeft / stepWidth()))); }
+  function goTo(i) { car.scrollTo({ left: i * stepWidth(), behavior: 'smooth' }); }
+
+  dots.querySelectorAll('[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () { goTo(Number(b.getAttribute('data-go'))); });
+  });
+  var prev = prevId && document.getElementById(prevId);
+  var next = nextId && document.getElementById(nextId);
+  function sync() {
+    var i = index();
+    dots.querySelectorAll('[data-go]').forEach(function (b, j) {
+      b.setAttribute('aria-current', String(j === i));
+    });
+    if (prev) prev.disabled = i <= 0;
+    if (next) next.disabled = i >= n - 1;
+  }
+  if (prev) prev.onclick = function () { goTo(Math.max(0, index() - 1)); };
+  if (next) next.onclick = function () { goTo(Math.min(n - 1, index() + 1)); };
+  car.onscroll = sync;
+  sync();
 }
 
 /* ---------- plan chart ---------- */
@@ -951,14 +1050,7 @@ function renderList() {
       '<div class="it-foot">' + note + acts + '</div></div>';
   }).join('');
 
-  el.querySelectorAll('[data-toggle]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var id = b.getAttribute('data-toggle');
-      var cur = allTasks().filter(function (x) { return x.id === id; })[0];
-      store.override[id] = (cur && cur.status === 'done') ? 'todo' : 'done';
-      saveStore(); render();
-    });
-  });
+  wireCardActions(el);
   el.querySelectorAll('[data-expand]').forEach(function (b) {
     b.addEventListener('click', function () {
       var id = b.getAttribute('data-expand');
@@ -978,9 +1070,6 @@ function renderList() {
       delete store.edits[b.getAttribute('data-reset')];
       saveStore(); render();
     });
-  });
-  el.querySelectorAll('[data-edit]').forEach(function (b) {
-    b.addEventListener('click', function () { openForm(b.getAttribute('data-edit')); });
   });
 }
 
@@ -1108,7 +1197,7 @@ function showFallback(data) {
 /* ---------- boot ---------- */
 function render() {
   var sch = schedule();
-  renderCritical(sch);
+  renderDisciplines(sch);
   renderUpcoming();
   renderChart(sch);
   renderDays(sch);
@@ -1189,54 +1278,19 @@ def render_timetable(m: dict) -> str:
             f'<div class="tt">{heads}{cols}</div>{note}</div></section>')
 
 
-def render_courses(m: dict) -> str:
-    cards = ""
-    for c in m["courses"]:
-        cid = c.get("id")
-        mine = [t for t in m["tasks"] if t["course"] == cid]
-        open_n = len([t for t in mine if t["status"] != "done"])
-
-        meta = []
-        if c.get("professor"):
-            meta.append(esc(c["professor"]))
-        for s in (c.get("schedule") or []):
-            meta.append(f'{DAY_PT.get((s.get("day") or "").lower(), "")} {esc(s.get("start"))}')
-        ends = as_date(c.get("ends"))
-        if ends:
-            meta.append(f"até {br_date(ends)}")
-
-        grading = c.get("grading") or []
-        total = sum(g.get("weight") or 0 for g in grading)
-        bar = leg = ""
-        if total:
-            segs, legs = [], []
-            for i, g in enumerate(grading):
-                w = g.get("weight") or 0
-                if w <= 0:
-                    continue
-                segs.append(f'<span style="width:{100 * w / total:.3f}%;'
-                            f'background:var(--c-{cid});opacity:{1 - i * 0.17:.2f}"></span>')
-                legs.append(f'<span>{esc(g.get("item"))} <i>{w}%</i></span>')
-            bar = f'<div class="wbar">{"".join(segs)}</div>'
-            leg = f'<div class="wleg">{"".join(legs)}</div>'
-        else:
-            leg = '<div class="wleg"><span>pesos ainda desconhecidos</span></div>'
-
-        cards += (
-            f'<div class="course" style="--c: var(--c-{cid});--on-c:var(--on-{cid})">'
-            f'<div class="c-top"><span class="cbadge">{esc(c.get("abbr"))}</span>'
-            f'<div class="c-name">{esc(c.get("name"))}</div>'
-            f'<div class="c-count">{open_n} aberto{"s" if open_n != 1 else ""}</div></div>'
-            f'<div class="c-meta">{" &middot; ".join(meta)}</div>{bar}{leg}</div>'
-        )
-    return f'<section class="px"><h2>Disciplinas</h2><div class="courses">{cards}</div></section>'
-
-
 def payload(m: dict) -> str:
     return json.dumps({
         "today": m["today"].isoformat(),
         "capacity": m["capacity"],
-        "courses": [{"id": c.get("id"), "name": c.get("name"), "abbr": c.get("abbr")} for c in m["courses"]],
+        "courses": [{
+            "id": c.get("id"), "name": c.get("name"), "abbr": c.get("abbr"),
+            "professor": c.get("professor") or "",
+            "ends": as_date(c.get("ends")).isoformat() if as_date(c.get("ends")) else None,
+            "schedule": [{"day": DAY_PT.get((s.get("day") or "").lower(), ""), "start": s.get("start")}
+                         for s in (c.get("schedule") or [])],
+            "grading": [{"item": g.get("item"), "weight": g.get("weight") or 0}
+                        for g in (c.get("grading") or [])],
+        } for c in m["courses"]],
         "tasks": m["tasks"],
     }, ensure_ascii=False, separators=(",", ":"))
 
@@ -1260,9 +1314,13 @@ def render_html(m: dict) -> str:
   <div class="px" id="banner"></div>
 
   <section>
-    <h2 class="px">Mais críticas <span class="sub">— por peso na nota e por não caberem no prazo</span></h2>
-    <div class="carousel" id="crit"></div>
-    <div class="dots" id="critdots"></div>
+    <h2 class="px">Disciplinas <span class="sub">— deslize para trocar; dentro de cada uma, as 5 próximas</span></h2>
+    <div class="carousel" id="disc"></div>
+    <div class="carnav">
+      <button class="arrow" id="discprev" aria-label="Disciplina anterior">&#8249;</button>
+      <div class="dots" id="discdots"></div>
+      <button class="arrow" id="discnext" aria-label="Próxima disciplina">&#8250;</button>
+    </div>
   </section>
 
   <section>
@@ -1340,7 +1398,6 @@ def render_html(m: dict) -> str:
   </section>
 
   {render_timetable(m)}
-  {render_courses(m)}
 
   <footer class="px">
     <button class="btn" id="exportbtn">Exportar alterações</button>
