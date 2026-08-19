@@ -61,7 +61,7 @@ tasks:
       - "Entregar"
     notes: >
       CONFIRMED. 30% of the grade. The paper is written about the seminário
-      final topic, so the seminar work and the paper share their research ,
+      final topic, so the seminar work and the paper share their research,
       do them as one effort, not two. Due one week after the prova, so it
       cannot start on 22/08.
 
@@ -142,7 +142,38 @@ tasks:
       - "Perguntar ao prof. Antonelo na aula de quarta"
       - "Anotar datas e formato"
       - "Me mandar aqui no chat para eu cadastrar"
-    notes: "20% of the grade sits in up to three assignments with no dates in the plan. Ask Prof. Antonelo on Wednesday, then I will add them."
+    notes: "Assignment #1 já está cadastrado (28/08). Faltam as datas do #2 e do #3, que completam os 20%. Perguntar ao prof. Antonelo na quarta."
+
+  - id: ml-assign-1
+    course: machine-learning
+    title: "Assignment #1: Regression (gradient descent)"
+    type: assignment
+    due: 2026-08-28
+    due_time: "22:28"
+    size: grande
+    weight: 7
+    status: todo
+    notes: >
+      CONFIRMADO pelo Moodle. Prof. Eric Antonelo. Vale por volta de 7%: os 20%
+      de practical assignments divididos entre até três trabalhos. Entrega um
+      zip com regression.py, relatório em PDF com plots e discussão, e o que
+      mais for preciso para reproduzir. Proibido usar LinearRegression do
+      scikit-learn no treino; NumPy e Matplotlib liberados. Só código, sem
+      análise, perde nota. Pode cair entrevista oral de 5 minutos sobre a
+      solução. Cai no mesmo dia da entrega do artigo de Ciência de Dados.
+    steps:
+      - "Pegar os dois últimos dígitos da matrícula (d1 e d2) e gerar o dataset"
+      - "Implementar h, J, gradient, train_gradient_descent e print_modelo"
+      - "Exp 1: plotar dados, reta verdadeira e reta aprendida em 0, 10, 100, 1000 e 5000 épocas"
+      - "Exp 2: treinar 5000 épocas com alpha 0.9, 0.1, 0.01, 0.001 e 0.0001, plotando o custo"
+      - "Exp 2: responder quais convergiram, quais oscilaram e qual teve o melhor equilíbrio"
+      - "Exp 3: tabela comparando a e b verdadeiros com theta0 e theta1 estimados"
+      - "Exp 4: repetir com x normalizado e discutir o efeito na velocidade de convergência"
+      - "Exp 5: critério de parada |Jt - Jt-1| < eps, testando 1e-6 e 1e-8"
+      - "Diagnóstico do erro: analisar o sinal em theta[i] = theta[i] + alpha * gradient(...)"
+      - "Versão com laços vs vetorizada, comparando tempo em 100, 10k e 100k pontos"
+      - "Escrever o relatório em PDF com plots, tabelas, discussão e conclusão"
+      - "Colocar print com o nome completo no início do código e zipar tudo"
 
   # ------------------------------------------------- Inteligência Artificial (60/25/15)
   - id: ia-seminario
@@ -306,7 +337,7 @@ tasks:
       - "Revisar o conteúdo da aula"
       - "Fazer o teste online"
     notes: >
-      Tomorrow, in Tuesday's class. Deadline for submission not yet known ,
+      Tomorrow, in Tuesday's class. Deadline for submission not yet known,
       the due time is a placeholder set to the end of class. Find out the real
       prazo and tell me.
 
