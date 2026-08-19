@@ -528,8 +528,22 @@ section { min-width: 0; }
         border-left: 3px solid var(--c, var(--line)); }
 .it-row { display: flex; gap: 10px; align-items: center; padding: 11px 12px; }
 .box { flex: none; width: 25px; height: 25px; border-radius: 7px; border: 1.8px solid var(--line);
-       background: var(--card); cursor: pointer; display: grid; place-items: center; padding: 0; color: transparent; }
+       background: var(--card); cursor: pointer; display: grid; place-items: center; padding: 0; color: transparent;
+       -webkit-tap-highlight-color: transparent;
+       transition: background .12s ease, border-color .12s ease, transform .1s ease, color .12s ease; }
 .box:hover { border-color: var(--muted); }
+.box.pressed { background: var(--sunken); border-color: var(--muted); transform: scale(.88); }
+.item.done .box.pressed { background: var(--ok); }
+/* Held on screen just long enough for the tick to register before the row
+   leaves the filter. */
+.item.settling { transition: opacity .25s ease .32s, transform .25s ease .32s; opacity: .35; transform: scale(.985); }
+.step { -webkit-tap-highlight-color: transparent; transition: background .12s ease; }
+.step.pressed { background: var(--sunken); }
+.step i { transition: background .12s ease, border-color .12s ease, color .12s ease; }
+.tbtn { -webkit-tap-highlight-color: transparent; transition: background .12s ease, border-color .12s ease, transform .1s ease; }
+.tbtn.pressed { background: var(--sunken); border-color: var(--muted); transform: scale(.96); }
+.act.done { opacity: .55; }
+.act.done .act-title { text-decoration: line-through; }
 .box:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .item.done .box { background: var(--ok); border-color: var(--ok); color: var(--card); }
 .it-main { flex: 1; min-width: 0; cursor: pointer; }
@@ -898,18 +912,53 @@ function renderDisciplines(sch) {
   wireCardActions(el);
 }
 
+/* A tap has to look like it landed. Re-rendering in the same frame made the
+   row vanish before the tick was ever drawn, which read as the checkbox not
+   working: the item leaves the "Em aberto" filter the instant it is done. So
+   paint the finished state on the element first, then re-render once it has
+   been on screen long enough to see. */
+var HOLD_MS = 620;
+function toggleTask(id, btn) {
+  var cur = allTasks().filter(function (x) { return x.id === id; })[0];
+  var nowDone = !(cur && cur.status === 'done');
+  store.override[id] = nowDone ? 'done' : 'todo';
+  saveStore();
+
+  var card = btn.closest ? (btn.closest('.item') || btn.closest('.act')) : null;
+  if (card) {
+    card.classList.toggle('done', nowDone);
+    card.classList.add('settling');
+    btn.setAttribute('aria-checked', String(nowDone));
+    if (btn.classList.contains('tbtn')) btn.textContent = nowDone ? 'Concluída' : 'Concluir';
+  }
+  clearTimeout(toggleTask._t);
+  toggleTask._t = setTimeout(function () {
+    render();
+    if (modalDay) renderModal();
+  }, card ? HOLD_MS : 0);
+}
+
+/* Pressed state, so a tap darkens the control straight away. iOS will not
+   apply :active reliably without a touch listener on the element. */
+function pressFeedback(el) {
+  ['pointerdown', 'touchstart'].forEach(function (ev) {
+    el.addEventListener(ev, function () { el.classList.add('pressed'); }, { passive: true });
+  });
+  ['pointerup', 'pointercancel', 'pointerleave', 'touchend', 'touchcancel'].forEach(function (ev) {
+    el.addEventListener(ev, function () { el.classList.remove('pressed'); }, { passive: true });
+  });
+}
+
 /* Buttons live inside both carousels, so the same handlers are wired there. */
 function wireCardActions(scope) {
   scope.querySelectorAll('[data-edit]').forEach(function (b) {
     b.addEventListener('click', function (ev) { ev.stopPropagation(); openForm(b.getAttribute('data-edit')); });
   });
   scope.querySelectorAll('[data-toggle]').forEach(function (b) {
+    pressFeedback(b);
     b.addEventListener('click', function (ev) {
       ev.stopPropagation();
-      var id = b.getAttribute('data-toggle');
-      var cur = allTasks().filter(function (x) { return x.id === id; })[0];
-      store.override[id] = (cur && cur.status === 'done') ? 'todo' : 'done';
-      saveStore(); render();
+      toggleTask(b.getAttribute('data-toggle'), b);
     });
   });
 }
@@ -1311,6 +1360,7 @@ function renderSteps(t) {
 }
 function wireSteps(scope) {
   scope.querySelectorAll('[data-step]').forEach(function (b) {
+    pressFeedback(b);
     b.addEventListener('click', function (ev) {
       ev.stopPropagation();
       var id = b.getAttribute('data-step'), i = b.getAttribute('data-i');
