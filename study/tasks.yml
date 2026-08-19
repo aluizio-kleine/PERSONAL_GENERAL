@@ -324,26 +324,9 @@ tasks:
     notes: "30% of the grade, spread across the semester in JaCaMo. Tell me when each is assigned."
 
   # ------------------------------------------------- Estatística
-  - id: est-teste-1
-    course: estatistica
-    title: "Teste online 1"
-    type: exam
-    due: 2026-08-18
-    due_time: "20:30"
-    size: pequeno
-    status: todo
-    steps:
-      - "Confirmar o prazo real de entrega"
-      - "Revisar o conteúdo da aula"
-      - "Fazer o teste online"
-    notes: >
-      Tomorrow, in Tuesday's class. Deadline for submission not yet known,
-      the due time is a placeholder set to the end of class. Find out the real
-      prazo and tell me.
-
   - id: est-trabalho
     course: estatistica
-    title: "Trabalho: correlação e regressão linear"
+    title: "Trabalho Prático 2: correlação e regressão linear"
     type: assignment
     due: 2026-08-25
     due_time: "23:59"
@@ -354,7 +337,9 @@ tasks:
       - "Revisar regressão linear"
       - "Aplicar no conjunto de dados do trabalho"
       - "Escrever e entregar"
-    notes: "CONFIRMED date. Lands the same day as the second online test."
+    notes: >
+      Disponível no Moodle desde 11/08. A data 25/08 foi você que me passou;
+      o aviso da disciplina não repete o prazo, então vale confirmar no Moodle.
 
   - id: est-teste-2
     course: estatistica
@@ -388,6 +373,44 @@ tasks:
       Assignment #1 de ML: o gradiente descendente e os gráficos de
       convergência do custo servem para os dois.
 
+
+  - id: est-teste-3
+    course: estatistica
+    title: "Teste Online 3"
+    type: assignment
+    due:
+    due_time: ""
+    size: medio
+    status: todo
+    steps:
+      - "Abrir o teste no Moodle quando for liberado em 25/08"
+      - "Anotar o prazo real e me avisar para eu cadastrar"
+      - "Fazer o teste"
+    notes: >
+      Do aviso da disciplina: será disponibilizado no Moodle em 25/08. O prazo
+      de entrega não foi informado, então está sem data aqui e não entra no
+      plano de estudo até você confirmar. O Teste 3 é a única atividade nova da
+      Parte 3, não haverá relatório novo do Trabalho Prático 3.
+
+  - id: est-tp3-apresentacao
+    course: estatistica
+    title: "TP3: apresentação"
+    type: presentation
+    due: 2026-09-08
+    due_time: "20:30"
+    size: medio
+    status: todo
+    steps:
+      - "Montar a apresentação a partir dos exercícios E1, E2 e E3"
+      - "Ensaiar"
+      - "Apresentar presencialmente em 08/09, no horário da aula"
+      - "Se não puder comparecer: gravar e enviar o vídeo até 07/09"
+    notes: >
+      Do aviso da disciplina. A nota do TP3 é 50% desenvolvimento mais 50%
+      apresentação. O desenvolvimento é a média dos exercícios E1, E2 e E3 que
+      você já entregou, ou seja, só a apresentação ainda é trabalho novo.
+      Presencial em 08/09 no horário da aula, terça. Quem não puder comparecer
+      envia o vídeo até 07/09, segunda.
 
   - id: est-plano
     course: estatistica
