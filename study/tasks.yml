@@ -358,17 +358,36 @@ tasks:
 
   - id: est-teste-2
     course: estatistica
-    title: "Teste online 2"
-    type: exam
-    due: 2026-08-25
-    due_time: "20:30"
-    size: pequeno
+    title: "Teste 2: regressão linear múltipla comparativa"
+    type: assignment
+    due: 2026-09-01
+    due_time: "23:59"
+    size: grande
     status: todo
     steps:
-      - "Confirmar o prazo real de entrega"
-      - "Revisar o conteúdo"
-      - "Fazer o teste online"
-    notes: "Prazo not yet known, placeholder at end of class. Same day as the correlação/regressão trabalho."
+      - "Carregar o conjunto de dados de preço de casas"
+      - "Limpar os dados: valores nulos e outliers"
+      - "Normalizar as variáveis e justificar por que isso importa nos métodos iterativos"
+      - "Método 1: solução analítica pela equação normal (forma matricial)"
+      - "Método 2: gradiente descendente em batch, monitorando a convergência do MSE"
+      - "Método 3: bibliotecas e métodos de estatística do Python"
+      - "Calcular RMSE e R² nos dados de teste"
+      - "Registrar o tempo de execução de cada método"
+      - "Plotar a função de custo (MSE) ao longo das iterações"
+      - "Montar a tabela comparativa: coeficientes, métricas de erro e tempo"
+      - "Discutir quando a solução fechada deixa de ser viável frente ao gradiente"
+      - "Entregar .ipynb ou link do Colab aberto, com seções comentadas e seeds fixas"
+    notes: >
+      CONFIRMADO pelo Moodle. Abriu em 18/08, vence terça 01/09 às 23:59. Não é
+      um teste rápido: é um notebook completo comparando equação normal,
+      gradiente descendente e bibliotecas do Python, inspirado no ICD-UFMG.
+      Critérios: pré-processamento 2,0, implementação 3,5, visualização e
+      métricas 2,5, análise crítica 2,0. Entrega .ipynb ou link do Colab com
+      permissão de visualização aberta, código comentado por seção e seeds
+      fixas para reprodutibilidade. Compartilha quase toda a base com o
+      Assignment #1 de ML: o gradiente descendente e os gráficos de
+      convergência do custo servem para os dois.
+
 
   - id: est-plano
     course: estatistica
