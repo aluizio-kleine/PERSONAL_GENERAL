@@ -137,7 +137,7 @@ tasks:
     due_time: "12:00"
     size: pequeno
     weight: 0
-    status: todo
+    status: done
     steps:
       - "Perguntar ao prof. Antonelo na aula de quarta"
       - "Anotar datas e formato"
@@ -200,7 +200,7 @@ tasks:
     due_time: "12:00"
     size: pequeno
     weight: 0
-    status: todo
+    status: done
     steps:
       - "Perguntar ao prof. Hübner na aula de terça"
       - "Anotar quantos são, datas e formato"
@@ -215,7 +215,7 @@ tasks:
     due_time: "23:59"
     size: medio
     weight: 8
-    status: todo
+    status: done
     steps:
       - "Ler o artigo (Agüera y Arcas & Norvig, 2023)"
       - "1. O que é AGI e o que a caracteriza?"
@@ -419,7 +419,7 @@ tasks:
     due: 2026-08-18
     due_time: "20:30"
     size: pequeno
-    status: todo
+    status: done
     steps:
       - "Perguntar na aula de terça"
       - "Ou procurar no Moodle / CAGR"
