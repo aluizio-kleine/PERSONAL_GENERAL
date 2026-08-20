@@ -618,6 +618,10 @@ section { min-width: 0; }
 .wleg { display: flex; flex-wrap: wrap; gap: 3px 11px; font-size: 10.5px; color: var(--faint); }
 .wleg i { font-style: normal; font-family: var(--mono); }
 
+.pend { display: flex; align-items: center; gap: 10px; background: var(--warn-soft); color: var(--warn);
+         border-radius: 10px; padding: 9px 10px 9px 13px; font-size: 12.5px; font-weight: 550; }
+.pend span { flex: 1; }
+.pend .tbtn { background: var(--card); border-color: var(--warn); color: var(--warn); min-height: 34px; padding: 6px 11px; }
 .note-box { display: flex; gap: 9px; align-items: flex-start; border-radius: 10px; padding: 11px 13px; font-size: 13.5px; font-weight: 500; }
 .note-box.bad { background: var(--danger-soft); color: var(--danger); }
 .note-box.warn { background: var(--warn-soft); color: var(--warn); }
@@ -700,7 +704,19 @@ function ymd(d) {
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 function parseISO(iso) { var p = String(iso).split('-').map(Number); return new Date(p[0], p[1]-1, p[2]); }
-var TODAY = parseISO(DATA.today);
+/* The date is worked out on the device, not baked in at build time. Baking it
+   meant the page had to be republished every morning to stay correct, and each
+   republish serves the page from a new versioned path, which is what was
+   wiping the completions stored on the device overnight. */
+function todayISO() {
+  try {
+    return new Intl.DateTimeFormat('en-CA', { timeZone: DATA.tz }).format(new Date());
+  } catch (e) {
+    return DATA.today;
+  }
+}
+var TODAY_ISO = todayISO();
+var TODAY = parseISO(TODAY_ISO);
 function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
 function diffDays(iso) { return Math.round((parseISO(iso) - TODAY) / 86400000); }
 function dowKey(d) { return DAYK[d.getDay() === 0 ? 6 : d.getDay() - 1]; }
@@ -1139,7 +1155,7 @@ function renderCal() {
     if (items.length) cls += ' has';
     // Urgency, not course identity; colour here would be identity by colour alone.
     if (items.some(function (t) { return (t.weight == null ? 0 : t.weight) >= 25; })) cls += ' urg';
-    if (iso === DATA.today) cls += ' today';
+    if (iso === TODAY_ISO) cls += ' today';
     if (d < TODAY) cls += ' past';
     if (capOf(d) === 0) cls += ' nostudy';
     var mlab = d.getDate() === 1 ? '<span class="mlab">' + MON[d.getMonth()] + '</span>' : '';
@@ -1253,7 +1269,7 @@ function openForm(id) {
   document.getElementById('f-title').value = t ? t.title : '';
   document.getElementById('f-course').value = t ? t.course : DATA.courses[0].id;
   document.getElementById('f-type').value = t ? t.type : 'assignment';
-  document.getElementById('f-due').value = t && t.due ? t.due : DATA.today;
+  document.getElementById('f-due').value = t && t.due ? t.due : TODAY_ISO;
   document.getElementById('f-size').value = t ? (t.size || 'medio') : 'medio';
   document.getElementById('f-weight').value = t && t.weight != null ? t.weight : '';
   f.classList.add('open');
@@ -1478,8 +1494,39 @@ function initModal() {
 }
 
 /* ---------- boot ---------- */
+function renderHeading() {
+  var d = TODAY;
+  document.getElementById('hoje').textContent =
+    FULLDOW[d.getDay() === 0 ? 6 : d.getDay() - 1] + ', ' + d.getDate() + ' de ' + FULLMON[d.getMonth()];
+  document.getElementById('rel').textContent =
+    'Contagens relativas a ' + String(d.getDate()).padStart(2, '0') + '/' +
+    String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear() + ' em ' + DATA.tz + '.';
+}
+
+/* Anything changed here lives only on this device until it is exported, so the
+   page says how much is waiting rather than letting it pile up unnoticed. */
+function pendingCount() {
+  var n = Object.keys(store.override).length + Object.keys(store.edits).length + store.added.length;
+  Object.keys(store.steps).forEach(function (k) { n += Object.keys(store.steps[k]).length; });
+  return n;
+}
+function renderPending() {
+  var el = document.getElementById('pending');
+  var n = pendingCount();
+  if (!n) { el.innerHTML = ''; return; }
+  el.innerHTML = '<div class="pend">' +
+    '<span>' + n + (n === 1 ? ' alteração guardada neste aparelho' : ' alterações guardadas neste aparelho') +
+    '</span><button class="tbtn" id="pendexport">Exportar</button></div>';
+  document.getElementById('pendexport').addEventListener('click', function () {
+    document.getElementById('exportbtn').click();
+    document.getElementById('exportbtn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+}
+
 function render() {
   var sch = schedule();
+  renderHeading();
+  renderPending();
   renderDisciplines(sch);
   renderUpcoming();
   renderChart(sch);
@@ -1565,6 +1612,7 @@ def render_timetable(m: dict) -> str:
 def payload(m: dict) -> str:
     return json.dumps({
         "today": m["today"].isoformat(),
+        "tz": m["tz"],
         "capacity": m["capacity"],
         "courses": [{
             "id": c.get("id"), "name": c.get("name"), "abbr": c.get("abbr"),
@@ -1592,10 +1640,11 @@ def render_html(m: dict) -> str:
 <div class="page">
   <header class="px">
     <div class="term">{esc(m['term'])} &middot; UFSC &middot; 5 disciplinas</div>
-    <h1>{heading}</h1>
+    <h1 id="hoje">{heading}</h1>
   </header>
 
   <div class="px" id="banner"></div>
+  <div class="px" id="pending"></div>
 
   <section>
     <h2 class="px">Disciplinas <span class="sub">deslize para trocar; dentro de cada uma, as 5 próximas</span></h2>
@@ -1705,8 +1754,7 @@ def render_html(m: dict) -> str:
     <div id="fallback"></div>
     O que você marca, edita e adiciona aqui fica salvo <b>neste aparelho</b>. Para gravar
     no repositório de vez, exporte e me envie o arquivo no chat.<br>
-    Atualizado em {dt.datetime.utcnow().strftime('%d/%m/%Y %H:%M')} UTC &middot;
-    contagens relativas a {today.strftime('%d/%m/%Y')} em {esc(m['tz'])}.
+<span id="rel"></span>
   </footer>
 </div>
 <script>var DATA = {payload(m)};</script>
