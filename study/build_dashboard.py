@@ -618,6 +618,21 @@ section { min-width: 0; }
 .wleg { display: flex; flex-wrap: wrap; gap: 3px 11px; font-size: 10.5px; color: var(--faint); }
 .wleg i { font-style: normal; font-family: var(--mono); }
 
+.brief { background: var(--card); border-radius: var(--r); box-shadow: var(--shadow); padding: 6px 14px 10px; }
+.bf-row { display: flex; gap: 11px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--hair); }
+.bf-row:last-child { border-bottom: 0; }
+.bf-row > div { flex: 1; min-width: 0; }
+.bf-row.bad { color: var(--danger); }
+.bf-row.bad b { font-weight: 650; }
+.bf-row svg { flex: none; margin-top: 2px; }
+.bf-k { flex: none; width: 54px; font-size: 10px; font-weight: 700; letter-spacing: .07em;
+        text-transform: uppercase; color: var(--faint); padding-top: 3px; }
+.bf-line { font-size: 13px; line-height: 1.45; display: flex; align-items: baseline; gap: 7px; }
+.bf-line i { width: 7px; height: 7px; border-radius: 2px; background: var(--dc); flex: none; }
+.bf-sub { font-size: 12.5px; font-weight: 500; margin-top: 2px; }
+.bf-none { font-size: 13px; color: var(--faint); font-style: italic; }
+.bf-when { font-style: normal; font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+.bf-tight { font-style: normal; font-size: 10.5px; font-weight: 700; color: var(--danger); }
 .pend { display: flex; align-items: center; gap: 10px; background: var(--warn-soft); color: var(--warn);
          border-radius: 10px; padding: 9px 10px 9px 13px; font-size: 12.5px; font-weight: 550; }
 .pend span { flex: 1; }
@@ -846,6 +861,72 @@ function classErrands(iso) {
 function isTight(t, sch) {
   if (!t.due || t.status === 'done' || t.type === 'admin') return false;
   return (sch.doneBy[t.id] || 0) < sizeDays(t);
+}
+
+/* ---------- today's brief, computed here rather than pushed from a job ----------
+   Everything the morning message said is derived from the same data this page
+   already has, so it belongs on the page: open it and the brief is current,
+   with no conversation to go and read. */
+function renderBrief(sch) {
+  var el = document.getElementById('brief');
+  var tasks = allTasks();
+  var open = tasks.filter(function (t) { return t.status !== 'done'; });
+  var late = open.filter(function (t) { return t.days != null && t.days < 0; });
+  var today = open.filter(function (t) { return t.days === 0; });
+  var next7 = open.filter(function (t) { return t.days != null && t.days > 0 && t.days <= 7; });
+
+  var dayKey = DAYK[TODAY.getDay() === 0 ? 6 : TODAY.getDay() - 1];
+  var classes = [];
+  DATA.courses.forEach(function (c) {
+    (c.schedule || []).forEach(function (s) {
+      if (s.dayKey === dayKey) classes.push({ c: c, s: s });
+    });
+  });
+  classes.sort(function (a, b) { return (a.s.start || '').localeCompare(b.s.start || ''); });
+
+  var focus = (sch.plan[TODAY_ISO] || []).map(function (id) {
+    return tasks.filter(function (x) { return x.id === id; })[0];
+  }).filter(Boolean);
+  var errands = classErrands(TODAY_ISO);
+
+  var rows = '';
+  if (late.length) {
+    rows += '<div class="bf-row bad">' + WARN + '<div><b>' + late.length +
+      (late.length === 1 ? ' atividade atrasada' : ' atividades atrasadas') + '</b><div class="bf-sub">' +
+      esc(late.map(function (t) { return t.title; }).join(' &middot; ')) + '</div></div></div>';
+  }
+  if (today.length) {
+    rows += '<div class="bf-row bad">' + WARN + '<div><b>Vence hoje</b><div class="bf-sub">' +
+      esc(today.map(function (t) { return t.title; }).join(' &middot; ')) + '</div></div></div>';
+  }
+
+  rows += '<div class="bf-row"><span class="bf-k">Aulas</span><div>' +
+    (classes.length ? classes.map(function (x) {
+      return '<div class="bf-line"><i style="--dc:var(--c-' + esc(x.c.id) + ')"></i>' +
+        esc(x.s.start) + '-' + esc(x.s.end) + '  ' + esc(x.c.name) +
+        (x.s.where ? ' <em class="bf-when">' + esc(x.s.where) + '</em>' : '') + '</div>';
+    }).join('') : '<span class="bf-none">sem aulas hoje</span>') + '</div></div>';
+
+  rows += '<div class="bf-row"><span class="bf-k">Estudar</span><div>' +
+    (focus.length ? focus.map(function (t) {
+      return '<div class="bf-line"><i style="--dc:var(--c-' + esc(t.course) + ')"></i>' +
+        esc(t.title) + (isTight(t, sch) ? ' <em class="bf-tight">prazo apertado</em>' : '') + '</div>';
+    }).join('') : '<span class="bf-none">' +
+      (capOf(TODAY) > 0 ? 'nada pendente' : 'sem horário de estudo hoje') + '</span>') + '</div></div>';
+
+  if (errands.length) {
+    rows += '<div class="bf-row"><span class="bf-k">Na aula</span><div>' +
+      errands.map(function (t) { return '<div class="bf-line">' + esc(t.title) + '</div>'; }).join('') +
+      '</div></div>';
+  }
+
+  rows += '<div class="bf-row"><span class="bf-k">7 dias</span><div>' +
+    (next7.length ? next7.map(function (t) {
+      return '<div class="bf-line"><i style="--dc:var(--c-' + esc(t.course) + ')"></i>' +
+        esc(t.title) + ' <em class="bf-when">' + esc(countdown(t.days)) + '</em></div>';
+    }).join('') : '<span class="bf-none">nada nos próximos 7 dias</span>') + '</div></div>';
+
+  el.innerHTML = '<div class="brief">' + rows + '</div>';
 }
 
 /* ---------- outer carousel: disciplines, each holding its own activity carousel
@@ -1527,6 +1608,7 @@ function render() {
   var sch = schedule();
   renderHeading();
   renderPending();
+  renderBrief(sch);
   renderDisciplines(sch);
   renderUpcoming();
   renderChart(sch);
@@ -1618,7 +1700,10 @@ def payload(m: dict) -> str:
             "id": c.get("id"), "name": c.get("name"), "abbr": c.get("abbr"),
             "professor": c.get("professor") or "",
             "ends": as_date(c.get("ends")).isoformat() if as_date(c.get("ends")) else None,
-            "schedule": [{"day": DAY_PT.get((s.get("day") or "").lower(), ""), "start": s.get("start")}
+            "schedule": [{"day": DAY_PT.get((s.get("day") or "").lower(), ""),
+                          "dayKey": (s.get("day") or "").lower(),
+                          "start": s.get("start"), "end": s.get("end"),
+                          "where": s.get("where") or ""}
                          for s in (c.get("schedule") or [])],
             "grading": [{"item": g.get("item"), "weight": g.get("weight") or 0}
                         for g in (c.get("grading") or [])],
@@ -1645,6 +1730,7 @@ def render_html(m: dict) -> str:
 
   <div class="px" id="banner"></div>
   <div class="px" id="pending"></div>
+  <div class="px" id="brief"></div>
 
   <section>
     <h2 class="px">Disciplinas <span class="sub">deslize para trocar; dentro de cada uma, as 5 próximas</span></h2>
