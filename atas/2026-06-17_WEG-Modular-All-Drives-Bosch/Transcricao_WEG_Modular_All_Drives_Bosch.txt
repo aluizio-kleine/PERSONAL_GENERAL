@@ -1,0 +1,790 @@
+WEG - Modular All Drives - Bosch-20260617_140553-Gravação de Reunião
+17 de junho de 2026, 05:05PM
+50m 58s
+
+Aluizio Augusto Kleine Kirschner começou a transcrição
+
+Souza Victor (CaP/MFI31)   0:04
+Então tá fácil nisso aí. Teste funcional é que nem você comentou, praticamente todos os produtos nossos aqui, produtos que nós fizemos já também para empresas fora da Bosch, o teste funcional acontece então.
+Dependendo do produto, que nem o seu produto tem uma eletrônica, o seu produto exige alguma coisa nesse sentido também, que é o segundo módulo que você colocou na apresentação. Então vou trazer aqui mais um exemplo. Nós temos a as linhas nossa aqui do módulo que a gente chama de **, a eletrônica que controla o.
+
+Aluizio Augusto Kleine Kirschner   0:20
+Nice.
+
+Souza Victor (CaP/MFI31)   0:35
+o carro. Então, os testes funcionais ali de verificação, se o código fonte foi carregado no ICU, se o flash foi gravado, realizar validações mesmo, inserir sinais, buscar resultado desses sinais inseridos, simular algum tipo de movimentação e ver se o resultado apresentado.
+
+Aluizio Augusto Kleine Kirschner   0:40
+A.
+Sell me.
+
+Souza Victor (CaP/MFI31)   0:52
+Faz sentido né então é entender como funciona ali a spec do produto para não só aplicar um teste que às vezes tem uma prescrição já pronta ou também desenvolveram alguns testes tá para esses produtos eu trouxe o da Silva aqui como eletrônica mas
+Eu posso trazer alguns outros exemplos de produtos um pouco mais menos de eletrônico, como chama assim, a própria ferramenta elétrica, bombas de combustível, tudo isso aí fazem parte de teste que nós realizamos aqui e confesso que as máquinas de teste sempre são aquelas mais
+críticas numa linha de produção, justamente para o cuidado ali. Sistema de medição que atenda, velocidade, resolução, taxa de aquisição, qual hardware utilizar ali, ruídos, que no caso ali você tem um versor ali, você está falando de.
+tensão ali um pouco mais alta, corrente, eu vi que chega até 60 amperes, que eu acho que a máquina que você pediu, então tem que tomar esse cuidado também. Então esses testes também fazem parte e a carga, que é o último teste, mais uma vez, também.
+
+Aluizio Augusto Kleine Kirschner   1:48
+Mm-hmm.
+
+Souza Victor (CaP/MFI31)   1:56
+Faz sentido, já trabalhamos com isso sim, inclusive compramos a carga dinâmica, configura as cargas ali para a prescrição, atender a prescrição do teste do produto, principalmente fizemos isso em motor de partida.
+é aqueles motores de que parte achar o motor de partida na verdade né como chama alternador e tem um motor de partida isso então os dois também tinham uma carga dinâmica na máquina de teste justamente para simular alguma coisa ali então faz parte do nosso nosso portfólio aí tá esse
+É máquinas de teste assim aí podemos trazer, Marcelo, depois se quiser algum exemplo aí a gente tenta buscar.
+
+Laranjeira Marcelo (CaP/MFI21)   2:31
+Sim, é, eu quero. Se você é, se você me permitir, Aluizio, eu não sei se eu estou como apresentadora aqui. Eu vou até tentar. Eu vou fazer uma apresentação nossa aqui. Deixa, deixa eu tentar aqui, ver se vai.
+
+Aluizio Augusto Kleine Kirschner   2:45
+Mas tu consegue compartilhar a tela aí?
+
+Laranjeira Marcelo (CaP/MFI21)   2:47
+Isso, vocês estão vendo a minha tela?
+
+Aluizio Augusto Kleine Kirschner   2:49
+Sim.
+
+Laranjeira Marcelo (CaP/MFI21)   2:50
+Isso eu vou eu. Essa aqui é uma apresentação, depois eu compartilho com vocês. Então, todos esses exemplos que o Victor trouxe são de fato exemplos nossos aqui, da Bosch Campinas e da Bosch Curitiba. Deixa eu só colocar aqui o modo de apresentação.
+E é fácil depois a gente compartilhar com vocês. O que a gente não pode nem compartilhar por telefone. Muitas vezes são exemplos de clientes externos por forças de contrato de confidencialidade. Mas eu quero rapidamente aqui, aí o Victor também.
+
+Aluizio Augusto Kleine Kirschner   3:17
+Sim.
+
+Laranjeira Marcelo (CaP/MFI21)   3:21
+Fique à vontade para me ajudar Victor. Essa aqui é uma apresentação, é uma parte dela. Ela é bem maior do que essa, porque tem uma parte institucional que eu não vou colocar agora aqui que não é objetivo. Então só para que vocês nos conheçam. Hoje a gente já fornece várias soluções para algumas empresas do grupo VEG. Nós fornecemos soluções Linhas.
+E células de automações para motores comerciais, industriais, para controls, para drives, para capacitores. Estamos fornecendo agora para Vega, divisão é de tomadas, interruptores. É, estamos em negociações.
+De entendimentos com o pessoal de vocês da parte da WEG Energia para soluções em linhas de montagem de baterias. Eu posso ter uma parte aqui da apresentação e assim a gente cada vez mais a gente tem a WEG aqui como um grande cliente, um grande parceiro, né?
+E que a Bosch assim tem tem a prioriza a WEG como sendo aí um do foi um dos nossos clientes lançadores quando nós começamos a vender para o mercado externo. Por que que eu falo isso até fazendo uma introdução? A nossa divisão é construção de máquina especiais, chama-se Manufacturing Innovation.
+Nós temos mais de 60 anos, então nós existimos há 60 anos e quando a nossa divisão foi criada, foi justamente para implementar soluções para todas as empresas do Grupo Bosch na América Latina. A partir de 2013, eu vim com uma iniciativa junto à nossa divisão, junto ao nosso presidente.
+Se nós então colocarmos as soluções Bosch também no mercado externo para atender vários clientes, foi aí que aí então vocês vão entender que em 2014 a WEG Motores Unidade Linhares foi o nosso primeiro cliente, onde nós colocamos a primeira linha de montagem Bosch.
+Com soluções bote de linhas de montagem, linhas de transferência, linhas paletizadas, com RFID e tudo mais. Então assim, e na época, a fraveg foi 11 avanço muito significativo em termos de tecnologia em linhas de produção. E aí, depois disso, graças a Deus, a gente vem.
+É fornecendo aí para todas as divisões de vocês, inclusive também para WEG em Manaus. Nós estamos aí, é finalizando a entrega de uma linha para vocês na WEG em Manaus. Então, contando essa história um pouquinho aqui, é como é que a gente caminha, como é que está estruturado o nosso portfólio. Então, se vocês podem.
+Podem notar aqui da esquerda para a direita, nós temos então aqui toda a parte de consultoria que nós chamamos aqui. Essa parte de consultoria é voltado para ganho de produtividade. Então aqui nós trazemos a engenharia industrial rapidamente já no processo do cliente para olhar o seguinte, olha daquilo que.
+
+Aluizio Augusto Kleine Kirschner   5:44
+Sell.
+
+Laranjeira Marcelo (CaP/MFI21)   6:02
+O cliente tem, ele precisa realmente de uma linha automatizada. Qual que é o conteúdo de automação que ele tem? Então aqui a gente rapidamente pode capturar isso aqui com alguns workshops. O foco aqui então é grande produtividade. Qual que é a grande vantagem? Eu levo também as questões da engenharia industrial.
+Para dentro aqui do terceiro bloco, eu vou pular um bloco aqui, que é a parte de perdão, eu do segundo bloco aqui, perdão, já logo logo depois da engenharia, eu já levo as questões da engenharia industrial dentro da engenharia de construção de uma máquina especial, ou seja, a máquina, a máquina especial, linha ou células ou automação. Então ela já vem.
+Corretamente especificada com relação à ergonomia, com relação à segurança, aderência a todas as normas regulamentadoras. E aqui o nosso foco dentro de construção de máquinas é exatamente fazer o quê? Linhas novas, células novas, retrofiting, automações. Se eu colocar um braço robótico, um sistema de visão, um sistema de cola, de parafusamento, uma.
+Uma bancada de teste, então dentro aqui a gente consegue caminhar com muita tecnologia. Aí entra também toda a parte de conectividade, então assim, a WEG não é o caso, então vocês têm inclusive uma gerência que cuida da questão de indústria 4.0, tanto para manufatura de vocês como para conectar o produto, mas nós temos muitos clientes aqui no mercado.
+externo, que não tem esse braço, essa vertente como a WEG tem, então o que a gente faz? Também abraça a conectividade dentro de uma solução, de uma linha, de uma automação, de uma célula. Então, trazendo aqui mesh, sistemas preditivos, sistemas de conditional monitoring que eu vou monitorando as condições físicas do equipamento.
+Então os vários gradientes, pressão, vazão, temperatura e assim por diante. Então aqui a gente leva toda a tecnologia e a parte não menos importante, que é a parte do service, que é toda a parte aqui da assistência. Então há clientes nossos que falam, olha, laranjeiro, eu quero uma solução Bosch, mas eu também quero.
+Ter aqui um acesso ao atendimento 24 por 7. Então a Bosch tem um call center e dentro do call center da Bosch, então a nossa divisão também, ela está lá. Então o cliente, toda a máquina nossa, ela recebe um número. Então com esse número o cliente, ele tem acesso ao número da máquina no call center. Olha, eu estou com a máquina 71, alguma coisa com problema.
+Abre um chamado, rapidamente vem para a nossa assistência técnica, que entra em contato com o cliente e aí já encaminha o técnico mecânico, eletroeletrônico ou técnico de software rapidamente para fazer o atendimento. Então aqui é um pouquinho como está estruturado o portfólio.
+E na sequência, você fique à vontade para entender. Na sequência, a gente fala um pouquinho sobre os sistemas de manufatura. Então, assim, a nossa grande vertente é fabricar, entregar para o cliente soluções que levam o cliente a ter ganho de produtividade, levam o cliente a ter.
+O ciclo operacional que ele precisa para atender o teu cliente final. Então, com isso, nós temos aqui várias tecnologias de montagem, várias tecnologias aqui que rapidamente a gente consegue entender o processo do cliente em cima desse entendimento, propor qual que é o melhor conjunto de automação ou qual que é o melhor conjunto real.
+Realmente aqui de uma criação nova, seja uma linha, seja uma máquina, seja uma célula, seja um parque, um parque de automações, numa solução que o cliente já possa ter em sua casa. Gente, eu não estou lendo o slide porque o slide é autoexplicativo, mas vocês fiquem à vontade para me fazer a pergunta aqui. Eu estou indo mais no âmbito geral.
+De cada slide aqui, eu trago para vocês alguns exemplos de como é que a gente caminha, por exemplo, e aqui é até importante para vocês, Aluizio, nós temos várias soluções que nós fornecemos aqui para empresas, por exemplo, que são fabricantes de sensores, são fabricantes de componentes eletrônicos.
+Como eu já disse, então nós temos soluções para vocês em drives, temos soluções em encontros, várias soluções de encontros com Alexandre Guesser e toda a equipe dele. Se eu não me engano, acho que nós temos 5 soluções com eles, já negociamos, participamos de vários outros processos de concorrência. Acho que nós temos 2 soluções em drives com vocês também. É um prazer.
+Você tá sendo lembrado por vocês novamente aqui. Então, soluções onde a gente embarca vários conceitos aqui, conceitos a laser, conceitos de limpeza, de dispensing, de screen, de press fit e sistemas óticos, sistema de sistemas de visão ou até determinar.
+Novo sistema de visão, criar então uma inteligência para trabalhar junto com o hardware de comércio, um hardware quiesse ou um hardware de qualquer outro fornecedor.
+Aqui também um outro bom exemplo que a gente caminha aqui para o setor agro, então aqui para o setor agro, até utilizando a expertise que nós temos. Então, para que vocês tenham uma ideia, a nossa divisão, ela é responsável em abastecer a Bosch na América Latina e também exportamos soluções.
+Máquinas e linhas de montagem que fabricam os bicos de injetores que são montados na galeria de combustível. Então, essa nossa expertise gerou em um dos nossos clientes aqui do setor agro, o desenvolvimento que não existia até então no Brasil, só existe porque a Bosch já forneceu duas máquinas dessa para um cliente.
+máquinas que ela consegue então montar esses bicos injetor, calibrar esses bicos injetor indo ao encontro das mesmas soluções e tecnologias que a gente faz aqui para criar, para montar os nossos bicos injetores. Que tal alguns algumas das características principais
+
+Aluizio Augusto Kleine Kirschner   11:22
+We are so Michel Michel Martinelli.
+Fire.
+
+Laranjeira Marcelo (CaP/MFI21)   11:30
+que esses equipamentos hoje aqui tem né é uma outra outra parte importante também a gente também caminha muito fortemente para o segmento da construção civil né Então essa aqui é uma linha de montagem para um cliente que a cada 7 segundos sai uma fechadura montada né então a gente pode imaginar Poxa uma fechadura deve ser um negócio
+É extremamente complexo porque você tem muitos pequenos produtos e aí você imagina no ramo da construção civil é diferente do ramo de uma fabricante de sensores de uma fabricante automotiva, onde as tolerâncias são muito mais apertadas, então que a tolerância é muito mais aberta, você imagina a dificuldade que você tem uma linha automática a cada 7 segundos.
+saiu um componente montado no extremo padrão de qualidade que fez esse cliente aqui a ter uma alteração radical no seu sistema interno de produção para garantir que seus produtos realmente tenham uma repetibilidade no âmbito de qualidade. Aqui algumas tecnologias embarcadas aqui para que vocês possam ter uma ideia.
+é outro segmento que a gente está caminhando bastante aqui eu tô assim o intuito dessa apresentação mostrar para vocês a de o quanto a gente tem é condições de ir Avante vários processos aqui um exemplo da com de Foods né é na parte de Fudes Nós também estamos entrando com muito com muita rapidez
+deles né um segmento altamente é lucrativo Por que que eu falo lucrativo né porque existem poucos integradores né nacionais que que tem o o a capacidade tem o no Hall técnico de trabalhar com com a com food geralmente esses equipamentos são todos importados
+Nós começamos a trabalhar com foods, principalmente, nós estamos trabalhando de trás para frente, do final da linha para o meio da linha, então nosso objetivo ainda não é construir soluções turn que para processamento de alimentos, seja massa, seja biscoito, seja.
+E no Ey, qualquer outro é qualquer outro produto, então nós estamos trabalhando, começando na parte final, com sistemas de visão, sistemas de transferência, estamos trabalhando com soluções já específica no meio de linhas para fazer suporte preciso.
+com massa de massas de chocolate né através de sistemas de ultrassom então a gente vem avançando bastante rápido aí nesse segmento de foods aí e aquilo que eu comentei com vocês não menos importante a gente trouxe toda a tecnologia da Alemanha para o Brasil de linhas para fabricarmos as baterias e células
+De combustível, então nós temos é, estamos conversando com a equipe de vocês da WEG Energia, para então tentar aí está dependendo de alguns fatores aí de clientes aí da WEG, estabelecer realmente aí 1 o volume de compras que seja compatível.
+Para que a Vega então estruture dentro da sua divisão de energia, uma linha, uma célula ou alguns postos de montagem, mesmo que seja semiautomático aí de baterias. Então gente, é um pouco é isso da nossa divisão de automação, bem rapidamente.
+É Aluizio, porque acho que o grande objetivo é estar discutindo em cima da sua especificação técnica um pouco do que a gente faz. Eu acho que a gente pode voltar, como o Victor disse, trazendo alguns exemplos para vocês, até para dar para vocês aí um pouco mais de.
+É de segurança naquilo que nós estamos falando aí, não é? Não sei se ficou claro para vocês aí.
+
+Aluizio Augusto Kleine Kirschner   14:55
+Não ficou 100% claro, é mais para ter uma noção do que vocês fazem, se a gente consegue também depois no futuro pensar em outras aplicações aqui na nossa área, né? Até porque o Franklin e o Alysson vão estar trabalhando também na linha de montagem automatizada e é bom saber o que vocês conseguem fazer.
+Na questão de manipulação de placa eletrônica, montagem, por exemplo, de um inversor de frequência completamente, integrando ali as partes plásticas com PCB, para depois a gente poder discutir sobre essa linha de montagem.
+
+Laranjeira Marcelo (CaP/MFI21)   15:22
+Mm-hmm.
+
+Aluizio Augusto Kleine Kirschner   15:30
+Também um pouco e fazer um projeto integrado. A ideia, no fim das contas, é que se você tem essa capacidade de fazer, que a gente crie 3 orçamentos, sendo separadamente o sistema de testes da linha de montagem e depois um.
+
+Laranjeira Marcelo (CaP/MFI21)   15:31
+Now, let go.
+Mhm.
+
+Aluizio Augusto Kleine Kirschner   15:45
+O orçamento do pacote completo, a entrega da linha de montagem automatizada com o sistema de testes e uma embalagem automatizada.
+
+Laranjeira Marcelo (CaP/MFI21)   15:54
+bom a gente está disposição eu acho que para esse conteúdo Victor também aqui ele ele participou de vários projetos aqui da de eletrônico né na nossa área aqui de de placas de comando né que a central que comanda os carros né então e mas vai ser também muito importante você
+
+Aluizio Augusto Kleine Kirschner   15:55
+Cert.
+
+Laranjeira Marcelo (CaP/MFI21)   16:13
+virem nos visitar viu Alysson já fica aberto aqui o convite né É para que vocês venham conhecer a nossa a nossa engenharia para que a gente possa dar uma volta com vocês na fábrica para que vocês tenham uma ideia hoje mais de 80% dos equipamentos especiais aqui da nossa planta em Campinas são feitos aí pelo time do Victor né parte elétrica
+Monica pela engenharia mecânica também, então a gente tem muita coisa para mostrar para vocês aí como Lastro, não é?
+
+Aluizio Augusto Kleine Kirschner   16:39
+Show de bola, bom, eu vou, eu vou com.
+
+Laranjeira Marcelo (CaP/MFI21)   16:41
+Então está bom, fica à vontade de vocês. Eu vou ficar no mudo agora. Já falei muito aí.
+
+Aluizio Augusto Kleine Kirschner   16:46
+Eu vou compartilhar minha tela aqui pra gente poder explicar melhor um pouco do conceito, porque às vezes pode ficar meio nebuloso ali só no escopo, né. E aí a gente vai discutindo ao longo da apresentação aqui.
+Vocês conseguem ver minha tela já?
+
+Souza Victor (CaP/MFI31)   17:06
+Sim.
+
+Laranjeira Marcelo (CaP/MFI21)   17:06
+Sim.
+
+Aluizio Augusto Kleine Kirschner   17:08
+Bom, então aqui na nossa fábrica, eu, o Alysson, Franklim e o Carlos, a gente trabalha na seção de engenharia industrial, implantando novos produtos na fábrica. Então, quando a gente tem uma demanda de um novo produto, a gente tem que preparar a fábrica para fazer essa
+Essa produção, eu especificamente trabalho com os sistemas de teste dos inversores de frequência, junto com o Julio também, que é o nosso analista sênior aqui, e a ideia aqui é criar um novo conceito de sistema de testes que possa ser modular.
+Escalável, aplicado globalmente e que eu consiga testar vários SKUs no mesmo sistema de teste.
+Bom, aqui nós já temos alguns sistemas de testes manuais, nós temos alguns que são automáticos, mas nenhum deles tem conexões elétricas automatizadas ainda ou movimentação por esteiras. É, todos eles são.
+Colocados manualmente ali no sistema, os cabos são conectados manualmente, a sequência de teste em si, que é automática. O operador não precisa ficar realizando a sequência de testes.
+Então, esse conceito novo aqui, no que ele consiste? A gente vai ter no começo uma linha de montagem montando os produtos e aí a ideia é que ela seja automatizada, mas vamos considerar aqui, por exemplo, uma linha manual ao fim da montagem, então.
+Vai ter como se fosse uma estação de carregamento onde vai ter um operador, caso a linha seja integrada, seria automaticamente colocada ali, mas vai ter um operador pegando esse drive montado e colocando ele em cima de um fixture, como se fosse uma bandeja de teste.
+E a ideia é que exista a conexão automática dos cabos ou barramentos ou agulhas desse fixture é automaticamente se conectem com o produto.
+Então, existem, agora no começo, nós temos cinco tipos de produtos que estão descritos ali no sistema, no escopo, que seriam cinco tipos de fixtures. A ideia é que se a gente tiver bons resultados com isso, a gente comece a aplicar para outros drives da mesma categoria de corrente e tensão.
+Mas é que o grande ponto aqui é que os fixtures vão ser customizáveis, eles vão ser personalizados para cada tipo de produto, mas a conexão do fixture com o sistema de teste vai ser sempre a mesma, vai ser um padrão, você vai sempre ter a mesma interface.
+Então, dessa forma, tu só precisa customizar o teu fixture. Ah, senhor, vai ter um novo produto sendo lançado, cria um novo fixture para ele, mas o sistema de teste vai ser sempre o mesmo.
+Para nós isso é muito bom, porque a gente não vai ter que fazer reprojeto, que é muitas vezes onde a gente perde muito tempo numa implantação de produto, tendo que fazer um projeto novo de um sistema de testes. E também gera gargalos, porque às vezes tu cria um sistema de testes com número limitado de posições.
+E aí a demanda muitas vezes de produção aumenta e você não consegue mais aumentar a produção da tua linha, porque o teste está limitado aquela quantidade de posições. Por isso que a ideia aqui é que ele seja modular. Eu vou ter um módulo de teste de tensão aplicada.
+Um módulo de teste funcional e um módulo de teste de carga. Aumentou minha demanda, eu compro mais um módulo e assim por diante.
+Qual que é a ideia aqui do conceito do funcionamento aqui do módulo de teste? O produto ele vai entrar então por meio de uma esteira que a ideia é que cada módulo tenha sua própria esteira, mas aqui talvez no começo a gente vai ter uma esteira
+integrada, uma esteira adicional. E aí esse produto em cima do Fixture vai entrar no módulo de teste. Aqui vai ter uma espécie de porta ou janela ou algo que vai abrir nessa lateral. O produto vai entrar no módulo e aí quando ele estiver dentro do módulo.
+A ideia é que a esteira fique sempre livre para que outros produtos possam seguir o fluxo de linha, caso tu tenha ali uma produção entregando produtos para os módulos. Nesse sentido, o que nós pensamos é que existe uma movimentação desse produto com o fixture.
+para trás do módulo, para o fundo dele, e aí nesse momento tu vai ter uma conexão automática do Fixture com o módulo de teste, deixando a esteira livre para que outros produtos possam fluir ali pelo fluxo, pela esteira.
+Um
+Nesse momento então, depois do teste de tensão aplicada, o produto retorna à esteira e aí ele segue o fluxo, indo para o próximo módulo, nesse exemplo aqui, indo para um próximo módulo de teste funcional, executa os testes.
+Depois, ele parte para um módulo de teste de carga e aí no final ele vai ser enviado para uma ou um buffer se não tiver uma etapa de embalagem automatizada, ou então ele entra já direto para a parte de embalagem automatizada.
+Tempos de ciclo, né? A gente não vai estabelecer aqui para vocês que tem que estar entregando tantos drives por minuto, por hora, porque os tempos de teste, eles já são pré-definidos. Então a gente tem, por exemplo, o teste de tensão aplicada fazendo testes de 3 segundos a 1 minuto.
+Dependendo do produto a ser testado, teste funcional, ele vai de um minuto, um minuto e meio, até 7 minutos, dependendo do produto, e o módulo de teste de carga, que é o mais demorado, ele leva de 6 a 20 minutos, dependendo do produto.
+Então o que acontece, um módulo de teste de tensão aplicada e um módulo de teste funcional consegue abastecer 3, 4, 5 módulos de teste de carga. Por isso que a gente precisa desse conceito de esteira livre para que eu faça o teste de tensão aplicada e funcional e depois eu consigo fazer paralelo os testes de carga.
+Ah, aumentou ainda mais a demanda. Eu preciso de mais de um teste, um módulo de teste funcional, então eu vou ter a esteira livre para também poder testar nos próximos módulos, né?
+Bom, o único módulo que vai ser com a cabine aquecida é o módulo de teste de carga, os outros 2 não tem essa necessidade.
+
+Souza Victor (CaP/MFI31)   23:23
+O.
+
+Aluizio Augusto Kleine Kirschner   23:31
+E basicamente é isso.
+Não sei se vocês têm alguma pergunta.
+
+Souza Victor (CaP/MFI31)   23:38
+Eu tenho, eu tenho Luiz, deixa eu fazer só uma, se eu entendi, legal aí, então quando você manda o módulo para trás da sessão, ele está fazendo um teste ali no módulo de teste inicial, o Hypotic, né? E aí fica livre a esteira se eu quiser passar o seguinte módulo para passar um próximo produto.
+Um seguinte módulo, mas o seguinte módulo teria que ser um outro hypot, porque ele não pode pular esse teste, ele teria que entendi. Então aí, a hora que o primeiro sair, ele vai chegar na segunda máquina. Não, mas esse teste que eu já fiz, não sei se eu identifico com RFID, talvez ali alguma coisa.
+
+Aluizio Augusto Kleine Kirschner   24:01
+Sim.
+
+Souza Victor (CaP/MFI31)   24:12
+Para em dizer, olha, esse cara, ou você tem o mesmo. Eu vi que você tem um sistema de supervisório lá supervisório que eu falar, não, cara, repórter, você pode passar nessa segunda aí porque você já fez o primeiro. Essa ideia de fazer o.
+
+Aluizio Augusto Kleine Kirschner   24:15
+Sim.
+Isso, a ideia é que, claro, ele precisa ter esse conceito de esteira livre caso eu aumente a linha. Eu preciso colocar mais módulos, então ele tem que ter já esse conceito implantado no módulo pra eu não ter que no futuro, agora aumentou minha linha e eu precisava que a esteira ficasse livre e ela não fica no módulo de hypot.
+
+Souza Victor (CaP/MFI31)   24:23
+Yeah.
+
+Aluizio Augusto Kleine Kirschner   24:41
+Aí vai ser um gargalo, entende? Então por isso que a gente já quer aplicar esse conceito para todos os módulos e não ter esse problema.
+
+Souza Victor (CaP/MFI31)   24:47
+Mm-hmm.
+
+Aluizio Augusto Kleine Kirschner   24:47
+É, mas é claro que precisa seguir a sequência, precisa começar pelo Hypotch depois do funcional e aí por fim o teste de carga.
+
+Souza Victor (CaP/MFI31)   24:55
+Entendi, entendi. Não entendi como vai funcionar de maneira modular. Aí está tchau, obrigado.
+
+Aluizio Augusto Kleine Kirschner   25:00
+O importante é que cada módulo tenha sua própria esteira para que eu não precise ficar fazendo integrações entre módulos com esteiras externas. A ideia é que o Fixture consiga se movimentar entre módulos com a própria esteira do módulo.
+Então ele vai ter ali um gapzinho entre eles, mas a ideia é que eles consigam se interligar sem precisar colocar outras esteiras, né? Porque assim, a ideia desse projeto aqui é expandir globalmente. Então depois eu vou precisar fazer uma linha lá na China, uma linha no México, uma linha na Itália.
+A minha ideia não é ter que ficar buscando integradores para parte de esteira, a ideia é que seja o mais compacto e simples possível, modular, né? A aumenta o módulo, é só botar ele ali no meio da linha, não vou precisar ficar fazendo integração depois.
+
+Souza Victor (CaP/MFI31)   25:51
+Then you, not sure.
+Obrigado.
+
+Aluizio Augusto Kleine Kirschner   25:55
+Mais algum questionamento? Alguma dúvida?
+
+Souza Victor (CaP/MFI31)   26:00
+não é assim eu tô entendendo aí o projeto como um todo tá então é legal agradeço os detalhes aí é claro que não para um próximo passo aí eu vou precisar de algumas prescrições né você imagina que você tem os testes ali eu vi que você tem é que você falou fixtures aí cada um deles tem o
+Esse é o modelo, talvez mecanicamente, o que muda um pouco ali, mas os testes que é feito no modelo mais compacto com o modelo maior, vai ser praticamente o mesmo, né? O conceito do teste, vamos mudar as correntes, vamos mudar as tensões, potências ali, mas teste funcional tem que ser feito em todos os produtos.
+
+Aluizio Augusto Kleine Kirschner   26:30
+Sim.
+
+Souza Victor (CaP/MFI31)   26:35
+Então acho que um próximo passo sim, eu estaria pedindo para você essas prescrições, sabe? De vai falar o tempo que nem você comentou aí, tem o tempo do teste e também vou chamar um pouco mais assim o High Pot AC/DC, qual a atenção que nós vamos utilizar, qual a fuga máxima permitida.
+
+Aluizio Augusto Kleine Kirschner   26:50
+Deal.
+
+Souza Victor (CaP/MFI31)   26:55
+Se for permitida, então esse nível de detalhe na prescrição aí para a gente poder depois acho que avançar, não é?
+
+Aluizio Augusto Kleine Kirschner   27:00
+É na especificação de teste já tem bastante detalhe, tá? A grosso modo, assim, a gente já detalhou mais do que o necessário, eu imagino. Claro que se tu encontrar alguma coisa, eu preciso dessa informação, né? Tu pode mandar esse questionamento pra gente, mas a ideia aqui a gente não entra.
+
+Laranjeira Marcelo (CaP/MFI21)   27:01
+Yeah.
+
+Souza Victor (CaP/MFI31)   27:03
+Mhm.
+Sim.
+
+Aluizio Augusto Kleine Kirschner   27:17
+Vamos entrar muito no detalhe do projeto porque nós estamos cotando com empresas do Brasil e do mundo inteiro essa solução e a gente quer comparar sempre a mesma coisa. E a gente está buscando um preço agora, a gente está buscando qual que é o preço desse sistema de testes.
+
+Souza Victor (CaP/MFI31)   27:24
+Uh-huh.
+
+Aluizio Augusto Kleine Kirschner   27:33
+Então, se a gente entrar muito no detalhe, muitas vezes vai estar alongando a proposta ali da cotação e sem uma necessidade. É claro que para poder fazer a cotação, eu preciso dessa informação, a gente vai trabalhar nisso.
+Por exemplo, tu precisa saber como são os bones de potência, como são os bones de controle para fazer a automação dos fixtures. A gente passa desenhos para vocês para poder fazer essa análise.
+Yesterday.
+
+Laranjeira Marcelo (CaP/MFI21)   28:02
+É, eu acho que da parte mecânica, Victor, o que a gente vai precisar agora de imediato, Aluizio também, quando você fornecer a documentação para nós aí, eu imagino que você tenha uma tabela com as principais dimensões dos seus componentes e peso.
+
+Souza Victor (CaP/MFI31)   28:02
+Entendi.
+
+Laranjeira Marcelo (CaP/MFI21)   28:21
+Até para a gente pensar na no numa linha de transporte aí Bosch, eu vi que eu vi que tem o maior comprimento, o maior produto teu está especificado com cotas, mas eu não consigo viver todas as famílias ou.
+Uma tabela onde eu tenho todas as famílias de produtos sua aí, não é isso, esse é o maior produto, não é?
+
+Aluizio Augusto Kleine Kirschner   28:44
+Isso, esse é o maior produto e por que eu passei isso? Porque assim tu consegue dimensionar o tamanho do teu fixture, ele vai ser padrão pra isso, né? Mas claro, se vocês precisarem ali todos os 5 tamanhos de
+
+Laranjeira Marcelo (CaP/MFI21)   28:45
+Isso, chamar um produto isso.
+Sing, sing.
+
+Aluizio Augusto Kleine Kirschner   28:58
+Produtos que a gente vai ter agora nesse momento e as os 5 tipos de conexão, a gente pode passar isso se for relevante pro orçamento, tá?
+
+Laranjeira Marcelo (CaP/MFI21)   29:00
+Oh.
+And I.
+É, não é que seja, não é que seja relevante. Agora eu tô entendendo que agora eu vou te dar uma estimativa de custo, porque aí você vai ver como é que você vai caminhar. Eu quero caminhar com fornecedor nacional e dentro dos fornecedores nacionais a Boston vai ser contemplada, aí sim a gente vai avançar.
+Mas o que eu preciso é até para entender a questão de usinagem, ter uma ideia mais ou menos de custo de usinagem, porque para o pallet. Então, assim, como é que eu vou comunizar esse pallet para produtos diferentes? Como é que se eu tenho um produto diferente, vai ser como é que vai ser o meu conteúdo de setup? Eu tenho que pensar num setup rápido para estar absorvendo.
+
+Aluizio Augusto Kleine Kirschner   29:40
+Mhm.
+
+Laranjeira Marcelo (CaP/MFI21)   29:43
+Cada um dos seus produtos não é em cima do meu, do meu porta peça, não é?
+
+Aluizio Augusto Kleine Kirschner   29:44
+William.
+
+Laranjeira Marcelo (CaP/MFI21)   29:48
+Mas é coisa simples também, Aluizio. Eu estou entendendo aí que agora é só uma estimativa. Eu vou abrir a solicitação de cotação interna e a gente vai caminhar, Victor. E aí você, você puder englobar Victor, essa minha solicitação junto com as suas, eu imagino que seja muito maior.
+Para o Aluizio passar para nós aí, não é?
+
+Souza Victor (CaP/MFI31)   30:11
+Sim, falando um pouco da elétrica aí, que nem num teste de High Pot, por exemplo, se a gente for utilizar uma fonte de 5, 10 kg, não é isso que realmente faz a diferença no orçamento final, numa estimativa aí é possível, mas, por exemplo, aqui nós estamos falando da máquina.
+de teste funcional é um teste bem dedicado ao seu produto Então olha que a prescrição dela eu vejo como importante aí é para eu saber cara então eu tava até com ela aberta aqui assim né vamos validação da bateria deve ter um procedimento pela sua prescrição de como eu valido a bateria
+
+Aluizio Augusto Kleine Kirschner   30:32
+Thing.
+
+Souza Victor (CaP/MFI31)   30:44
+Como eu valido o 485 funcionando, como eu valido a parada segura funcionando? Então eu acho que a prescrição, por mais que seja Victor, tenho 15 tipos de produtos para passar nessa marca. São 5 fixos com 3 tipos. Pelo que eu entendi, são 15.
+Vou te mandar uma para você ter uma ideia, uma ideia do que como que é feito esse teste e na hora e o da carga é, eu fiquei na dúvida aqui até vou fazer essa pergunta, a carga vocês vão fornecer essa carga que nós vamos utilizar para o teste ou é uma carga que eu também vou?
+Considerar a compra nossa aqui para utilizar no teste.
+
+Aluizio Augusto Kleine Kirschner   31:22
+A gente está considerando nesse momento com todos os fornecedores, considerando que o fornecedor vai fornecer a solução completa, sem a gente comprar nada e sem a gente fornecer nada. Porque pode acontecer de ter diferença nos orçamentos, porque um considerou que nós vamos fornecer, o outro não.
+
+Souza Victor (CaP/MFI31)   31:30
+That.
+
+Aluizio Augusto Kleine Kirschner   31:39
+E aí os preços diferem, sabe? Então a ideia aqui é que vocês forneçam tudo, e aí depois a gente pode discutir a questão da WEG estar fornecendo componentes, principalmente componentes do portfólio WEG, e que se vocês trabalharem com componentes WEG, vai ser muito mais interessante.
+
+Souza Victor (CaP/MFI31)   31:39
+Perfect.
+Mhm.
+
+Aluizio Augusto Kleine Kirschner   31:56
+Mas se vocês me falarem assim, para sensor, eu não consigo fazer com que tem que ser aqui em seu para PLC, vai ser muito melhor desenvolvimento se for com outro PLC, a gente está aberto a isso também, porque a gente sabe dos problemas que podem ser gerados se a gente forçar alguma coisa.
+E também muitas vezes o aumento de preço, declinar, a proposta, enfim, são n fatores que influenciam se a gente forçar alguma coisa aqui. É claro que a ideia agora é ter o orçamento bruto, a estimativa de custo, e aí depois a gente discute detalhes.
+Podem gerar algum abatimento no valor ou algo nesse sentido.
+
+Laranjeira Marcelo (CaP/MFI21)   32:30
+The.
+
+Souza Victor (CaP/MFI31)   32:33
+E faz sentido para você de repente me enviar uma prescrição de cada uma dessas marcas, uma do Hypotman, que seja um produto para eu ter uma ideia, eu não vou entrar no nível detalhes, mas aqui cinco, seis, o valor em si não é uma especificação do teste que eu tenho que fazer todos esses testes aqui.
+
+Aluizio Augusto Kleine Kirschner   32:44
+Mais especificações de teste do que é.
+
+Souza Victor (CaP/MFI31)   32:49
+Porque aí eu consigo ver responder até algumas perguntas, já que a gente começou aqui, tipo o PLC 500 que nós consideramos aí da WEG aí que eu vejo até que você colocou aqui é atende o depois devolver um problema, cara, nesse momento, olha, é um PLC.
+
+Aluizio Augusto Kleine Kirschner   33:04
+Sim.
+
+Souza Victor (CaP/MFI31)   33:04
+E nesse momento é um PLC, mas eu sei que vai ser um PLC com uma máquina, vamos chamar assim, de médio porte, ou já preciso considerar um PLC com uma performance diferente. Então essa análise eu consigo fazer só com a primeira prescrição aí, tá? Então se você puder enviar isso aí, eu agradeço. E aí uma pergunta tradicional também sobre os
+
+Aluizio Augusto Kleine Kirschner   33:14
+Sim.
+
+Souza Victor (CaP/MFI31)   33:24
+Na verdade, são dois temas aí. Quando você fala do supervisório, as máquinas que eu fiz com a WEG e outras divisões. Então, por isso que eu vou perguntar, é assim, nós integrávamos nosso sistema, o CLP ali, um sistema supervisório de vocês, ou seja, lá ele informava se a
+A peça estava no número título, vinha as prescrições, vinha os dados, vinha todas as informações lá do produto que vai ser testado quando eu perguntava pelo identificador da peça. E eu guardava esses resultados também, então quando chegava no próximo módulo, ele sabia, já passei pelo Hypot. Que legal. Esse supervisório que você está falando. Essa parte é da WEG, eu na verdade.
+
+Aluizio Augusto Kleine Kirschner   33:56
+Sim.
+
+Souza Victor (CaP/MFI31)   33:58
+Desenvolva a parte do PLC e IHM para que integre a máquina nesse sistema. É isso que eu considero aqui.
+
+Aluizio Augusto Kleine Kirschner   34:05
+O que a gente está cotando é que o fornecedor vai entregar já a solução completa com o sistema supervisório. A gente não está cotando como se nós fossemos desenvolver o sistema supervisório, tá? Não sei se foi essa a tua pergunta, mas a ideia é que a solução completa seja entregue
+
+Souza Victor (CaP/MFI31)   34:08
+Mm.
+
+Aluizio Augusto Kleine Kirschner   34:23
+pelo fornecedor.
+
+Souza Victor (CaP/MFI31)   34:25
+Tá não sim então é que você vai ter um supervisório das máquinas de teste desse fornecedor que for selecionado e provavelmente um supervisório da WEG para as outras máquinas é isso vai ficar meio padrões diferente
+
+Aluizio Augusto Kleine Kirschner   34:38
+Outras máquinas.
+
+Souza Victor (CaP/MFI31)   34:39
+É, você falou que tem outras marcas na linha, numa linha de montagem que vem um pouco antes, e é.
+
+Aluizio Augusto Kleine Kirschner   34:44
+Não, claro, é que daí a ideia é que assim, se for fornecido a linha de montagem e o sistema de testes por vocês, por exemplo, que tudo seja integrado por vocês também. A gente não vai fazer um sistema provisório separado do que é o sistema de teste ou
+
+Souza Victor (CaP/MFI31)   34:53
+Mm-hmm.
+Sell.
+
+Aluizio Augusto Kleine Kirschner   35:01
+Do que é a linha de montagem? É tudo fornecido pelo fornecedor. A gente não vai desenvolver nada. Claro que nem tu questionou ali sobre a especificação de testes, esses detalhes de teste, que são conhecimentos específicos que nós temos aqui.
+
+Souza Victor (CaP/MFI31)   35:04
+The bom.
+Tá bom, tá bom.
+
+Aluizio Augusto Kleine Kirschner   35:17
+Eles vão ser tratados em colaboração com a nossa equipe e a equipe de vocês. A gente não vai, nem tem como vocês desenvolverem se a gente não colaborar. A ideia é que se a gente avançar com o projeto, fechamos com vocês, vamos fazer com vocês, então a gente vai estar colaborando, passando todas as informações necessárias no detalhe.
+
+Laranjeira Marcelo (CaP/MFI21)   35:27
+S.
+
+Aluizio Augusto Kleine Kirschner   35:36
+A gente está fazendo esse sistema de testes rodar.
+
+Souza Victor (CaP/MFI31)   35:39
+Sim, não. Nessa primeira, é mais para ter um overview do que são esses testes e entendi. Então a gente vai desenvolver o supervisório aqui. Não vamos utilizar um supervisório que nas vezes que eu trabalhei com a WEG, a WEG tinha um sisteminha.
+
+Aluizio Augusto Kleine Kirschner   35:44
+Ish.
+
+Souza Victor (CaP/MFI31)   35:53
+Vocês aí mesmo, está bom, entendi. Provisório ali para as máquinas de teste, está bom?
+
+Aluizio Augusto Kleine Kirschner   35:55
+Mm-hmm.
+
+Laranjeira Marcelo (CaP/MFI21)   35:57
+O.
+É o Aluizio, só para ir a um encontro que você falou de produtos WEG. Nós temos toda a familiaridade com os produtos da WEG e até nós temos algo mais com vocês em termos de relacionamento. Hoje nós temos um contrato exclusivo com WEG Automação.
+que nós compramos hoje para industrializar, seja para VEG ou seja para outros clientes, e a gente está cada vez aumentando mais o consumo de compra de itens VEG. Então a gente consegue hoje comprar preços muito competitivos. Para você ter uma ideia, a gente tem um relacionamento. Eu vou te falar um número, que nós estamos falando BOST para VEG.
+
+Aluizio Augusto Kleine Kirschner   36:34
+Mhm.
+
+Laranjeira Marcelo (CaP/MFI21)   36:39
+Nós estamos aqui com um projeto da WEG agora em tomadas interruptores, onde a Bosch foi contemplada em detrimento de um fornecedor que já tem uma máquina muito parecida lá. Nós ganhamos por causa do relacionamento, então para você ter uma ideia.
+Nós temos um relacionamento de compra de mais de 1000000 de produtos VEG por ano para aplicar, seja em máquinas VEG ou seja em máquinas de outros clientes. Então isso, a divisão de vocês aí do setor de suprimentos, junto com a comissão que aprovou o projeto, levou isso muito em consideração.
+
+Aluizio Augusto Kleine Kirschner   37:01
+Mm-hmm.
+
+Laranjeira Marcelo (CaP/MFI21)   37:15
+Essa reciprocidade que a que a Bosch tem com a WEG, não é?
+
+Aluizio Augusto Kleine Kirschner   37:21
+Most a bit.
+
+Laranjeira Marcelo (CaP/MFI21)   37:21
+Tá, então isso pode ser um fator que também deixa vocês aí, você e todo o seu time mais tranquilo com relação a nossa competência em trabalhar com produtos de vocês aí.
+
+Aluizio Augusto Kleine Kirschner   37:34
+Tranquilo, ótimo.
+
+Laranjeira Marcelo (CaP/MFI21)   37:38
+Eu acho que é só Victor. Tem mais algum ponto que você queria trazer para o Alysson e para o time?
+
+Souza Victor (CaP/MFI31)   37:43
+Não, não só a gente combinar um quando a gente consegue ter esse esse essa prescrição aí, não é mais que seja uma que nem eu falei.
+
+Laranjeira Marcelo (CaP/MFI21)   37:49
+Aluizio, perdão. Aluizio, desculpa, chamei você de Alisson, perdão Aluizio.
+
+Aluizio Augusto Kleine Kirschner   37:54
+Mm-hmm.
+
+Souza Victor (CaP/MFI31)   37:55
+E então é para a gente conseguir fazer essa estimativa aí, colocar um pouco mais aí de valor, até passar um prazo para eles depois.
+
+Laranjeira Marcelo (CaP/MFI21)   37:55
+No.
+Tá bom.
+Isso, isso. O Luiz, você coloca isso para mim, aos meus cuidados e do Victor, que chegando toda a documentação, eu abro a solicitação de cotação aí e aí o Victor puxa isso aí com o time aqui interno, né? Como ele já está familiarizado.
+Ele já puxa com o time dele e acrescenta os engenheiros aí e mecânicos, não é?
+
+Aluizio Augusto Kleine Kirschner   38:22
+Beleza, só para também deixar claro, não sei se a gente chegou a comentar sobre isso, mas a gente espera esse sistema de testes aqui na nossa fábrica no final do ano que vem, então a gente precisa esse o comissionamento tanto na fábrica
+
+Laranjeira Marcelo (CaP/MFI21)   38:34
+Yeah.
+
+Aluizio Augusto Kleine Kirschner   38:39
+de vocês ali com o sistema de testes e o comissionamento aqui, startup, todo feito para o final do ano que vem. E em relação às cotações, a gente espera o quanto antes, porque a gente está cotando com o mundo inteiro, então a gente precisa levantar esses custos e começar o projeto para não ter nenhum problema com o atraso.
+
+Laranjeira Marcelo (CaP/MFI21)   38:46
+Sell.
+
+Aluizio Augusto Kleine Kirschner   38:58
+E poder desenvolver isso de uma forma mais tranquila, sem correr apagando incêndio, né?
+E a seleção dos fornecedores provavelmente vai acontecer agora nos próximos meses. A gente espera no máximo, ali próximo no final do ano, ter tudo definido já com o projeto iniciado, que COF já feito. Então, provavelmente no mês de julho, agosto, a gente vai estar discutindo.
+
+Laranjeira Marcelo (CaP/MFI21)   39:05
+That's.
+Uh-huh.
+
+Aluizio Augusto Kleine Kirschner   39:24
+Qual fornecedor vai ser selecionado pra tá dando andamento ao projeto, tá?
+
+Laranjeira Marcelo (CaP/MFI21)   39:28
+e deixa eu só te fazer uma pergunta Luiz é então nós estamos vendo aqui contigo uma parte desse projeto vocês pretende também startar outra parte da linha que que vem vem produzindo esse produto ou vai vai começar por essa iniciativa depois
+Dela na planta, vai partir para outra.
+
+Aluizio Augusto Kleine Kirschner   39:49
+O Alysson e o Franklim podem conversar contigo agora a respeito disso, mas a ideia é que se fizer sentido, a gente comece tudo junto. A ideia é entregar tudo junto também no ano que vem.
+
+Laranjeira Marcelo (CaP/MFI21)   39:53
+So.
+Thank you.
+Entendi, entendi, entendi. É até por custo para nós, por exemplo, assim, quanto, porque hoje todos os sistemas de manufatura Bosch, de transporte, da Bosch, Rexford, a Rexford é uma empresa do Grupo Bosch, isso tudo é importado, nós não temos nada nacional.
+Então, assim, quanto maior o volume que eu negocio na Alemanha, mais o preço é economicamente é mais viável. Por isso que eu estou perguntando, é se de repente a gente receber aí do de vocês a outra demanda também, a gente pode é.
+
+Aluizio Augusto Kleine Kirschner   40:25
+Sim.
+
+Laranjeira Marcelo (CaP/MFI21)   40:33
+Até tentar ter um preço muito mais competitivo, não é?
+
+Aluizio Augusto Kleine Kirschner   40:37
+É justamente essa a ideia, a gente criar aqui três cotações, onde vai ser uma cotação para o sistema de testes, uma da linha de montagem automatizada com a embalagem e um do pacote completo, buscando ali um preço melhor.
+
+Laranjeira Marcelo (CaP/MFI21)   40:41
+Mm-hmm.
+Tá.
+Tá bom, tá bom.
+Não, legal. Eu vou, eu já fechando a conversa aqui, eu já vou compartilhar com vocês a apresentação que eu fiz, que ela é muito maior. Eu fico à disposição de vocês aí, de todo o time, então eu sou o contato, eu sou o responsável aqui por vendas, então.
+Eu estou à disposição, rapidamente eu trago a demanda, já coloco para engenharia. Que bom que o Victor já está me suportando aqui e a gente consegue avançar mais rápido com vocês aí.
+
+Aluizio Augusto Kleine Kirschner   41:18
+O Franklim e Alissonn querem comentar, mostrar alguma coisa ali da parte de montagem.
+
+Alissonn Felippe Bebber   41:22
+Sim.
+É boa tarde, pessoal, então vou apresentar rapidinho só o que a gente tem hoje de conceito aqui de esboço referente a essa parte.
+
+Laranjeira Marcelo (CaP/MFI21)   41:32
+Ah, tá bom, obrigado.
+
+Alissonn Felippe Bebber   41:42
+Então hoje, como Aluizio comentou, a nossa ideia é que a gente entregue um conjunto todo, relacionado a montagem, o teste e a embalagem. A nossa proposta é automatizar o máximo possível. 100% seria o ideal, né? Mas se a gente não conseguir 100%, tentar maximizar o máximo disso com automatização.
+
+Laranjeira Marcelo (CaP/MFI21)   41:51
+Mm-hmm.
+Mhm.
+
+Alissonn Felippe Bebber   42:01
+Santos ações, não é? Então, a hoje a gente tem 1 o volume de deste produto é muito alto, não é? A gente está falando aí na velocidade de cruzeiro ali no quinto ano de implantação do produto em torno de 900 drives por dia, né? Sendo produzidos, então.
+
+Laranjeira Marcelo (CaP/MFI21)   42:16
+Mhm.
+
+Alissonn Felippe Bebber   42:19
+A gente precisa usar ferramentas que nos possibilitam seguir essa possibilidade de montagem e o produto está sendo desenvolvido com essas características que auxiliam numa possível montagem automatizada.
+
+Laranjeira Marcelo (CaP/MFI21)   42:27
+Mhm.
+Mhm.
+
+Alissonn Felippe Bebber   42:34
+Então aqui a gente tem o produto. Imagine que esses cartões eletrônicos aqui estão cheios de componentes em cima na parte superior. A gente pegou, tirou até por questões de privacidade por enquanto, pra não estar mostrando. Mas aqui eu tenho a sequência das montagens, então o produto todo está sendo feito com essa possibilidade de montagem automatizada. A gente tinha alguns cabos no produto.
+
+Laranjeira Marcelo (CaP/MFI21)   42:43
+Claro, claro.
+
+Alissonn Felippe Bebber   42:54
+conseguiu eliminar praticamente todos os cabos. Hoje somente um cabo ainda está dentro do produto que a gente entende que a gente vai ter que fazer uma pré-montagem hoje para que essa conexão seja feita. Mas o interessante seria que depois disso o restante da montagem, a parafusamento, o fechamento, seja feito tudo.
+Tudo de forma automatizada, então o produto seria montado, depois passaria pro teste que o Aluizio explicou que também a gente gostaria que fosse automatizado pra que não tivesse o mínimo de interação humana possível e depois a parte da embalagem também, se a gente não conseguisse automatizar tudo, mas automatizar uma boa parte do processo.
+
+Laranjeira Marcelo (CaP/MFI21)   43:13
+Mm-hmm.
+Mhm.
+
+Alissonn Felippe Bebber   43:30
+Então o escopo eu já tenho ele pronto, vou estar enviando para vocês ainda hoje também da parte da montagem aqui, onde é que eu tenho um sequencial de cada peça é montada, em que momento no produto a gente tem a parte dos volumes, demandas, tempo de ciclo que a gente.
+
+Laranjeira Marcelo (CaP/MFI21)   43:33
+There go.
+Legal.
+
+Alissonn Felippe Bebber   43:45
+Espera mais ou menos que seja atendido para conseguir atender a nossa demanda prevista, né? Então vou estar enviando para vocês hoje para a gente dar sequência assim. Hoje vocês já tiveram alguma experiência com montagem de algum produto que tenha cartão eletrônico, manipulação desses componentes assim? Vocês tem esse know how hoje?
+
+Laranjeira Marcelo (CaP/MFI21)   44:04
+Victor, vai lá contigo aí.
+
+Souza Victor (CaP/MFI31)   44:06
+Sim, o que eu falei, eu acho que envolve muito desse da parte eletrônica é justamente esse produto que a gente chama de O computador ali do nosso do carro é um produto wash, é um produto desenvolvido aqui, inclusive na planta de Campinas.
+Então nós temos as linhas de montagem justamente da eletrônica, das placas eletrônica, dos componentes na placa e depois a integração dessa placa no produto final, que é o aquele módulo que nós conseguimos ver assim no abrir o capô do carro. Então aí começa justamente esses problemas que falou.
+
+Alissonn Felippe Bebber   44:34
+Mm-hmm.
+
+Souza Victor (CaP/MFI31)   44:38
+A integração da placa com a parte externa, vamos evitar os cabos aqui, porque cabo é imprevisível. Então busca conectores, aquela proteção também SD, no caso ali para a gente não ter nenhum tipo de problema com isso, né? É trabalhar esse encaixe de.
+
+Alissonn Felippe Bebber   44:52
+Mhm.
+
+Souza Victor (CaP/MFI31)   44:54
+PCB que a gente chama aqui a placa conector elétrico é conector com a capa plástica, conector com a capa metálica, tudo isso aí, esse cuidado.
+
+Alissonn Felippe Bebber   45:02
+É, hoje os nossos conectores, a gente está vendo todo esse cuidado ali, os conectores vão ser todos revestidos para que ele tenha uma resistência mecânica maior, para facilitar esse encaixe. As peças tem convites, isso tudo a gente está já elaborando no produto para que facilite.
+
+Souza Victor (CaP/MFI31)   45:06
+Yeah.
+Exato, exato.
+Isso.
+
+Alissonn Felippe Bebber   45:19
+Cristina essa montagem, né?
+
+Souza Victor (CaP/MFI31)   45:21
+é então não tem uma linha aqui de 23 postos que tá estamos trabalhando nela no momento inclusive que que faz toda a montagem disso aí tá então venha receber vem toda essa parte conectores tudo mais teste passar por também por um forno passa também
+uma isolação térmica ali, uma pasta térmica para fechar esses componentes aí de uma maneira segura, componentes para vibração, então nós montamos isso também. Então a linha de montagem é no sentido que vocês estão fazendo aí, monta e vai testando por partes ali para ver que está validando as coisas e no final aqueles testes funcionais que
+Garantem a qualidade do produto.
+
+Alissonn Felippe Bebber   45:59
+Não, maravilha. Então vocês tem know how hoje para conseguir fazer uma montagem de um produto assim, de forma totalmente automatizada, não tendo cabos. Um cabo a gente não consegue. Eu acho que é meio impossível hoje automatizar essa parte. Impossível não deve ser, mas eu acho que.
+
+Souza Victor (CaP/MFI31)   46:09
+Sim, sim.
+Okay.
+É, pra automação é um caos, é.
+
+Alissonn Felippe Bebber   46:16
+Desprenderia um.
+
+Souza Victor (CaP/MFI31)   46:19
+Pra automação é o caos porque a gente comenta aqui que ele tem vida própria o carro, então você deixa ele hoje aqui paradinho na mesa, amanhã ele tá de outra posição, né? eSIM, inclusive essa linha que eu comentei com você de 23 postos aí que nós estamos trabalha sobre esses paletes, né? Eu acho que similar ao que você chamou de fixture aí.
+
+Alissonn Felippe Bebber   46:19
+Um tempo absurdo.
+Yeah.
+
+Laranjeira Marcelo (CaP/MFI21)   46:23
+Right.
+Yeah.
+
+Souza Victor (CaP/MFI31)   46:36
+O Luiz chamou, e então tem o RFID, tem sistema supervisório aí até para esse controle de rota, saber que produto bom, bom, ruim, onde vai e tudo mais. Temos esse controle também aqui com softwares desenvolvido por nós, tá? Esse software supervisório aqui faz parte também de um software padronizado aqui na planta da Bosch.
+
+Alissonn Felippe Bebber   46:36
+Mhm.
+Becker.
+
+Souza Victor (CaP/MFI31)   46:55
+Então esse cuidado, esse conhecimento, nós temos também e evitamos que nem se falou, cabo aí é um negócio para automação.
+É difícil, a gente tem que evitar, mas sim, já fizemos algumas coisas, mas o cuidado tem que ser dobrado nesse sentido aí.
+
+Alissonn Felippe Bebber   47:06
+Não maravilha.
+Perfeito. Então, como comentei, vou estar enviando o scope para vocês ainda hoje ali, eu já peguei os contatos aí para gente começar esse assunto em paralelo e ao mesmo tempo em conjunto. Acho que não sei se o Luiz chegou a explicar, mas a ideia é que a gente faça um orçamento para a linha de montagem, outro orçamento para o sistema
+
+Souza Victor (CaP/MFI31)   47:19
+Sell.
+
+Laranjeira Marcelo (CaP/MFI21)   47:24
+Sim.
+
+Alissonn Felippe Bebber   47:31
+do teste o outro para sistema da embalagem e, se possível, fazer um do conjunto, ver se no conjunto, talvez no agregado tem um, a gente consegue no pacote um desconto maior, alguma coisa assim para verificar a viabilidade, mas a gente não vai.
+
+Laranjeira Marcelo (CaP/MFI21)   47:37
+Entendi.
+I'm going on.
+Claro.
+
+Alissonn Felippe Bebber   47:46
+Se prender a um fornecedor que entregue tudo 100% da solução de montagem, teste de embalagem, a gente vai ver o que é melhor de cada um para chegar a uma solução final que nos atenda de forma eficiente.
+
+Laranjeira Marcelo (CaP/MFI21)   47:58
+Becker.
+
+Souza Victor (CaP/MFI31)   47:59
+Perfeito.
+
+Raphael Franklim Oliveira Ferreira   48:01
+Eu gostaria apenas de fazer um comentário. Talvez o Aluizio já até comentou sobre a importância do projeto para nós. A gente está falando de um projeto novo que pode ser um carro-chefe aí da nossa, de uma linha de produtos nossa. Então é muito importante que o projeto seja replicável.
+Porque aqui a gente está pensando nas nossas é outras plantas fora do país, então a gente tem a China, tem o México, então é muito provável que isso seja expansível, tá?
+
+Laranjeira Marcelo (CaP/MFI21)   48:21
+Mhm.
+
+Aluizio Augusto Kleine Kirschner   48:35
+É, a ideia é escalabilidade.
+
+Laranjeira Marcelo (CaP/MFI21)   48:35
+bacana sim legal frankly legal
+
+Souza Victor (CaP/MFI31)   48:37
+Sim.
+
+Laranjeira Marcelo (CaP/MFI21)   48:40
+e não tá ótimo gente eu eu agradeço imensamente aí a oportunidade que vocês estão nos dando né de nós participarmos aí desse desse projeto bonito de vocês aí Esperamos que a gente possa chegar entre dentre os clientes selecionados né aí para mais para frente tá realmente aí
+Afinando e refinando a cotação, não é?
+
+Alissonn Felippe Bebber   49:01
+They go.
+
+Raphael Franklim Oliveira Ferreira   49:02
+Mm-hmm.
+
+Laranjeira Marcelo (CaP/MFI21)   49:02
+Nós estamos à disposição de vocês aqui, viu? Por favor, fiquem à vontade, planeje para vir nos visitar e aí busquem referências nossas aí com Alexandre, com o Lucas, Lucas, Lucas da drives ali nós fizemos para você.
+
+Aluizio Augusto Kleine Kirschner   49:02
+Perfect.
+
+Raphael Franklim Oliveira Ferreira   49:16
+Ah sim não isso aí nós estamos bem bem alinhados já a gente já conhece o projeto de vocês aqui dentro a gente já esteve na planta de vocês lá em Pomerode na ano passado se não me engano a gente pode ver um pouco né do que é uma linha
+
+Alissonn Felippe Bebber   49:17
+A Lucas Azevedo.
+
+Laranjeira Marcelo (CaP/MFI21)   49:18
+Isso.
+
+Alissonn Felippe Bebber   49:20
+Passos.
+
+Laranjeira Marcelo (CaP/MFI21)   49:21
+Legal, legal.
+Mhm.
+
+Alissonn Felippe Bebber   49:27
+Okay.
+
+Laranjeira Marcelo (CaP/MFI21)   49:27
+Ah, sim, Pomerode, aham.
+
+Raphael Franklim Oliveira Ferreira   49:33
+Vocês tem uma linha meio integrada lá com o conveyor, não é? Então a gente já está bem ciente já do know-how.
+
+Laranjeira Marcelo (CaP/MFI21)   49:35
+Sim, sim, isso.
+Tá bom, tá bom. Mas Franklim, repetindo, estamos aqui à disposição. Eu faço muito gosto de receber vocês aqui. Uma coisa é eu mostrar no PowerPoint, outra coisa, não, vamos ver se esses caras realmente tem lastro, né? Mas é isso aí. Isso é muito importante, porque hoje.
+
+Raphael Franklim Oliveira Ferreira   49:45
+Claro.
+
+Souza Victor (CaP/MFI31)   49:47
+H.
+
+Raphael Franklim Oliveira Ferreira   49:51
+Sim, tem razão, é isso aí.
+
+Aluizio Augusto Kleine Kirschner   49:53
+Mhm.
+
+Laranjeira Marcelo (CaP/MFI21)   49:56
+Muita gente promete tudo na hora de entregar, não entrega nada, então é com então. Então tá bom, meus amigos, muito obrigado. Eu já estou na sequência mandando para vocês apresentação. A gente fica no aguardo aí de receber o os documentos e.
+
+Raphael Franklim Oliveira Ferreira   50:00
+É, não tem razão, é isso aí.
+
+Aluizio Augusto Kleine Kirschner   50:00
+Tá certo.
+
+Laranjeira Marcelo (CaP/MFI21)   50:11
+E vamos rapidamente aí, colocando para vocês as estimativas aí.
+
+Aluizio Augusto Kleine Kirschner   50:15
+E só Marcelo, por favor, ali vocês mandem o que vocês precisam para a cotação, porque daí a gente já prepara os documentos aqui para enviar para vocês, tá? Porque é muita gente, é muita coisa sendo levantada e pode acabar ficando.
+
+Raphael Franklim Oliveira Ferreira   50:16
+Perfeito.
+
+Laranjeira Marcelo (CaP/MFI21)   50:21
+Sing, sing.
+Tá bom?
+Claro.
+
+Aluizio Augusto Kleine Kirschner   50:31
+Para trás alguma informação, então o que for necessário, levanta ali no e-mail que a gente repassa para vocês, está bom?
+
+Laranjeira Marcelo (CaP/MFI21)   50:32
+A.
+
+Laranjeira Marcelo (CaP/MFI21)   50:37
+excelente excelente pode deixar o Victor vai fazer isso aí um grande abraço gente fique com Deus aí bom final de tarde até logo abraço até mais tchau tchau
+
+Souza Victor (CaP/MFI31)   50:37
+Combinado.
+
+Aluizio Augusto Kleine Kirschner   50:41
+Show the ball.
+
+Souza Victor (CaP/MFI31)   50:43
+Valeu igualmente, até mais. Prazer pessoal, valeu, tchau, tchau.
+
+Alissonn Felippe Bebber   50:44
+Valeu pessoal, valeu!
+
+Raphael Franklim Oliveira Ferreira   50:44
+Obrigado, tudo de bom. Tchau, tchau.
+
+Carlos Roberto de Andrade   50:47
+Tchau.
+
+Alissonn Felippe Bebber   50:51
+It's.
+
+Aluizio Augusto Kleine Kirschner parou a transcrição
