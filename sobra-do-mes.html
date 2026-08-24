@@ -98,7 +98,33 @@ input,select{font:inherit; color:inherit}
 .monthnav .label{
   min-width:132px; text-align:center; font-weight:600; font-size:.86rem;
 }
-.saveflag{font-size:.72rem; color:var(--muted); min-height:1em; min-width:74px; text-align:right}
+.brand-tools{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.savebox{display:flex; align-items:center; gap:9px}
+.saveflag{font-size:.72rem; color:var(--muted); white-space:nowrap}
+.savebtn{
+  display:flex; align-items:center; gap:7px;
+  padding:6px 13px; border-radius:8px; font-size:.81rem; font-weight:600;
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--ink-2);
+}
+.savebtn::before{content:""; width:7px; height:7px; border-radius:99px; background:var(--good); flex:none}
+.savebtn[data-state="dirty"]{background:var(--accent); color:var(--on-accent); border-color:var(--accent)}
+.savebtn[data-state="dirty"]::before{background:var(--on-accent)}
+.savebtn[data-state="dirty"]:hover{filter:brightness(1.08)}
+.savebtn[data-state="saving"]{opacity:.65}
+.savebtn[data-state="saving"]::before{background:var(--warning)}
+.savebtn[data-state="local"]{border-color:color-mix(in srgb,var(--warning) 50%,transparent)}
+.savebtn[data-state="local"]::before{background:var(--warning)}
+.savebtn[data-state="clean"]{cursor:default}
+.toast{
+  position:fixed; left:50%; bottom:22px; transform:translate(-50%, 14px);
+  background:var(--ink); color:var(--plane); padding:11px 18px; border-radius:10px;
+  font-size:.85rem; font-weight:500; z-index:90; pointer-events:none;
+  opacity:0; transition:opacity .18s, transform .18s; max-width:min(92vw,460px); text-align:center;
+}
+.toast.show{opacity:1; transform:translate(-50%, 0)}
+.toast.bad{background:var(--critical); color:#fff}
+.filebtn{position:relative; overflow:hidden; display:inline-flex}
+.filebtn input[type=file]{position:absolute; inset:0; opacity:0; cursor:pointer; font-size:0}
 
 .tabs{display:flex; gap:2px; overflow-x:auto; scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
@@ -352,11 +378,16 @@ ol.actions .amt{font-family:"IBM Plex Mono",monospace; font-weight:600; font-siz
         <h1>Sobra do Mês</h1>
         <span class="sub">controle de gastos e plano de saída do vermelho</span>
       </div>
-      <div class="monthnav">
-        <button id="prevM" aria-label="Mês anterior">‹</button>
-        <span class="label num" id="mLabel">—</span>
-        <button id="nextM" aria-label="Próximo mês">›</button>
-        <span class="saveflag" id="saveflag"></span>
+      <div class="brand-tools">
+        <div class="monthnav">
+          <button id="prevM" aria-label="Mês anterior">‹</button>
+          <span class="label num" id="mLabel">—</span>
+          <button id="nextM" aria-label="Próximo mês">›</button>
+        </div>
+        <div class="savebox">
+          <span class="saveflag" id="saveflag"></span>
+          <button class="savebtn" id="saveBtn" data-state="clean">Salvo</button>
+        </div>
       </div>
     </div>
     <nav class="tabs" role="tablist" id="tabs">
@@ -465,8 +496,42 @@ S = loadState();
 
 /* ============ persistence ============ */
 let artifactNS = null, artifactTried = false, saveTimer = null;
+let dirty = false, saving = false, soLocal = false;
 const flag = document.getElementById("saveflag");
-function setFlag(t){ flag.textContent = t; }
+const saveBtn = document.getElementById("saveBtn");
+
+function haQuanto(iso){
+  const t = Date.parse(iso || 0); if(!t) return "";
+  const seg = Math.max(0, (Date.now() - t) / 1000);
+  if(seg <  50) return "agora";
+  if(seg < 3600) return "há " + Math.round(seg/60) + " min";
+  if(seg < 86400) return "há " + Math.round(seg/3600) + "h";
+  return "em " + new Date(t).toLocaleDateString("pt-BR", {day:"2-digit", month:"2-digit"});
+}
+function updateSaveUI(){
+  if(saving){
+    flag.textContent = ""; saveBtn.dataset.state = "saving";
+    saveBtn.textContent = "Salvando"; saveBtn.disabled = true; return;
+  }
+  saveBtn.disabled = false;
+  if(dirty){
+    flag.textContent = "não salvo";
+    saveBtn.dataset.state = "dirty"; saveBtn.textContent = "Salvar agora";
+  } else if(soLocal){
+    flag.textContent = "só neste aparelho · " + haQuanto(S.atualizadoEm);
+    saveBtn.dataset.state = "local"; saveBtn.textContent = "Tentar de novo";
+  } else {
+    flag.textContent = "salvo " + haQuanto(S.atualizadoEm);
+    saveBtn.dataset.state = "clean"; saveBtn.textContent = "Salvo";
+  }
+}
+function toast(txt, bad){
+  let t = document.getElementById("toast");
+  if(!t){ t = el(`<div id="toast" class="toast"></div>`); document.body.appendChild(t); }
+  t.textContent = txt;
+  t.className = "toast show" + (bad ? " bad" : "");
+  clearTimeout(t._t); t._t = setTimeout(() => { t.className = "toast" + (bad?" bad":""); }, 3400);
+}
 
 function docWithState(st){
   const json = JSON.stringify(st).replace(/</g, "\\u003c");
@@ -477,24 +542,39 @@ function docWithState(st){
   return "<!doctype html>\n" + out;
 }
 
-async function persist(){
+function persist(){
   S.atualizadoEm = new Date().toISOString();
   try{ localStorage.setItem(LSKEY, JSON.stringify(S)); }catch(e){}
-  setFlag("salvando…");
+  dirty = true; updateSaveUI();
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(async () => {
-    if(!artifactTried){
-      artifactTried = true;
-      try{ artifactNS = (window.claude && claude.use) ? await claude.use("artifact") : null; }catch(e){ artifactNS = null; }
-    }
-    if(!artifactNS){ setFlag("salvo neste aparelho"); return; }
-    try{
-      await artifactNS.publish(docWithState(S));
-      setFlag("salvo");
-    }catch(err){
-      setFlag(err && err.code === "conflict" ? "recarregando…" : "salvo neste aparelho");
-    }
-  }, 1600);
+  saveTimer = setTimeout(salvar, 2500);
+}
+async function salvar(manual){
+  clearTimeout(saveTimer);
+  if(saving) return;
+  if(!dirty && !manual) return;
+  if(!artifactTried){
+    artifactTried = true;
+    try{ artifactNS = (window.claude && claude.use) ? await claude.use("artifact") : null; }catch(e){ artifactNS = null; }
+  }
+  if(!artifactNS){
+    soLocal = true; dirty = false; updateSaveUI();
+    if(manual) toast("Esta cópia não pode publicar. Os dados ficam neste navegador — baixe o backup em Plano.", true);
+    return;
+  }
+  saving = true; updateSaveUI();
+  const eraDirty = dirty;
+  dirty = false;                       /* otimista: o publish recarrega a página */
+  try{
+    await artifactNS.publish(docWithState(S));
+    saving = false; soLocal = false; updateSaveUI();
+    if(manual) toast("Salvo. Seus dados vão junto com a página, em qualquer aparelho.");
+  }catch(err){
+    saving = false;
+    if(err && err.code === "conflict"){ flag.textContent = "recarregando…"; return; }
+    dirty = eraDirty; soLocal = true; updateSaveUI();
+    if(manual) toast("Não deu para salvar agora. Os dados seguem neste navegador — tente de novo.", true);
+  }
 }
 function commit(){ persist(); render(); }
 
@@ -1324,26 +1404,64 @@ function renderPlano(){
       </ol>
     </div>`));
 
-  /* --- export --- */
+  /* --- backup --- */
   const ec = el(`
     <div class="card">
-      <div class="card-head"><h2>Backup</h2><span class="hint">seus lançamentos em CSV</span></div>
-      <p class="prose" style="margin-bottom:12px">Os dados ficam salvos nesta página e no seu navegador. Baixe uma cópia de vez em quando.</p>
-      <button class="btn ghost sm" id="csvBtn">Baixar CSV</button>
+      <div class="card-head"><h2>Backup e dados</h2><span class="hint">salvo automaticamente · ${esc(haQuanto(S.atualizadoEm))}</span></div>
+      <p class="prose" style="margin-bottom:14px">
+        Tudo que você lança fica gravado na própria página — não precisa exportar nada para consultar depois,
+        nem para eu ver seus números. O botão <strong>Salvar</strong> lá em cima força a gravação na hora,
+        e o mesmo dado abre em qualquer aparelho. Os arquivos abaixo são a cópia de segurança:
+        o <strong>JSON</strong> restaura o app inteiro, o <strong>CSV</strong> serve para abrir na planilha.
+      </p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+        <button class="btn ghost sm" id="jsonBtn">Baixar backup completo (JSON)</button>
+        <button class="btn ghost sm" id="csvBtn">Baixar lançamentos (CSV)</button>
+        <label class="btn ghost sm filebtn">Restaurar de um backup
+          <input type="file" accept="application/json,.json" id="restoreIn">
+        </label>
+      </div>
     </div>`);
-  ec.querySelector("#csvBtn").onclick = async () => {
-    const rows = [["mes","dia","categoria","valor","nota"]].concat(
-      S.lancamentos.map(l=>[l.mes, l.dia||"", (S.categorias.find(c=>c.id===l.cat)||{}).nome||l.cat, String(l.valor).replace(".",","), l.nota||""])
-    );
-    const csv = "﻿" + rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(";")).join("\n");
+
+  const baixar = async (filename, data) => {
     let dl = null;
     try{ dl = (window.claude && claude.use) ? await claude.use("downloads") : null; }catch(e){}
-    if(dl){
-      try{ await dl.save({filename:"sobra-do-mes.csv", data:csv}); return; }catch(e){}
-    }
-    const b = ec.querySelector("#csvBtn");
-    b.textContent = "download indisponível aqui";
-    setTimeout(()=>{ b.textContent = "Baixar CSV"; }, 2600);
+    if(!dl){ toast("Download indisponível nesta visualização.", true); return; }
+    try{ await dl.save({filename, data}); toast("Arquivo gerado: " + filename); }
+    catch(e){ if(!(e && e.code === "cancelled")) toast("O download não foi concluído.", true); }
+  };
+
+  ec.querySelector("#csvBtn").onclick = () => {
+    const rows = [["mes","dia","categoria","valor","nota"]].concat(
+      S.lancamentos.map(l => [l.mes, l.dia||"", nomeCat(l.cat), String(l.valor).replace(".",","), l.nota||""])
+    );
+    baixar("sobra-do-mes-lancamentos.csv",
+      "﻿" + rows.map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(";")).join("\n"));
+  };
+  ec.querySelector("#jsonBtn").onclick = () =>
+    baixar("sobra-do-mes-" + S.mesAtual + ".json", JSON.stringify(S, null, 2));
+
+  ec.querySelector("#restoreIn").onchange = e => {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = "";
+    if(!f) return;
+    const rd = new FileReader();
+    rd.onerror = () => toast("Não deu para ler o arquivo.", true);
+    rd.onload = () => {
+      let novo = null;
+      try{ novo = JSON.parse(rd.result); }
+      catch(err){ toast("Arquivo inválido — não é um backup deste app.", true); return; }
+      if(!novo || !Array.isArray(novo.lancamentos) || !Array.isArray(novo.categorias) || !Array.isArray(novo.fixos)){
+        toast("Arquivo inválido — não é um backup deste app.", true); return;
+      }
+      const n = novo.lancamentos.length;
+      if(!confirm("Restaurar este backup (" + n + " lançamentos)?\n\nOs dados que estão no app agora serão substituídos.")) return;
+      S = migra(novo);
+      tab = "painel";
+      commit();
+      toast("Backup restaurado: " + n + " lançamentos.");
+    };
+    rd.readAsText(f);
   };
   root.appendChild(ec);
 }
@@ -1366,9 +1484,12 @@ document.getElementById("tabs").addEventListener("click", e => {
   const b = e.target.closest("button[data-tab]"); if(!b) return;
   tab = b.dataset.tab; render(); window.scrollTo({top:0, behavior:"instant"});
 });
+saveBtn.onclick = () => salvar(true);
+setInterval(() => { if(!dirty && !saving) updateSaveUI(); }, 30000);
 document.getElementById("prevM").onclick = () => { S.mesAtual = mk(mi(S.mesAtual)-1); commit(); };
 document.getElementById("nextM").onclick = () => { S.mesAtual = mk(mi(S.mesAtual)+1); commit(); };
 
 render();
+updateSaveUI();
 })();
 </script>
