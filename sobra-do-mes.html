@@ -202,12 +202,15 @@ section[hidden]{display:none !important}
 /* ---------- simulador ---------- */
 .simrows{display:flex; flex-direction:column}
 .simrow{
-  display:grid; grid-template-columns:1fr auto; gap:7px 14px;
+  display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:7px 12px;
   padding:15px 2px; border-bottom:1px solid var(--line); align-items:center;
 }
+.simrow > *{min-width:0}
 .simrow:last-child{border-bottom:0}
-.simrow .sname{font-weight:600; font-size:.94rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
-.simrow .snote{display:block; font-size:.77rem; color:var(--muted); font-weight:400; margin-top:2px}
+.simrow .sname{font-weight:600; font-size:.94rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap; min-width:0}
+.simrow .sname input.plain{min-width:0}
+.simrow .cmp{flex-wrap:wrap}
+.simrow .snote{flex:1 1 100%; font-size:.77rem; color:var(--muted); font-weight:400; margin-top:1px}
 .simrow .sctl{display:flex; align-items:center; gap:8px; white-space:nowrap}
 .simrow .sctl span{font-size:.8rem; color:var(--muted)}
 .simrow input[type=number]{width:104px; text-align:right; padding:7px 10px; font-family:"IBM Plex Mono",monospace; font-weight:600}
@@ -229,6 +232,43 @@ section[hidden]{display:none !important}
 .caplabels div{display:flex; align-items:center; gap:7px; font-size:.8rem; color:var(--ink-2)}
 .caplabels i{width:11px; height:11px; border-radius:3px; flex:none}
 .caplabels b{color:var(--ink); font-weight:600}
+.simbanner{
+  display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+  padding:11px 15px; border-radius:10px; margin-bottom:16px; font-size:.86rem;
+  background:var(--accent-soft); border:1px solid color-mix(in srgb,var(--accent) 38%,transparent);
+}
+.simbanner .acts{display:flex; gap:8px}
+.row.simedit{gap:8px}
+@media (max-width:640px){
+  .row.simedit, .row-fix, .row-parc{
+    display:flex !important; flex-wrap:wrap; align-items:center; gap:8px;
+  }
+  .row.simedit > span:first-child,
+  .row.simedit > input[type=text]:first-child,
+  .row-fix > input[type=text]:first-child,
+  .row-fix > span:first-child,
+  .row-parc > input[type=text]:first-child,
+  .row-parc > span:first-child{flex:1 1 100%; min-width:0}
+  .row.simedit input[type=number],
+  .row-fix input[type=number],
+  .row-parc input[type=number]{width:92px; flex:0 0 auto}
+  .row.simedit input[type=month]{width:126px; flex:0 0 auto}
+  .row.simedit > [data-fim]{flex:1 1 auto; text-align:left !important}
+  .row.simedit > button, .row-fix > button, .row-parc > button{flex:0 0 auto; margin-left:auto}
+  .simrow .sname input.plain{flex:1 1 100%}
+  .simbanner .acts{width:100%}
+  .simbanner .acts .btn{flex:1 1 0}
+}
+input.plain{
+  border:1px solid transparent; background:none; padding:5px 7px; width:100%;
+  border-radius:7px; font-weight:600;
+}
+input.plain:hover{border-color:var(--line)}
+input.plain:focus{border-color:var(--accent); background:var(--surface-2)}
+.simrow .sname{align-items:center}
+.simrow .sname input.plain{flex:0 1 auto}
+button.chip-state{cursor:pointer}
+button.chip-state:hover{filter:brightness(.96)}
 .cenarios{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px}
 .cen{
   border:1px solid var(--line); border-radius:var(--r); padding:14px 15px;
@@ -608,6 +648,8 @@ const metasTotal   = () => S.categorias.reduce((a,c)=>a+(+c.meta||0),0);
 const baseTotal    = () => S.categorias.reduce((a,c)=>a+(+c.base||0),0);
 const catsLanc     = () => S.categorias.reduce((a,c)=>a.concat([c], S.subcats.filter(x=>x.pai===c.id)), []);
 const nomeCat      = id => (S.categorias.find(c=>c.id===id)||S.subcats.find(c=>c.id===id)||{nome:id}).nome;
+/* roda fn com S apontando para outro estado — usado pelo simulador */
+function withState(st, fn){ const old = S; S = st; try{ return fn(); } finally { S = old; } }
 
 function liquidoEm(mes){
   const d = S.renda.degraus.slice().sort((a,b)=>mi(a.mes)-mi(b.mes));
@@ -848,87 +890,215 @@ function renderLancar(){
 }
 
 /* ============ render: SIMULADOR ============ */
+let sim = null;
+function simCopia(){ if(!sim) sim = JSON.parse(JSON.stringify(S)); return sim; }
+function simMudou(){ return !!sim && JSON.stringify(sim) !== JSON.stringify(S); }
+
 function renderSim(){
   const root = document.getElementById("tab-sim");
   root.innerHTML = "";
-  const mes = S.mesAtual, fx = fixosTotal();
+  const W = simCopia();
+  if(W.mesAtual !== S.mesAtual) W.mesAtual = S.mesAtual;
+  const mes = W.mesAtual;
+  const calc = fn => withState(W, fn);
 
-  /* três cenários: agora · mês seguinte · sem nenhuma parcela */
-  const fins = S.parcelas.map(parcelaFim).sort((a,b)=>mi(a)-mi(b));
-  const semParc = fins.length ? mk(mi(fins[fins.length-1])+1) : mk(mi(mes)+1);
-  const cenarios = [
-    {mes, rot:"Agora"},
-    {mes: mk(mi(mes)+1), rot:"Mês que vem"},
-    {mes: semParc, rot:"Sem parcelas"}
-  ].filter((c,i,a) => a.findIndex(x=>x.mes===c.mes)===i);
-
-  const card = el(`
+  const cabeca = el(`
     <div class="card">
-      <div class="card-head">
-        <h2>Simulador de tetos</h2>
-        <span class="hint">arraste e veja o mês mudar na hora</span>
+      <div class="simbanner" id="simBanner" hidden>
+        <span id="simBannerTxt">Cenário em teste — o app de verdade continua como estava.</span>
+        <span class="acts">
+          <button class="btn sm" id="simApply">Aplicar ao app</button>
+          <button class="btn ghost sm" id="simReset">Descartar</button>
+        </span>
       </div>
-
+      <div class="card-head">
+        <h2>Simulador de cenários</h2>
+        <span class="hint">mude o que quiser — nada é gravado até você aplicar</span>
+      </div>
       <div class="tiles" style="margin-bottom:18px">
         <div class="tile hero" style="box-shadow:none">
           <div class="stripe" id="simStripe"></div>
-          <span class="k">Sobra em ${esc(mShort(mes))} com estes tetos</span>
+          <span class="k">Sobra em ${esc(mShort(mes))} neste cenário</span>
           <span class="v num" id="simSobra">—</span>
           <span class="n" id="simSobraN"></span>
         </div>
         <div class="tile" style="box-shadow:none">
-          <span class="k">Teto variável</span>
-          <span class="v num" id="simTeto">—</span>
-          <span class="n">soma de todos os limites</span>
+          <span class="k">Sai por mês</span>
+          <span class="v num" id="simSaiu">—</span>
+          <span class="n" id="simSaiuN">fixos + parcelas + tetos</span>
         </div>
         <div class="tile" style="box-shadow:none">
-          <span class="k">Economia</span>
-          <span class="v num" id="simEcon">—</span>
-          <span class="n">contra o mês da planilha (${money(baseTotal())})</span>
+          <span class="k">Contra o app atual</span>
+          <span class="v num" id="simDelta">—</span>
+          <span class="n" id="simDeltaN"></span>
         </div>
       </div>
-
       <div class="capbar" id="simBar"></div>
       <div class="caplabels" id="simLabels"></div>
-
-      <h3 style="margin:24px 0 2px">Os tetos</h3>
-      <div class="simrows" id="simRows"></div>
-
-      <h3 style="margin:26px 0 10px">O mesmo teto, em três momentos</h3>
-      <div class="cenarios" id="simCen"></div>
-      <p class="prose" style="margin-top:12px" id="simProsa"></p>
     </div>`);
-  root.appendChild(card);
+  root.appendChild(cabeca);
 
-  const rowsBox = card.querySelector("#simRows");
-  S.categorias.forEach(c => {
-    const gasto = gastoCat(mes, c.id);
+  const num = (val, on, extra) =>
+    `<input class="num money" type="number" step="${extra&&extra.step||10}" min="${extra&&extra.min!=null?extra.min:0}" value="${val}"${extra&&extra.title?` title="${esc(extra.title)}"`:""}>`;
+  const bind = (inp, set) => {
+    inp.addEventListener("input", e => { set(e.target.value); simRefresh(); });
+  };
+
+  /* ---------- renda ---------- */
+  const cR = el(`
+    <div class="card">
+      <div class="card-head"><h2>Salário</h2><span class="hint">líquido em ${esc(mShort(mes))}: <b class="num" id="totRenda">—</b></span></div>
+      <div class="rows" id="rowsRenda"></div>
+      <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn ghost sm" id="addDeg">+ degrau de salário</button>
+        <button class="btn ghost sm" id="reajuste">aplicar +5% em todos</button>
+      </div>
+    </div>`);
+  const rbR = cR.querySelector("#rowsRenda");
+  W.renda.degraus.slice().sort((a,b)=>mi(a.mes)-mi(b.mes)).forEach(d => {
+    const row = el(`
+      <div class="row simedit" style="grid-template-columns:1fr 96px 100px 100px 34px">
+        <span>
+          <input class="nm plain" type="text" value="${esc(d.rotulo)}">
+          <span class="snote" data-info></span>
+        </span>
+        <input type="month" value="${esc(d.mes)}" class="num" style="padding:6px 8px;font-size:.8rem">
+        ${num(d.bruto, null, {step:50, title:"bruto"})}
+        ${num(d.liquido, null, {step:50, title:"líquido"})}
+        <button class="btn danger" aria-label="Apagar degrau">×</button>
+      </div>`);
+    const [rot, mm, br, lq] = row.querySelectorAll("input");
+    rot.addEventListener("input", e => { d.rotulo = e.target.value; });
+    mm.addEventListener("input",  e => { d.mes = e.target.value; simRefresh(); });
+    bind(br, v => { d.bruto = +v||0; });
+    bind(lq, v => { d.liquido = +v||0; });
+    row.querySelector("button").onclick = () => {
+      if(W.renda.degraus.length <= 1){ toast("Você precisa de pelo menos um degrau de salário.", true); return; }
+      W.renda.degraus = W.renda.degraus.filter(x=>x.id!==d.id); renderSim();
+    };
+    rbR.appendChild(row);
+  });
+  cR.querySelector("#addDeg").onclick = () => {
+    const ord = W.renda.degraus.slice().sort((a,b)=>mi(a.mes)-mi(b.mes));
+    const last = ord[ord.length-1] || {bruto:0, liquido:0, mes:mes};
+    const taxa = last.bruto ? last.liquido/last.bruto : 0.742;
+    W.renda.degraus.push({ id:uid(), mes:mk(mi(last.mes)+12),
+      bruto:Math.round(last.bruto*1.05), liquido:Math.round(last.bruto*1.05*taxa), rotulo:"Novo aumento" });
+    renderSim();
+  };
+  cR.querySelector("#reajuste").onclick = () => {
+    W.renda.degraus.forEach(d => {
+      const taxa = d.bruto ? d.liquido/d.bruto : 0.742;
+      d.bruto = Math.round(d.bruto*1.05); d.liquido = Math.round(d.bruto*taxa);
+    });
+    renderSim(); toast("+5% aplicado em todos os degraus do cenário.");
+  };
+  root.appendChild(cR);
+
+  /* ---------- fixos ---------- */
+  const cF = el(`
+    <div class="card">
+      <div class="card-head"><h2>Custos fixos</h2><span class="hint num" id="totFixos">—</span></div>
+      <div class="rows" id="rowsFixos"></div>
+      <div style="margin-top:14px"><button class="btn ghost sm" id="addFixo">+ adicionar custo fixo</button></div>
+    </div>`);
+  const rbF = cF.querySelector("#rowsFixos");
+  if(!W.fixos.length) rbF.appendChild(el(`<p class="empty">Nenhum custo fixo neste cenário.</p>`));
+  W.fixos.forEach(f => {
+    const row = el(`
+      <div class="row simedit" style="grid-template-columns:1fr 116px 34px 34px; ${f.ativo?"":"opacity:.45"}">
+        <input class="nm plain" type="text" value="${esc(f.nome)}">
+        ${num(f.valor)}
+        <button class="btn danger" title="${f.ativo?"Desligar neste cenário":"Religar"}">${f.ativo?"◉":"○"}</button>
+        <button class="btn danger" aria-label="Apagar" data-del>×</button>
+      </div>`);
+    const [nm, vl] = row.querySelectorAll("input");
+    nm.addEventListener("input", e => { f.nome = e.target.value; });
+    bind(vl, v => { f.valor = +v||0; });
+    row.querySelectorAll("button")[0].onclick = () => { f.ativo = !f.ativo; renderSim(); };
+    row.querySelector("[data-del]").onclick = () => { W.fixos = W.fixos.filter(x=>x.id!==f.id); renderSim(); };
+    rbF.appendChild(row);
+  });
+  cF.querySelector("#addFixo").onclick = () => {
+    W.fixos.push({id:uid(), nome:"", valor:0, ativo:true});
+    renderSim();
+    const ins = document.querySelectorAll("#rowsFixos input[type=text]");
+    if(ins.length) ins[ins.length-1].focus();
+  };
+  root.appendChild(cF);
+
+  /* ---------- parcelas ---------- */
+  const cP = el(`
+    <div class="card">
+      <div class="card-head"><h2>Parcelas</h2><span class="hint num" id="totParc">—</span></div>
+      <div class="rows" id="rowsParc"></div>
+      <div style="margin-top:14px"><button class="btn ghost sm" id="addParc">+ adicionar parcela</button></div>
+    </div>`);
+  const rbP = cP.querySelector("#rowsParc");
+  if(!W.parcelas.length) rbP.appendChild(el(`<p class="empty">Nenhuma parcela neste cenário — é assim que fica depois de tudo quitar.</p>`));
+  W.parcelas.slice().sort((a,b)=>calc(()=>mi(parcelaFim(a))-mi(parcelaFim(b)))).forEach(p => {
+    const ativa = calc(()=>parcelaAtiva(p, mes));
+    const row = el(`
+      <div class="row simedit" style="grid-template-columns:1fr 104px 58px 58px 96px 34px; ${ativa?"":"opacity:.45"}">
+        <input class="nm plain" type="text" value="${esc(p.nome)}">
+        ${num(p.valor, null, {step:1})}
+        ${num(p.num,   null, {step:1, min:1, title:"parcela atual"})}
+        ${num(p.total, null, {step:1, min:1, title:"total de parcelas"})}
+        <span class="snote" style="text-align:right" data-fim></span>
+        <button class="btn danger" aria-label="Apagar parcela">×</button>
+      </div>`);
+    const [nm, vl, nn, tt] = row.querySelectorAll("input");
+    nm.addEventListener("input", e => { p.nome = e.target.value; });
+    bind(vl, v => { p.valor = +v||0; });
+    bind(nn, v => { p.num   = Math.max(1, +v||1); });
+    bind(tt, v => { p.total = Math.max(1, +v||1); });
+    rbP.appendChild(row);
+    row.querySelector("button").onclick = () => { W.parcelas = W.parcelas.filter(x=>x.id!==p.id); renderSim(); };
+  });
+  cP.querySelector("#addParc").onclick = () => {
+    W.parcelas.push({id:uid(), nome:"", valor:0, num:1, total:12, mesRef:mes});
+    renderSim();
+    const ins = document.querySelectorAll("#rowsParc input[type=text]");
+    if(ins.length) ins[ins.length-1].focus();
+  };
+  root.appendChild(cP);
+
+  /* ---------- tetos ---------- */
+  const cT = el(`
+    <div class="card">
+      <div class="card-head"><h2>Tetos variáveis</h2><span class="hint num" id="totTetos">—</span></div>
+      <div class="simrows" id="rowsTetos"></div>
+      <div style="margin-top:14px"><button class="btn ghost sm" id="addCat">+ adicionar categoria</button></div>
+    </div>`);
+  const rbT = cT.querySelector("#rowsTetos");
+  W.categorias.forEach(c => {
+    const gasto = calc(()=>gastoCat(mes, c.id));
     const livre = c.tipo === "livre";
     const teto  = +c.meta || 0;
     const maxv  = Math.max(Math.ceil((Math.max(c.base||0, teto) * 1.6) / 100) * 100, 600);
-    const kids  = filhosDe(c.id);
-    const kidTxt = kids.map(k => {
-      const kg = lancsDo(mes).filter(l=>l.cat===k).reduce((a,l)=>a+(+l.valor||0),0);
-      return `${esc(nomeCat(k))} ${money(kg)}`;
-    }).join(" · ");
+    const kids  = calc(()=>filhosDe(c.id));
+    const kidTxt = kids.map(k => `${esc(calc(()=>nomeCat(k)))} ${money(W.lancamentos.filter(l=>l.mes===mes&&l.cat===k).reduce((a,l)=>a+(+l.valor||0),0))}`).join(" · ");
     const row = el(`
       <div class="simrow ${livre?"livre":""}" data-cat="${esc(c.id)}">
         <span class="sname">
-          ${esc(c.nome)}
-          ${livre ? '<span class="chip-state st-livre">sem teto</span>' : ""}
+          <input class="nm plain" type="text" value="${esc(c.nome)}" style="font-weight:600; width:auto; min-width:110px">
+          <button class="chip-state ${livre?"st-livre":"st-good"}" data-tipo title="Alternar entre teto e livre">${livre?"sem teto":"com teto"}</button>
           <span class="snote">${esc(c.nota||"")}${kidTxt?" · "+kidTxt+" neste mês":""}</span>
         </span>
         <span class="sctl">
           <span>${livre?"previsão":"teto"}</span>
           <input type="number" min="0" step="10" value="${teto}" aria-label="${livre?"Previsão":"Teto"} de ${esc(c.nome)}">
         </span>
+        <button class="btn danger" data-del aria-label="Apagar categoria">×</button>
         <input type="range" min="0" max="${maxv}" step="10" value="${teto}" aria-label="Ajustar ${esc(c.nome)}">
         <span class="cmp">
           <span>gastou <b class="num">${money(gasto)}</b> em ${esc(mShort(mes))}${c.base?` · planilha <b class="num">${money(c.base)}</b>`:""}</span>
           <span class="num" data-delta></span>
         </span>
       </div>`);
+    const nomeIn = row.querySelector('input[type=text]');
     const nIn = row.querySelector('input[type=number]'), rIn = row.querySelector('input[type=range]');
+    nomeIn.addEventListener("input", e => { c.nome = e.target.value; });
     const sync = (v, from) => {
       v = Math.max(0, +v || 0);
       c.meta = v;
@@ -936,82 +1106,155 @@ function renderSim(){
       if(from !== "r") rIn.value = Math.min(v, +rIn.max);
       simRefresh();
     };
-    rIn.addEventListener("input",  e => sync(e.target.value, "r"));
-    nIn.addEventListener("input",  e => sync(e.target.value, "n"));
-    rIn.addEventListener("change", () => persist());
-    nIn.addEventListener("change", () => persist());
-    rowsBox.appendChild(row);
+    rIn.addEventListener("input", e => sync(e.target.value, "r"));
+    nIn.addEventListener("input", e => sync(e.target.value, "n"));
+    row.querySelector("[data-tipo]").onclick = () => { c.tipo = livre ? "teto" : "livre"; renderSim(); };
+    row.querySelector("[data-del]").onclick = () => {
+      const ks = calc(()=>filhosDe(c.id));
+      const n = W.lancamentos.filter(l => l.cat===c.id || ks.indexOf(l.cat)>=0).length;
+      if(!confirm(`Tirar "${c.nome||"esta categoria"}" do cenário?` + (n ? `\n\n${n} lançamento${n>1?"s":""} dela sai${n>1?"em":""} junto.` : ""))) return;
+      W.categorias = W.categorias.filter(x=>x.id!==c.id);
+      W.subcats    = W.subcats.filter(x=>x.pai!==c.id);
+      W.lancamentos = W.lancamentos.filter(l => l.cat!==c.id && ks.indexOf(l.cat)<0);
+      renderSim();
+    };
+    rbT.appendChild(row);
   });
+  cT.querySelector("#addCat").onclick = () => {
+    W.categorias.push({id:uid(), nome:"", tipo:"teto", meta:0, base:0, nota:""});
+    renderSim();
+    const ins = document.querySelectorAll("#rowsTetos input[type=text]");
+    if(ins.length) ins[ins.length-1].focus();
+  };
+  root.appendChild(cT);
 
+  /* ---------- três momentos ---------- */
+  const fins = W.parcelas.map(p => calc(()=>parcelaFim(p))).sort((a,b)=>mi(a)-mi(b));
+  const semParc = fins.length ? mk(mi(fins[fins.length-1])+1) : mk(mi(mes)+1);
+  const cenarios = [
+    {mes, rot:"Agora"},
+    {mes: mk(mi(mes)+1), rot:"Mês que vem"},
+    {mes: semParc, rot:"Sem parcelas"}
+  ].filter((c,i,a) => a.findIndex(x=>x.mes===c.mes)===i);
+
+  const cC = el(`
+    <div class="card">
+      <div class="card-head"><h2>O mesmo cenário, em três momentos</h2><span class="hint">a renda sobe e as parcelas quitam sozinhas</span></div>
+      <div class="cenarios" id="simCen"></div>
+      <p class="prose" style="margin-top:12px" id="simProsa"></p>
+    </div>`);
+  root.appendChild(cC);
+
+  root.appendChild(el(`
+    <div class="callout">
+      <strong>Como funciona:</strong> tudo aqui mexe numa cópia. Enquanto você não clicar em
+      <strong>Aplicar ao app</strong>, seus lançamentos, fixos e parcelas de verdade continuam intactos —
+      pode apagar, inventar e exagerar à vontade. <strong>Descartar</strong> volta tudo ao que está salvo.
+    </div>`));
+
+  /* ---------- cálculo ---------- */
   function simRefresh(){
-    const teto = metasTotal(), pc = parcelasTotal(mes), liq = liquidoEm(mes);
-    const sobra = liq - fx - pc - teto, econ = baseTotal() - teto;
+    const r = calc(() => {
+      const fx = fixosTotal(), pc = parcelasTotal(mes), teto = metasTotal(), liq = liquidoEm(mes);
+      return {fx, pc, teto, liq, saiu:fx+pc+teto, sobra:liq-fx-pc-teto, base:baseTotal()};
+    });
+    const real = withState(S, () => {
+      const fx = fixosTotal(), pc = parcelasTotal(S.mesAtual), teto = metasTotal();
+      return liquidoEm(S.mesAtual) - fx - pc - teto;
+    });
+    const dif = r.sobra - real;
 
-    const set = (id, txt, cls) => { const n = card.querySelector(id); n.textContent = txt; if(cls!=null) n.className = cls; };
-    set("#simSobra", signed(sobra), "v num " + (sobra>=0 ? "pos" : "neg"));
-    set("#simTeto",  money(teto),   "v num");
-    set("#simEcon",  signed(econ),  "v num " + (econ>=0 ? "pos" : "neg"));
-    card.querySelector("#simStripe").style.background = sobra>=0 ? "var(--good)" : "var(--critical)";
-    card.querySelector("#simSobraN").textContent = sobra>=0
-      ? "fecha no azul com estes limites"
-      : "ainda falta " + money(-sobra) + " para fechar o mês";
+    const put = (id, txt, cls) => { const n = cabeca.querySelector(id); if(!n) return; n.textContent = txt; if(cls) n.className = cls; };
+    put("#simSobra", signed(r.sobra), "v num " + (r.sobra>=0?"pos":"neg"));
+    put("#simSaiu",  money(r.saiu),   "v num");
+    put("#simDelta", (dif>=0?"+":"−") + money(Math.abs(dif)).replace("R$","R$"), "v num " + (dif>0?"pos":(dif<0?"neg":"")));
+    cabeca.querySelector("#simStripe").style.background = r.sobra>=0 ? "var(--good)" : "var(--critical)";
+    cabeca.querySelector("#simSobraN").textContent = r.sobra>=0
+      ? "fecha no azul" : "faltam " + money(-r.sobra) + " para fechar o mês";
+    cabeca.querySelector("#simSaiuN").textContent =
+      `fixos ${money(r.fx)} · parcelas ${money(r.pc)} · tetos ${money(r.teto)}`;
+    cabeca.querySelector("#simDeltaN").textContent = dif === 0
+      ? "igual ao que está salvo"
+      : (dif > 0 ? "sobra a mais por mês" : "sobra a menos por mês");
 
-    /* barra de capacidade */
-    const gasto = fx + pc + teto;
-    const denom = Math.max(liq, gasto) || 1;
-    const rest = Math.max(0, liq - gasto), over = Math.max(0, gasto - liq);
+    const denom = Math.max(r.liq, r.saiu) || 1;
+    const rest = Math.max(0, r.liq - r.saiu), over = Math.max(0, r.saiu - r.liq);
     const seg = (v,c) => v>0 ? `<span style="background:${c}; width:${(v/denom*100).toFixed(2)}%"></span>` : "";
-    card.querySelector("#simBar").innerHTML =
-      seg(fx,"var(--ord-1)") + seg(pc,"var(--ord-2)") + seg(teto,"var(--ord-3)") +
+    cabeca.querySelector("#simBar").innerHTML =
+      seg(r.fx,"var(--ord-1)") + seg(r.pc,"var(--ord-2)") + seg(r.teto,"var(--ord-3)") +
       seg(rest,"var(--good)") + seg(over,"var(--critical)");
-    card.querySelector("#simLabels").innerHTML = [
-      `<div><i style="background:var(--ord-1)"></i>Fixos <b class="num">${money(fx)}</b></div>`,
-      pc ? `<div><i style="background:var(--ord-2)"></i>Parcelas <b class="num">${money(pc)}</b></div>` : "",
-      `<div><i style="background:var(--ord-3)"></i>Tetos <b class="num">${money(teto)}</b></div>`,
+    cabeca.querySelector("#simLabels").innerHTML = [
+      `<div><i style="background:var(--ord-1)"></i>Fixos <b class="num">${money(r.fx)}</b></div>`,
+      r.pc ? `<div><i style="background:var(--ord-2)"></i>Parcelas <b class="num">${money(r.pc)}</b></div>` : "",
+      `<div><i style="background:var(--ord-3)"></i>Tetos <b class="num">${money(r.teto)}</b></div>`,
       rest ? `<div><i style="background:var(--good)"></i>Sobra <b class="num">${money(rest)}</b></div>` : "",
       over ? `<div><i style="background:var(--critical)"></i>Estoura <b class="num">${money(over)}</b></div>` : ""
     ].join("");
 
-    /* deltas por linha */
-    card.querySelectorAll(".simrow").forEach(r => {
-      const c = S.categorias.find(x => x.id === r.dataset.cat);
+    cR.querySelector("#totRenda").textContent = money(r.liq);
+    cF.querySelector("#totFixos").textContent = money(r.fx) + " por mês";
+    cP.querySelector("#totParc").textContent  = money(r.pc) + " em " + mShort(mes);
+    cT.querySelector("#totTetos").textContent = money(r.teto) + " por mês";
+
+    /* notas por linha */
+    rbR.querySelectorAll("[data-info]").forEach((n,i) => {
+      const ord = W.renda.degraus.slice().sort((a,b)=>mi(a.mes)-mi(b.mes));
+      const d = ord[i], ant = i>0 ? ord[i-1] : null;
+      if(!d) return;
+      n.textContent = ant
+        ? `${ant.bruto?((d.bruto/ant.bruto-1)*100).toFixed(1):"0"}% no bruto · ${signed(d.liquido-ant.liquido)}/mês no líquido`
+        : "ponto de partida";
+    });
+    rbP.querySelectorAll("[data-fim]").forEach((n,i) => {
+      const ps = W.parcelas.slice().sort((a,b)=>calc(()=>mi(parcelaFim(a))-mi(parcelaFim(b))));
+      const p = ps[i]; if(!p) return;
+      const ativa = calc(()=>parcelaAtiva(p, mes));
+      n.textContent = ativa ? "até " + calc(()=>mShort(parcelaFim(p))) : "quitada";
+    });
+    rbT.querySelectorAll(".simrow").forEach(rw => {
+      const c = W.categorias.find(x => x.id === rw.dataset.cat); if(!c) return;
       const d = (+c.base||0) - (+c.meta||0);
-      const n = r.querySelector("[data-delta]");
-      n.textContent = d === 0 ? "igual à planilha" : (d > 0 ? "corta " + money(d) : "sobe " + money(-d));
-      n.style.color = d > 0 ? "var(--good-ink)" : (d < 0 ? "var(--serious-ink)" : "var(--muted)");
-      const g = gastoCat(mes, c.id), t = +c.meta||0;
-      r.style.background = (c.tipo!=="livre" && g > t)
+      const n = rw.querySelector("[data-delta]");
+      n.textContent = !c.base ? "categoria nova" : (d === 0 ? "igual à planilha" : (d > 0 ? "corta " + money(d) : "sobe " + money(-d)));
+      n.style.color = !c.base ? "var(--muted)" : (d > 0 ? "var(--good-ink)" : (d < 0 ? "var(--serious-ink)" : "var(--muted)"));
+      const g = calc(()=>gastoCat(mes, c.id));
+      rw.style.background = (c.tipo!=="livre" && g > (+c.meta||0))
         ? "color-mix(in srgb, var(--critical) 7%, transparent)" : "";
     });
 
-    /* cenários */
-    card.querySelector("#simCen").innerHTML = cenarios.map(cn => {
-      const l = liquidoEm(cn.mes), p = parcelasTotal(cn.mes), sb = l - fx - p - teto;
-      const nAtivas = parcelasNo(cn.mes).length;
+    cC.querySelector("#simCen").innerHTML = cenarios.map(cn => {
+      const x = calc(() => {
+        const l = liquidoEm(cn.mes), pp = parcelasTotal(cn.mes);
+        return {l, pp, n:parcelasNo(cn.mes).length, sb: l - r.fx - pp - r.teto};
+      });
       return `<div class="cen">
         <span class="k">${esc(cn.rot)} · ${esc(mShort(cn.mes))}</span>
-        <span class="v num ${sb>=0?"pos":"neg"}">${signed(sb)}</span>
-        <span class="n">líquido ${money(l)} · ${nAtivas ? nAtivas+" parcela"+(nAtivas>1?"s":"")+" ("+money(p)+")" : "sem parcelas"}</span>
+        <span class="v num ${x.sb>=0?"pos":"neg"}">${signed(x.sb)}</span>
+        <span class="n">líquido ${money(x.l)} · ${x.n ? x.n+" parcela"+(x.n>1?"s":"")+" ("+money(x.pp)+")" : "sem parcelas"}</span>
       </div>`;
     }).join("");
+    const ult = cenarios[cenarios.length-1];
+    const sbU = calc(() => liquidoEm(ult.mes) - r.fx - parcelasTotal(ult.mes) - r.teto);
+    cC.querySelector("#simProsa").innerHTML =
+      `Mantendo este cenário, você sai de <strong class="num">${signed(r.sobra)}</strong> em ${esc(mShort(mes))} ` +
+      `para <strong class="num">${signed(sbU)}</strong> por mês em ${esc(mShort(ult.mes))}.`;
 
-    const ultimo = cenarios[cenarios.length-1];
-    const sbU = liquidoEm(ultimo.mes) - fx - parcelasTotal(ultimo.mes) - teto;
-    card.querySelector("#simProsa").innerHTML =
-      `Os tetos são os mesmos nos três — o que muda é a renda subindo e as parcelas quitando. ` +
-      `Mantendo estes limites, você sai de <strong class="num">${signed(sobra)}</strong> hoje para ` +
-      `<strong class="num">${signed(sbU)}</strong> por mês em ${esc(mShort(ultimo.mes))}.`;
+    /* banner */
+    const mud = simMudou();
+    cabeca.querySelector("#simBanner").hidden = !mud;
   }
-  simRefresh();
 
-  root.appendChild(el(`
-    <div class="callout">
-      <strong>Como ler:</strong> o teto é o quanto você se permite gastar, não o quanto vai gastar.
-      A barra mostra o salário inteiro sendo consumido — se o vermelho aparecer, os tetos somados
-      não cabem no mês e alguma coisa precisa descer. A farmácia não tem teto: o número ali é só
-      uma previsão para a projeção fechar.
-    </div>`));
+  cabeca.querySelector("#simApply").onclick = () => {
+    S = sim; sim = null; commit();
+    toast("Cenário aplicado. Agora é o seu app de verdade.");
+  };
+  cabeca.querySelector("#simReset").onclick = () => {
+    sim = null; renderSim();
+    toast("Cenário descartado.");
+  };
+  simRefresh();
 }
+
 
 /* ============ render: FIXOS ============ */
 function renderFixos(){
@@ -1116,7 +1359,7 @@ function renderRenda(){
     const pctB  = ant && ant.bruto ? (d.bruto/ant.bruto-1)*100 : 0;
     const vigente = mi(d.mes) <= mi(mes) && (i===degraus.length-1 || mi(degraus[i+1].mes) > mi(mes));
     const row = el(`
-      <div class="row" style="grid-template-columns:1fr 92px 104px 104px 34px; ${vigente?"background:var(--accent-soft); border-radius:8px; padding-left:8px; padding-right:8px":""}">
+      <div class="row simedit" style="grid-template-columns:1fr 92px 104px 104px 34px; ${vigente?"background:var(--accent-soft); border-radius:8px; padding-left:8px; padding-right:8px":""}">
         <span>
           <input class="nm" type="text" value="${esc(d.rotulo)}" style="border:0;background:none;padding:2px 0;font-weight:600">
           <span style="display:block; font-size:.76rem; color:var(--muted)">
@@ -1486,8 +1729,9 @@ document.getElementById("tabs").addEventListener("click", e => {
 });
 saveBtn.onclick = () => salvar(true);
 setInterval(() => { if(!dirty && !saving) updateSaveUI(); }, 30000);
-document.getElementById("prevM").onclick = () => { S.mesAtual = mk(mi(S.mesAtual)-1); commit(); };
-document.getElementById("nextM").onclick = () => { S.mesAtual = mk(mi(S.mesAtual)+1); commit(); };
+const irMes = d => { S.mesAtual = mk(mi(S.mesAtual)+d); if(sim) sim.mesAtual = S.mesAtual; commit(); };
+document.getElementById("prevM").onclick = () => irMes(-1);
+document.getElementById("nextM").onclick = () => irMes(1);
 
 render();
 updateSaveUI();
