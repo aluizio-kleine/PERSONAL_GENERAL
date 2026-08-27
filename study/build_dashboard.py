@@ -16,6 +16,7 @@ reconciled from the page's export file.
 from __future__ import annotations
 
 import argparse
+import base64
 import datetime as dt
 import html
 import json
@@ -633,10 +634,14 @@ section { min-width: 0; }
 .bf-none { font-size: 13px; color: var(--faint); font-style: italic; }
 .bf-when { font-style: normal; font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
 .bf-tight { font-style: normal; font-size: 10.5px; font-weight: 700; color: var(--danger); }
-.pend { display: flex; align-items: center; gap: 10px; background: var(--warn-soft); color: var(--warn);
-         border-radius: 10px; padding: 9px 10px 9px 13px; font-size: 12.5px; font-weight: 550; }
-.pend span { flex: 1; }
-.pend .tbtn { background: var(--card); border-color: var(--warn); color: var(--warn); min-height: 34px; padding: 6px 11px; }
+.save { display: flex; align-items: center; gap: 7px; font-size: 11.5px; font-weight: 550; color: var(--faint); }
+.save i { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); flex: none; }
+.save.saving i, .save.pending i { background: var(--warn); }
+.save.saved i { background: var(--ok); }
+.save.saved { color: var(--ok); }
+.save.local i { background: var(--muted); }
+.save.error i, .save.error { color: var(--danger); background: none; }
+.save.error i { background: var(--danger); }
 .note-box { display: flex; gap: 9px; align-items: flex-start; border-radius: 10px; padding: 11px 13px; font-size: 13.5px; font-weight: 500; }
 .note-box.bad { background: var(--danger-soft); color: var(--danger); }
 .note-box.warn { background: var(--warn-soft); color: var(--warn); }
@@ -738,23 +743,41 @@ function dowKey(d) { return DAYK[d.getDay() === 0 ? 6 : d.getDay() - 1]; }
 function capOf(d) { return DATA.capacity[dowKey(d)] || 0; }
 function fmtShort(iso) { var d = parseISO(iso); return DOW[d.getDay()===0?6:d.getDay()-1].toLowerCase() + ' ' + d.getDate() + ' ' + MON[d.getMonth()]; }
 
-function loadStore() {
+function readPublished() {
+  try {
+    var el = document.getElementById('state');
+    return el ? (JSON.parse(el.textContent || '{}') || {}) : {};
+  } catch (e) { return {}; }
+}
+function readLocal() {
   try {
     var raw = localStorage.getItem(K);
-    if (raw) {
-      var p = JSON.parse(raw);
-      if (p && typeof p === 'object') {
-        store.override = p.override || {};
-        store.edits = p.edits || {};
-        store.added = Array.isArray(p.added) ? p.added : [];
-        store.steps = p.steps || {};
-      }
-    }
-  } catch (e) { lsOK = false; }
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { lsOK = false; return null; }
+}
+function adopt(src) {
+  if (!src || typeof src !== 'object') return;
+  store.override = src.override || {};
+  store.edits = src.edits || {};
+  store.added = Array.isArray(src.added) ? src.added : [];
+  store.steps = src.steps || {};
+  store.savedAt = src.savedAt || 0;
+}
+/* The page carries the last saved state inside itself. Device storage is the
+   instant copy and can be newer than the last publish, so the more recent of
+   the two wins. */
+function loadStore() {
+  var published = readPublished();
+  var local = readLocal();
+  var useLocal = local && (local.savedAt || 0) > (published.savedAt || 0);
+  adopt(useLocal ? local : published);
 }
 function saveStore() {
+  store.savedAt = Date.now();
   try { localStorage.setItem(K, JSON.stringify(store)); }
-  catch (e) { lsOK = false; renderBanner(); }
+  catch (e) { lsOK = false; }
+  scheduleSync();
+  renderSaveState();
 }
 
 function courseOf(id) {
@@ -1441,6 +1464,86 @@ function showFallback(data) {
   box.querySelector('textarea').select();
 }
 
+/* ---------- saving ----------
+   Every change goes to device storage at once, and a debounced publish writes
+   it back into the artifact itself so it survives a new device, a cleared
+   browser, or anything that drops local storage. Publishing reloads the view,
+   which is why it waits for a lull instead of firing on each tick. */
+var SYNC_DELAY = 4000;
+var syncTimer = null, syncing = false, readOnly = false, syncState = 'idle';
+
+function setSync(s) { syncState = s; renderSaveState(); }
+
+function scheduleSync() {
+  if (readOnly) return;
+  clearTimeout(syncTimer);
+  setSync('pending');
+  syncTimer = setTimeout(syncNow, SYNC_DELAY);
+}
+
+function buildPage() {
+  var b64 = document.getElementById('tpl').textContent.trim();
+  var core = new TextDecoder().decode(
+    Uint8Array.from(atob(b64), function (c) { return c.charCodeAt(0); }));
+
+  var head = '';
+  var reHead = new RegExp('<!' + '--HEAD--' + '>([\\s\\S]*?)<!' + '--/HEAD--' + '>');
+  var m = core.match(reHead);
+  if (m) head = m[1];
+  var body = core.replace(reHead, '');
+
+  var tpl = '<script id="tpl" type="text/plain">' + b64 + '<\/script>';
+  var json = JSON.stringify(store).replace(/</g, '\\u003c');
+  var st = '<script id="state" type="application/json">' + json + '<\/script>';
+
+  var MK_T = '<!' + '--TPL--' + '>', MK_S = '<!' + '--STATE--' + '>';
+  return '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">' + head +
+         '</head><body>' + body.replace(MK_T, tpl).replace(MK_S, st) +
+         '</body></html>';
+}
+
+async function syncNow() {
+  if (readOnly || syncing) return;
+  var api = null;
+  try { api = await window.claude.use('artifact'); } catch (e) { api = null; }
+  if (!api) { readOnly = true; setSync('local'); return; }
+
+  syncing = true;
+  setSync('saving');
+  try {
+    await api.publish(buildPage());
+    setSync('saved');            // the view reloads to the new version
+  } catch (err) {
+    var code = err && err.code;
+    if (code === 'conflict') {
+      setSync('idle');           // a newer version won; the reload brings it
+    } else if (code === 'not_writer' || code === 'not_granted' ||
+               code === 'not_declared' || code === 'capability_disabled' ||
+               code === 'capability_removed' || code === 'consent_required') {
+      readOnly = true;
+      setSync('local');          // keep working, device storage only
+    } else if (code === 'rate_limited') {
+      SYNC_DELAY = Math.min(SYNC_DELAY * 2, 60000);
+      scheduleSync();
+    } else {
+      setSync('error');
+      scheduleSync();
+    }
+  } finally {
+    syncing = false;
+  }
+}
+
+function renderSaveState() {
+  var el = document.getElementById('savestate');
+  if (!el) return;
+  var text = { idle: '', pending: 'salvando em instantes', saving: 'salvando',
+               saved: 'salvo', local: 'salvo neste aparelho',
+               error: 'não consegui salvar, tentando de novo' }[syncState] || '';
+  if (!text) { el.innerHTML = ''; return; }
+  el.innerHTML = '<div class="save ' + syncState + '"><i></i>' + esc(text) + '</div>';
+}
+
 /* ---------- steps: the to-do breakdown of one activity ---------- */
 function stepState(id) { return store.steps[id] || {}; }
 function renderSteps(t) {
@@ -1584,30 +1687,10 @@ function renderHeading() {
     String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear() + ' em ' + DATA.tz + '.';
 }
 
-/* Anything changed here lives only on this device until it is exported, so the
-   page says how much is waiting rather than letting it pile up unnoticed. */
-function pendingCount() {
-  var n = Object.keys(store.override).length + Object.keys(store.edits).length + store.added.length;
-  Object.keys(store.steps).forEach(function (k) { n += Object.keys(store.steps[k]).length; });
-  return n;
-}
-function renderPending() {
-  var el = document.getElementById('pending');
-  var n = pendingCount();
-  if (!n) { el.innerHTML = ''; return; }
-  el.innerHTML = '<div class="pend">' +
-    '<span>' + n + (n === 1 ? ' alteração guardada neste aparelho' : ' alterações guardadas neste aparelho') +
-    '</span><button class="tbtn" id="pendexport">Exportar</button></div>';
-  document.getElementById('pendexport').addEventListener('click', function () {
-    document.getElementById('exportbtn').click();
-    document.getElementById('exportbtn').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
-}
-
 function render() {
   var sch = schedule();
   renderHeading();
-  renderPending();
+  renderSaveState();
   renderBrief(sch);
   renderDisciplines(sch);
   renderUpcoming();
@@ -1718,9 +1801,11 @@ def render_html(m: dict) -> str:
     heading = f"{FULLDAY_PT[today.weekday()]}, {today.day} de {FULLMONTH_PT[today.month - 1]}"
     types = "".join(f'<option value="{k}">{v}</option>' for k, v in TYPE_PT.items())
 
-    return f"""<title>Painel do Mestrado</title>
+    return f"""<!--HEAD-->
+<title>Painel do Mestrado</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#F4F5F7">
+<!--/HEAD-->
 <style>{CSS}{color_tokens(m['courses'])}</style>
 <div class="page">
   <header class="px">
@@ -1729,7 +1814,7 @@ def render_html(m: dict) -> str:
   </header>
 
   <div class="px" id="banner"></div>
-  <div class="px" id="pending"></div>
+  <div class="px" id="savestate"></div>
   <div class="px" id="brief"></div>
 
   <section>
@@ -1843,9 +1928,41 @@ def render_html(m: dict) -> str:
 <span id="rel"></span>
   </footer>
 </div>
+<!--TPL-->
+<!--STATE-->
 <script>var DATA = {payload(m)};</script>
 <script>{JS}</script>
 """
+
+
+def assemble(core: str) -> str:
+    """Emit the page with its own source embedded, so it can republish itself.
+
+    The page saves by handing the runtime a complete replacement document. To
+    build one it needs its own source, which it cannot read back from the live
+    DOM (that carries session state and injected runtime scripts). So the
+    source travels inside the page, base64 so that the script tags within it
+    cannot terminate their own container, with the two markers left intact:
+    the copy is what future versions are rebuilt from.
+    """
+    b64 = base64.b64encode(core.encode("utf-8")).decode("ascii")
+    tpl = f'<script id="tpl" type="text/plain">{b64}</script>'
+
+    # Carry forward whatever the published page has already saved, so a rebuild
+    # from this side does not wipe the reader's ticked-off work.
+    carried = {}
+    state_file = HERE / "state.json"
+    if state_file.exists():
+        try:
+            carried = json.loads(state_file.read_text(encoding="utf-8")) or {}
+        except json.JSONDecodeError:
+            carried = {}
+    state_json = json.dumps(carried, ensure_ascii=False).replace("<", "\\u003c")
+    state = f'<script id="state" type="application/json">{state_json}</script>'
+
+    # count=1: the markers also appear inside the page's own JavaScript, which
+    # rebuilds the page later; only the real markers must be substituted here.
+    return core.replace("<!--TPL-->", tpl, 1).replace("<!--STATE-->", state, 1)
 
 
 def main() -> None:
@@ -1861,7 +1978,7 @@ def main() -> None:
         return
 
     out = HERE / "dashboard.html"
-    out.write_text(render_html(model), encoding="utf-8")
+    out.write_text(assemble(render_html(model)), encoding="utf-8")
     print(f"wrote {out}")
 
 

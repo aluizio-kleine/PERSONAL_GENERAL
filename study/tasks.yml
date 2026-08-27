@@ -47,8 +47,8 @@ tasks:
     course: ciencia-dados
     title: "Entrega do artigo científico"
     type: paper
-    due: 2026-08-28
-    due_time: "23:59"
+    due: 2026-09-04
+    due_time: "08:40"
     size: grande
     weight: 30
     status: todo
@@ -60,25 +60,30 @@ tasks:
       - "Revisar e formatar"
       - "Entregar"
     notes: >
-      CONFIRMED. 30% of the grade. The paper is written about the seminário
-      final topic, so the seminar work and the paper share their research,
-      do them as one effort, not two. Due one week after the prova, so it
-      cannot start on 22/08.
+      Prazo corrigido pelo Moodle: submissões abriram 21/08 08:44 e FECHAM
+      04/09 08:40, não 28/08 como constava no cronograma do plano de ensino.
+      Depois disso ainda há uma janela de avaliações até 11/09 08:40, ou seja,
+      provavelmente avaliação entre pares, confirme se você precisa avaliar os
+      artigos dos colegas. 30% da nota. O artigo é sobre o tema do seminário
+      final, então a pesquisa serve para os dois.
 
   - id: cd-sf
     course: ciencia-dados
-    title: "Seminário final"
+    title: "Seminário final: slides e apresentação"
     type: presentation
     due: 2026-09-11
-    due_time: "12:15"
+    due_time: "08:00"
     size: medio
     weight: 30
     status: todo
     steps:
       - "Reaproveitar a pesquisa do artigo científico"
       - "Montar os slides"
-      - "Ensaiar a apresentação"
-    notes: "CONFIRMED. 30% of the grade. Last session of the discipline."
+      - "Entregar os slides no Moodle até 11/09 às 08:00"
+      - "Apresentar na última aula"
+    notes: >
+      CONFIRMADO pelo Moodle. Os slides vencem 11/09 às 08:00, antes da aula,
+      e a apresentação é no mesmo dia. 30% da nota. Última sessão da disciplina.
 
   # ------------------------------------------------- Machine Learning (40/40/20)
   - id: ml-exam
@@ -206,6 +211,32 @@ tasks:
       - "Anotar quantos são, datas e formato"
       - "Me mandar aqui no chat"
     notes: "60% of this discipline is trabalhos práticos with no dates in the plan, the single largest unknown across all five courses. Ask Prof. Hubner Tuesday."
+
+  - id: ia-trabalho-busca
+    course: ia
+    title: "Primeiro trabalho prático: busca (elevadores)"
+    type: assignment
+    due: 2026-09-10
+    due_time: "22:59"
+    size: grande
+    weight: 20
+    status: todo
+    steps:
+      - "Ler o enunciado: Trabalho de Busca -- Elevadores.pdf, no Moodle"
+      - "Me mandar o PDF para eu detalhar estes passos"
+      - "Modelar o problema dos elevadores como espaço de estados"
+      - "Definir estado inicial, ações, transições e teste de objetivo"
+      - "Implementar a busca e escolher a heurística"
+      - "Testar em cenários diferentes e medir o desempenho"
+      - "Escrever o relatório com os resultados"
+      - "Enviar pelo Moodle"
+    notes: >
+      CONFIRMADO pelo Moodle. Prof. Jomi Hübner, vence quinta 10/09 às 22:59.
+      É o primeiro dos trabalhos práticos que valem 60% da nota de IA. O peso
+      de 20% aqui é suposição minha, 60 dividido por três, porque ninguém
+      disse quantos trabalhos são; corrija quando souber. Eu não recebi o PDF
+      do enunciado, então os passos abaixo são a estrutura usual de um
+      trabalho de busca, não o que o professor pediu de fato.
 
   - id: ia-quest-agi
     course: ia
@@ -376,21 +407,20 @@ tasks:
 
   - id: est-teste-3
     course: estatistica
-    title: "Teste Online 3"
+    title: "Teste 3: estudo dirigido"
     type: assignment
-    due:
-    due_time: ""
+    due: 2026-09-07
+    due_time: "23:59"
     size: medio
     status: todo
     steps:
-      - "Abrir o teste no Moodle quando for liberado em 25/08"
-      - "Anotar o prazo real e me avisar para eu cadastrar"
-      - "Fazer o teste"
+      - "Abrir o teste no Moodle a partir de 25/08"
+      - "Estudar o conteúdo de inferências e testes estatísticos"
+      - "Fazer o estudo dirigido e enviar"
     notes: >
-      Do aviso da disciplina: será disponibilizado no Moodle em 25/08. O prazo
-      de entrega não foi informado, então está sem data aqui e não entra no
-      plano de estudo até você confirmar. O Teste 3 é a única atividade nova da
-      Parte 3, não haverá relatório novo do Trabalho Prático 3.
+      CONFIRMADO pelo Moodle. Abre 25/08 00:00 e vence segunda 07/09 às 23:59.
+      Está na seção Inferências e Testes estatísticos. É a única atividade nova
+      da Parte 3, não haverá relatório novo do Trabalho Prático 3.
 
   - id: est-tp3-apresentacao
     course: estatistica

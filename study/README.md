@@ -67,11 +67,27 @@ Every open task gets a countdown relative to today in the timezone set in
 past what a week can actually absorb, the crunch is visible while there is
 still time to move something.
 
+## Saving
+
+The page writes changes back into the artifact itself, so ticking something off
+survives a cleared browser or a different device. Every change lands in device
+storage immediately and a debounced publish (about four seconds after the last
+one) writes the state into the published page as a `<script id="state">` block.
+If the capability is missing or the viewer is read-only it degrades to device
+storage alone and says so.
+
+**Rebuilding from this side needs one extra step.** A rebuild here would ship a
+fresh page whose embedded state is empty, wiping what was ticked off. So before
+running the build, pull the live state down and drop it in `study/state.json`:
+read the published artifact, copy the contents of its `<script id="state">`
+block into that file, then rebuild. The build bakes it in as the starting state.
+
 ## The morning brief
 
-A scheduled task wakes a fresh Claude session each morning, pulls this repo,
-runs `--brief`, and pushes you the result. It stays silent on days when there
-is nothing overdue and nothing due within the week, so it does not become
-noise you learn to ignore.
+The brief is rendered at the top of the page itself, from the same data, so it
+is current whenever it is opened rather than being a snapshot of 07:12.
 
-To change the time, the timezone, or switch it off, just say so.
+The scheduled job that used to send it every morning is disabled. It also used
+to republish the page daily, which is what wiped the reader's ticked-off work:
+the page now derives the current date from the device, so it never needs a
+scheduled refresh.
