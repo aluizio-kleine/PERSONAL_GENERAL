@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bancada de Teste WEG SSW07 — 10 Estações</title>
+<style>
+  :root{
+    --bg:#f4f6f8; --card:#ffffff; --ink:#1c2430; --muted:#5c6b7a;
+    --line:#d5dde4; --blue:#1f5f9e; --accent:#0f4c81;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+  header{background:linear-gradient(135deg,#0f2c46,#1f5f9e);color:#fff;padding:34px 0 30px}
+  header h1{margin:0 0 6px;font-size:26px;letter-spacing:-.3px}
+  header p{margin:0;opacity:.85;font-size:14px}
+  .badges{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+         padding:4px 10px;border-radius:20px;font-size:12px}
+  section{margin:26px 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 22px;margin-bottom:20px}
+  h2{font-size:18px;margin:0 0 4px;color:var(--accent)}
+  h2 .n{color:var(--muted);font-weight:600;margin-right:8px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+  .svgbox{width:100%;overflow-x:auto;background:#fbfcfd;border:1px solid var(--line);border-radius:8px}
+  svg{display:block;width:100%;height:auto}
+  table{border-collapse:collapse;width:100%;font-size:13.5px}
+  th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}
+  th{background:#eef2f6;font-weight:600;color:#33414f}
+  td.v{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
+  .prompt{background:#0f1620;color:#dbe4ee;border-radius:8px;padding:16px 18px;
+          font:12.5px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+          white-space:pre-wrap;border:1px solid #223041;max-height:420px;overflow:auto}
+  .neg{color:#ffb4ab}
+  ul{margin:8px 0 0;padding-left:20px}
+  li{margin:3px 0}
+  .chg{border-left:3px solid var(--blue);padding-left:12px;margin:10px 0}
+  .chg b{color:var(--accent)}
+  footer{color:var(--muted);font-size:12px;padding:20px 0 40px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Bancada Automatizada de Testes Elétricos — WEG SSW07 (mecânicas 1 e 2)</h1>
+    <p>Desenho conceitual em escala · 10 estações em fileira única · transporte indexado por pallets</p>
+    <div class="badges">
+      <span class="badge">5000 × 1000 × 2000 mm</span>
+      <span class="badge">10 estações · passo 420 mm</span>
+      <span class="badge">Bandeja 300 × 300 mm</span>
+      <span class="badge">Nível de trabalho 950 mm</span>
+      <span class="badge">Cabine em policarbonato fumê</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section class="card">
+  <h2><span class="n">01</span>Correções aplicadas ao briefing</h2>
+  <p class="sub">O que mudou em relação ao texto original e por quê.</p>
+  <div class="chg"><b>Esteira contínua → transportador de correntes duplas com pallets.</b> Correia lisa não indexa com repetibilidade. Adotado transportador de correntes duplas (ou roletes acionados) com <i>stoppers</i> pneumáticos e centralizadores de pallet em cada estação — indexação real e fabricável.</div>
+  <div class="chg"><b>4000 mm → 5000 mm de comprimento externo.</b> Com 10 estações e bandeja de 300 mm, 4000 mm dariam passo de 400 mm, sem espaço para batentes, colunas e transferência. Passo adotado: 420 mm (zona de estações 4200 mm) + 400 mm de <i>buffer</i> em cada extremidade para as guilhotinas.</div>
+  <div class="chg"><b>Esteira no mesmo nível das bandejas (950 mm).</b> Transferência puramente horizontal, sem elevadores — menos eixos, menos custo, mais confiável.</div>
+  <div class="chg"><b>Acesso definido.</b> Bandejas entram e saem exclusivamente pelas guilhotinas de topo; a face frontal recebe portas de manutenção em policarbonato fumê com chave de intertravamento de segurança.</div>
+  <div class="chg"><b>Interface elétrica explícita.</b> Cabeçote de contatos descendente por cilindro pneumático em cada estação, com contatos de potência trifásicos e conector de comando — é o detalhe que dá credibilidade técnica ao conjunto.</div>
+  <div class="chg"><b>Painel elétrico integrado</b> sob o plano de trabalho na extremidade de saída, com IHM na porta; cabeamento em canaletas fechadas ao longo da estrutura.</div>
+</section>
+
+<section class="card">
+  <h2><span class="n">02</span>Vista isométrica</h2>
+  <p class="sub">Perspectiva frontal, entrada em primeiro plano. Policarbonato fumê representado translúcido para leitura do interior.</p>
+  <div class="svgbox"><svg id="iso" xmlns="http://www.w3.org/2000/svg"></svg></div>
+</section>
+
+<section class="card">
+  <h2><span class="n">03</span>Planta baixa (cotada)</h2>
+  <p class="sub">Fileira única de 10 estações; via de transporte na face frontal; eixo de transferência transversal por estação.</p>
+  <div class="svgbox"><svg id="top" xmlns="http://www.w3.org/2000/svg"></svg></div>
+</section>
+
+<section class="card">
+  <h2><span class="n">04</span>Vista frontal (cotada)</h2>
+  <p class="sub">Elevação frontal com estações visíveis através da cabine.</p>
+  <div class="svgbox"><svg id="front" xmlns="http://www.w3.org/2000/svg"></svg></div>
+</section>
+
+<div class="grid2">
+  <section class="card">
+    <h2><span class="n">05</span>Corte da estação</h2>
+    <p class="sub">Seção transversal: transporte, transferência, ninho e cabeçote de contatos.</p>
+    <div class="svgbox"><svg id="side" xmlns="http://www.w3.org/2000/svg"></svg></div>
+  </section>
+  <section class="card">
+    <h2><span class="n">06</span>Extremidade — porta guilhotina</h2>
+    <p class="sub">Face de topo com porta vertical, guias, cilindro e sensores.</p>
+    <div class="svgbox"><svg id="end" xmlns="http://www.w3.org/2000/svg"></svg></div>
+  </section>
+</div>
+
+<section class="card">
+  <h2><span class="n">07</span>Ficha técnica</h2>
+  <div class="svgbox" style="border:0;background:none">
+  <table>
+    <tr><th>Item</th><th>Especificação</th></tr>
+    <tr><td>Dimensões externas</td><td class="v">5000 (C) × 1000 (L) × 2000 (A) mm</td></tr>
+    <tr><td>Estações de teste</td><td class="v">10, em fileira única, passo 420 mm</td></tr>
+    <tr><td>Zona de estações / buffers</td><td class="v">4200 mm + 400 mm em cada extremidade</td></tr>
+    <tr><td>Bandeja (pallet)</td><td class="v">300 × 300 mm, base em alumínio com pinos de referência</td></tr>
+    <tr><td>Nível de trabalho (topo da bandeja)</td><td class="v">950 mm</td></tr>
+    <tr><td>Transporte</td><td>Correntes duplas acionadas, indexado, stopper pneumático + centralizador por estação</td></tr>
+    <tr><td>Transferência bandeja ↔ estação</td><td>Cilindro pneumático sem haste (ou atuador linear elétrico) com garfo, guia linear recirculante, curso 520 mm</td></tr>
+    <tr><td>Sensoriamento</td><td>Sensores indutivos de presença de pallet, fim de curso magnético nos cilindros, batentes ajustáveis</td></tr>
+    <tr><td>Interface elétrica do DUT</td><td>Cabeçote descendente pneumático: contatos de potência trifásicos + conector de comando</td></tr>
+    <tr><td>Fixação do produto</td><td>Ninho ajustável com trilho DIN deslizante e grampo excêntrico — cobre mecânicas 1 e 2</td></tr>
+    <tr><td>Portas de carga/descarga</td><td>2 × guilhotina vertical pneumática, vão 400 × 350 mm, cortina de luz + chave de segurança</td></tr>
+    <tr><td>Proteção</td><td>Policarbonato fumê 6 mm nas laterais, frente e topo; portas frontais de manutenção intertravadas</td></tr>
+    <tr><td>Estrutura</td><td>Perfil de alumínio anodizado 45 × 45 e 45 × 90 mm; chapas RAL 7035</td></tr>
+    <tr><td>Acabamento</td><td>Alumínio natural + cinza RAL 7035 + azul RAL 5015</td></tr>
+    <tr><td>Elétrica</td><td>Painel integrado sob o plano de trabalho, IHM na porta, torre luminosa, 3 botões de emergência</td></tr>
+  </table>
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="n">08</span>Prompt final — português</h2>
+  <p class="sub">Pronto para colar em gerador de imagem. Formato recomendado: 16:9, resolução máxima disponível.</p>
+  <div class="prompt">Renderização 3D fotorrealista, qualidade de render de produto industrial, de uma bancada automatizada de testes elétricos de soft-starters. Perspectiva isométrica a partir do canto frontal-esquerdo, câmera aproximadamente 30 graus acima do plano de trabalho, lente de 50 mm, equipamento inteiro enquadrado como elemento principal e dominante da composição.
+
+ESTRUTURA GERAL
+Bancada retilínea de 5000 mm de comprimento, 1000 mm de profundidade e 2000 mm de altura total. Estrutura em perfis de alumínio anodizado natural de 45 x 45 mm e 45 x 90 mm, com cantoneiras e parafusos visíveis. Base fechada em chapa dobrada cinza RAL 7035, com rodapé recuado escuro e pés niveladores. Plano de trabalho ergonômico a 950 mm do piso.
+
+ESTACOES DE TESTE
+Exatamente 10 estações de teste idênticas, em uma unica fileira, alinhadas ao longo do comprimento, com passo regular de 420 mm entre centros. Nenhuma segunda fileira. Cada estação contém uma bandeja quadrada de 300 x 300 mm em alumínio, apoiada sobre um ninho de posicionamento com pinos de referência, trilho deslizante ajustável e grampo excêntrico de fixação, capaz de acomodar dois tamanhos de soft-starter. Sobre cada bandeja, um soft-starter industrial: corpo retangular cinza-escuro com frente azul, dissipador aletado no topo, bornes de potência na parte inferior. Acima de cada bandeja, um cabeçote de contatos descendente acionado por cilindro pneumático vertical, com bloco de contatos de potência trifásicos e conector de comando, guiado por duas colunas com buchas lineares.
+
+TRANSPORTE
+Na face frontal, um transportador de correntes duplas percorrendo todo o comprimento, no mesmo nível das bandejas, com perfis-guia laterais em alumínio, chapa de deslizamento, motorredutor em uma extremidade e proteção de acionamento. Operação indexada: batentes pneumáticos retráteis e centralizadores de pallet em cada uma das 10 posições, com sensores indutivos de presença montados em suportes ajustáveis.
+
+TRANSFERENCIA
+Entre o transportador e cada estação, um mecanismo compacto de puxar e empurrar bandejas, transversal ao comprimento da bancada: cilindro pneumático sem haste montado sobre guia linear recirculante, carro com garfo de arrasto, batentes de fim de curso ajustáveis e sensores magnéticos. Mangueiras pneumáticas organizadas em esteiras porta-cabos curtas.
+
+PORTAS
+Nas duas faces de topo, portas verticais tipo guilhotina, com vão retangular de aproximadamente 400 x 350 mm, painel em policarbonato fumê emoldurado em alumínio, duas guias verticais laterais, cilindro pneumático vertical acima do vão, amortecedores e cortina de luz de segurança nas laterais do vão. Portas mostradas parcialmente abertas, deslizando verticalmente.
+
+PROTECAO E ACABAMENTO
+Laterais, frente e topo fechados com painéis de policarbonato transparente fumê, claramente translúcidos, deixando ver nitidamente as 10 estações e os produtos em teste, com reflexos suaves. Portas frontais de manutenção em policarbonato com puxadores e chaves de intertravamento de segurança. Painel elétrico integrado sob o plano de trabalho na extremidade direita, com porta cinza, dobradiças, fecho de quarto de volta e IHM retangular embutida. Canaletas fechadas de cabeamento ao longo da estrutura, sem cabos soltos. Torre luminosa de três estágios no topo, botões de emergência tipo cogumelo vermelhos sobre base amarela distribuídos na frente. Paleta: alumínio anodizado natural, cinza RAL 7035 e azul RAL 5015 como cor de destaque.
+
+AMBIENTE
+Chão de fábrica limpo, moderno e organizado, piso industrial epóxi cinza claro com faixas de demarcação, iluminação LED linear no teto, máquinas e prateleiras ao fundo desfocadas por profundidade de campo rasa. Iluminação industrial realista, sombras suaves de contato, reflexos plausíveis em metal escovado e policarbonato. Sem pessoas.
+
+ESTILO
+Robusto, limpo, técnico, ergonômico, realista e adequado para fabricação. Proporções coerentes, materiais plausíveis, detalhes construtivos visíveis: parafusos, cantoneiras, sensores, mangueiras, conectores. Alta resolução, foco nítido no equipamento. Sem aparência futurista, sem estética de laboratório de ficção científica.
+
+<span class="neg">EVITAR: quantidade de estações diferente de 10; duas ou mais fileiras de estações; correia lisa contínua sem guias, batentes ou sistema de indexação; proporções incoerentes; mecanismos impossíveis de fabricar; componentes flutuantes ou sem fixação visível; excesso de cabos expostos; portas horizontais ou de abrir em vez de guilhotinas verticais; policarbonato opaco ou espelhado; aparência futurista; luzes neon; qualquer texto, letreiro, plaqueta, etiqueta ou numeração; qualquer logotipo ou marca; pessoas na cena; ferramentas ou peças espalhadas; fundo bagunçado.</span></div>
+</section>
+
+<section class="card">
+  <h2><span class="n">09</span>Prompt final — inglês</h2>
+  <p class="sub">Versão em inglês, normalmente com melhor aderência nos geradores atuais.</p>
+  <div class="prompt">Photorealistic 3D render, industrial product visualization quality, of an automated electrical test bench for industrial soft starters. Isometric perspective from the front-left corner, camera about 30 degrees above the work surface, 50 mm lens, the entire machine framed as the dominant subject of the composition.
+
+STRUCTURE
+Straight bench, 5000 mm long, 1000 mm deep, 2000 mm total height. Frame built from natural anodized aluminium extrusion, 45 x 45 mm and 45 x 90 mm, with visible corner brackets and fasteners. Closed lower cabinet in folded sheet metal, grey RAL 7035, recessed dark plinth and levelling feet. Ergonomic work level at 950 mm from the floor.
+
+TEST STATIONS
+Exactly 10 identical test stations in a single row, evenly spaced along the length at a regular 420 mm pitch. No second row. Each station holds a 300 x 300 mm square aluminium tray resting on a locating nest with reference pins, an adjustable sliding rail and an eccentric clamp able to accept two product sizes. On each tray sits an industrial soft starter: dark grey rectangular body with a blue front face, finned heatsink on top, power terminals at the bottom. Above each tray, a descending contact head driven by a vertical pneumatic cylinder, carrying a three-phase power contact block and a control connector, guided by two columns with linear bushings.
+
+CONVEYOR
+Along the front face, a twin-chain pallet conveyor running the full length at the same level as the trays, with aluminium side guide rails, wear strip, a geared motor at one end and a guarded drive. Indexed operation: retractable pneumatic stoppers and pallet centering units at each of the 10 positions, with inductive presence sensors on adjustable brackets.
+
+TRANSFER
+Between the conveyor and each station, a compact push-pull tray transfer mechanism running transverse to the bench: a rodless pneumatic cylinder on a recirculating linear guide, a carriage with a driving fork, adjustable end stops and magnetic position sensors. Pneumatic hoses tidily routed in short cable carriers.
+
+DOORS
+At both end faces, vertical guillotine doors with a rectangular opening of roughly 400 x 350 mm, smoked polycarbonate panel in an aluminium frame, two vertical side guides, a vertical pneumatic cylinder above the opening, shock absorbers and safety light curtains at the sides of the opening. Doors shown partly open, sliding vertically.
+
+GUARDING AND FINISH
+Sides, front and roof enclosed with clearly translucent smoked transparent polycarbonate panels, the 10 stations and the products under test plainly visible through them with soft reflections. Front maintenance doors in polycarbonate with handles and safety interlock switches. Electrical cabinet integrated under the work surface at the right end, grey door with hinges, quarter-turn latch and a flush rectangular HMI. Closed cable ducts along the frame, no loose wiring. Three-stage signal tower on top, red mushroom emergency stop buttons on yellow bases along the front. Palette: natural anodized aluminium, grey RAL 7035, blue RAL 5015 as accent.
+
+ENVIRONMENT
+Clean, modern, organised factory floor, light grey epoxy industrial flooring with marking lines, linear LED ceiling lighting, machines and racking blurred in the background by shallow depth of field. Realistic industrial lighting, soft contact shadows, plausible reflections on brushed metal and polycarbonate. No people.
+
+STYLE
+Rugged, clean, technical, ergonomic, realistic and manufacturable. Coherent proportions, plausible materials, visible construction details: bolts, brackets, sensors, hoses, connectors. High resolution, sharp focus on the machine. Not futuristic, no science fiction laboratory aesthetic.
+
+<span class="neg">AVOID: any station count other than 10; two or more rows of stations; a plain continuous belt without guides, stops or indexing; incoherent proportions; unmanufacturable mechanisms; floating or unsupported components; excessive exposed cabling; horizontal or swing doors instead of vertical guillotines; opaque or mirrored polycarbonate; futuristic look; neon lighting; any text, sign, label, nameplate or numbering; any logo or brand mark; people in the scene; scattered tools or parts; cluttered background.</span></div>
+</section>
+
+<footer>Desenho conceitual em escala — dimensões em milímetros. Identificações de estação e logotipo a aplicar em etapa posterior de detalhamento.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+/* ---------- parametros construtivos (mm) ---------- */
+var P={L:5000,W:1000,H:2000,n:10,pitch:420,zone:400,
+  plinth:120,cabTop:830,plate:860,trayZ:950,trayH:40,
+  glass0:950,glass1:1900,top:2000,
+  cy0:620,cy1:960, ny0:120,ny1:420};
+function cx(i){return P.zone+P.pitch/2+i*P.pitch;}
+
+var C={alu:'#b9c1c9',grey:'#99a3ac',dark:'#4b545d',blue:'#1f5f9e',tray:'#cbd3da',
+  prod:'#3a424b',steel:'#828c94',light:'#ced6dc',red:'#c0382f',amber:'#d9a02b',
+  green:'#3d8f4e',floor:'#dfe4e8'};
+var ST='stroke="rgba(20,32,45,.30)" stroke-width="2.6" stroke-linejoin="round"';
+
+function sh(h,f){var n=parseInt(h.slice(1),16),r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  r=Math.min(255,Math.round(r*f));g=Math.min(255,Math.round(g*f));b=Math.min(255,Math.round(b*f));
+  return 'rgb('+r+','+g+','+b+')';}
+
+/* ---------- projecao isometrica alongada ---------- */
+var AX=18*Math.PI/180, AY=34*Math.PI/180;
+var cax=Math.cos(AX),sax=Math.sin(AX),cay=Math.cos(AY),say=Math.sin(AY);
+function iso(x,y,z){var X=P.L-x;return [(X*cax-y*cay), (X*sax+y*say-z)];}
+function pt(x,y,z){var p=iso(x,y,z);return p[0].toFixed(1)+','+p[1].toFixed(1);}
+
+function box(x0,x1,y0,y1,z0,z1,c,op){
+  var o=(op==null?1:op);
+  return '<polygon points="'+pt(x0,y0,z1)+' '+pt(x1,y0,z1)+' '+pt(x1,y1,z1)+' '+pt(x0,y1,z1)+
+         '" fill="'+sh(c,1.14)+'" opacity="'+o+'" '+ST+'/>'+
+         '<polygon points="'+pt(x0,y1,z1)+' '+pt(x1,y1,z1)+' '+pt(x1,y1,z0)+' '+pt(x0,y1,z0)+
+         '" fill="'+sh(c,0.90)+'" opacity="'+o+'" '+ST+'/>'+
+         '<polygon points="'+pt(x0,y0,z1)+' '+pt(x0,y1,z1)+' '+pt(x0,y1,z0)+' '+pt(x0,y0,z0)+
+         '" fill="'+sh(c,0.68)+'" opacity="'+o+'" '+ST+'/>';
+}
+function faceY(x0,x1,z0,z1,y,fill,extra){
+  return '<polygon points="'+pt(x0,y,z1)+' '+pt(x1,y,z1)+' '+pt(x1,y,z0)+' '+pt(x0,y,z0)+
+         '" fill="'+fill+'" '+(extra||'')+'/>';
+}
+function faceX(y0,y1,z0,z1,x,fill,extra){
+  return '<polygon points="'+pt(x,y0,z1)+' '+pt(x,y1,z1)+' '+pt(x,y1,z0)+' '+pt(x,y0,z0)+
+         '" fill="'+fill+'" '+(extra||'')+'/>';
+}
+function faceZ(x0,x1,y0,y1,z,fill,extra){
+  return '<polygon points="'+pt(x0,y0,z)+' '+pt(x1,y0,z)+' '+pt(x1,y1,z)+' '+pt(x0,y1,z)+
+         '" fill="'+fill+'" '+(extra||'')+'/>';
+}
+function lbl(x,y,z,dx,dy,txt){
+  var p=iso(x,y,z);
+  return '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+(p[0]+dx)+'" y2="'+(p[1]+dy)+
+         '" stroke="#42505f" stroke-width="3"/>'+
+         '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="9" fill="#42505f"/>'+
+         '<text x="'+(p[0]+dx+(dx<0?-14:14))+'" y="'+(p[1]+dy+26)+'" font-size="76" fill="#22303e" '+
+         'text-anchor="'+(dx<0?'end':'start')+'" font-family="sans-serif">'+txt+'</text>';
+}
+
+/* ---------- vista isometrica ---------- */
+function buildIso(){
+  var s='';
+  /* piso */
+  s+='<polygon points="'+pt(-900,-900,0)+' '+pt(P.L+900,-900,0)+' '+pt(P.L+900,P.W+1200,0)+' '+
+     pt(-900,P.W+1200,0)+'" fill="'+C.floor+'"/>';
+  for(var gx=-600;gx<=P.L+900;gx+=600){
+    s+='<line x1="'+iso(gx,-900,0)[0]+'" y1="'+iso(gx,-900,0)[1]+'" x2="'+iso(gx,P.W+1200,0)[0]+
+       '" y2="'+iso(gx,P.W+1200,0)[1]+'" stroke="#d2d8dd" stroke-width="3"/>';
+  }
+  /* painel traseiro da cabine */
+  s+=box(0,P.L,0,45,P.plate,P.glass1,C.steel);
+  /* base + gabinete + tampo */
+  s+=box(60,P.L-60,60,P.W-60,0,P.plinth,C.dark);
+  s+=box(0,P.L,0,P.W,P.plinth,P.cabTop,C.grey);
+  s+=box(0,P.L,0,P.W,P.cabTop,P.plate,C.alu);
+
+  /* estacoes: do fundo para a frente */
+  for(var i=P.n-1;i>=0;i--){
+    var c=cx(i);
+    /* montante divisor entre estacoes */
+    s+=box(c-P.pitch/2-10,c-P.pitch/2+10,80,560,P.plate,P.glass1,C.alu);
+    /* suporte do ninho */
+    s+=box(c-165,c+165,P.ny0-15,P.ny1+15,P.plate,P.trayZ,C.steel);
+    /* trilho e grampo de ajuste (mecanica 1 / 2) */
+    s+=box(c-150,c+150,P.ny0+20,P.ny0+50,P.trayZ,P.trayZ+55,C.blue);
+    /* bandeja */
+    s+=box(c-150,c+150,P.ny0,P.ny1,P.trayZ,P.trayZ+P.trayH,C.tray);
+    /* produto SSW07 */
+    var pz=P.trayZ+P.trayH;
+    s+=box(c-62,c+62,205,335,pz,pz+165,C.prod);
+    s+=faceY(c-62,c+62,pz+25,pz+140,335,'#2f6fae','opacity=".9"');
+    s+=box(c-62,c+62,205,335,pz+165,pz+185,C.dark);
+    /* colunas-guia e cabecote de contatos */
+    s+=box(c-132,c-112,150,170,P.trayZ+230,1790,C.steel);
+    s+=box(c+112,c+132,150,170,P.trayZ+230,1790,C.steel);
+    s+=box(c-145,c+145,140,400,1420,1475,C.blue);
+    s+=box(c-70,c+70,190,350,1370,1420,C.dark);
+    s+=box(c-26,c+26,250,302,1475,1770,C.steel);
+    s+=box(c-90,c+90,140,400,1770,1810,C.alu);
+    /* eixo de transferencia: guia linear + carro com garfo */
+    s+=box(c-42,c+42,110,690,P.plate+15,P.plate+65,C.dark);
+    s+=box(c-58,c+58,430,555,P.plate+65,P.plate+140,C.blue);
+    /* batente / centralizador de pallet na via */
+    s+=box(c-26,c+26,P.cy0-42,P.cy0-12,P.trayZ-30,P.trayZ+95,C.blue);
+    /* sensor de presenca */
+    s+=box(c+150,c+172,P.cy0-40,P.cy0-18,P.trayZ+20,P.trayZ+70,C.amber);
+  }
+
+  /* transportador de correntes duplas */
+  s+=box(0,P.L,P.cy0,P.cy1,P.plate,P.trayZ-30,C.steel);
+  s+=box(0,P.L,P.cy0+25,P.cy0+70,P.trayZ-30,P.trayZ,C.dark);
+  s+=box(0,P.L,P.cy1-70,P.cy1-25,P.trayZ-30,P.trayZ,C.dark);
+  s+=box(0,P.L,P.cy0-16,P.cy0,P.trayZ,P.trayZ+62,C.alu);
+  s+=box(0,P.L,P.cy1,P.cy1+16,P.trayZ,P.trayZ+62,C.alu);
+  /* motorredutor na extremidade de saida */
+  s+=box(P.L-360,P.L-140,P.cy0-150,P.cy0-30,P.plate+30,P.plate+250,C.dark);
+  /* pallets sobre a via */
+  [[60,360],[1780,2080],[3200,3500]].forEach(function(t){
+    s+=box(t[0],t[1],P.cy0+30,P.cy1-30,P.trayZ,P.trayZ+P.trayH,C.tray);
+    var m=(t[0]+t[1])/2, pz2=P.trayZ+P.trayH;
+    s+=box(m-62,m+62,P.cy0+95,P.cy1-95,pz2,pz2+165,C.prod);
+    s+=box(m-62,m+62,P.cy0+95,P.cy1-95,pz2+165,pz2+185,C.dark);
+  });
+
+  /* vidros: laterais, frente e teto (policarbonato fume) */
+  var gl='fill="rgba(88,112,132,0.30)" stroke="rgba(255,255,255,.45)" stroke-width="3"';
+  s+=faceZ(0,P.L,0,P.W,P.glass1,'rgba(150,172,190,0.22)','stroke="rgba(255,255,255,.35)" stroke-width="3"');
+  s+=faceY(0,P.L,P.glass0,P.glass1,P.W,'rgba(88,112,132,0.30)','stroke="rgba(255,255,255,.45)" stroke-width="3"');
+  s+=faceX(0,P.W,P.glass0,P.glass1,0,'rgba(88,112,132,0.34)','stroke="rgba(255,255,255,.45)" stroke-width="3"');
+  /* reflexo diagonal no policarbonato frontal */
+  s+='<polygon points="'+pt(900,P.W,P.glass1)+' '+pt(1500,P.W,P.glass1)+' '+pt(2500,P.W,P.glass0)+' '+
+     pt(1900,P.W,P.glass0)+'" fill="rgba(255,255,255,.13)"/>';
+
+  /* estrutura visivel sobre o vidro: montantes e travessas */
+  for(var px=0;px<=P.L;px+=1000){
+    var a=Math.max(px-22,0), b=Math.min(px+22,P.L);
+    s+=box(a,b,P.W-45,P.W,P.plate,P.top,C.alu);
+    s+=box(a,b,0,P.W,P.glass1,P.top,C.alu);
+  }
+  s+=box(0,P.L,P.W-45,P.W,P.glass1,P.top,C.alu);
+  s+=box(0,P.L,P.W-45,P.W,P.plate,P.plate+45,C.alu);
+
+  /* porta guilhotina na extremidade de entrada (x=0) */
+  s+=box(-30,10,555,585,P.glass0,P.top,C.alu);
+  s+=box(-30,10,975,1005,P.glass0,P.top,C.alu);
+  s+=box(-34,6,565,995,1330,1700,C.blue,0.92);
+  s+=box(-40,12,700,860,1760,1975,C.steel);
+  s+=box(-40,12,555,1005,P.top-60,P.top,C.alu);
+  s+=box(-26,2,530,552,P.glass0,P.glass0+360,C.amber);
+  s+=box(-26,2,1008,1030,P.glass0,P.glass0+360,C.amber);
+
+  /* detalhes na face frontal do gabinete */
+  for(var dx=0;dx<P.L;dx+=1000){
+    s+=faceY(dx+8,dx+992,P.plinth+30,P.cabTop-30,P.W,'rgba(255,255,255,.05)',
+      'stroke="rgba(40,55,70,.30)" stroke-width="4"');
+  }
+  s+=faceY(0,P.L,P.cabTop-95,P.cabTop-40,P.W,'#1f5f9e','opacity=".95"');
+  /* IHM + painel eletrico na extremidade de saida */
+  s+=faceY(P.L-880,P.L-120,P.plinth+60,P.cabTop-130,P.W,'rgba(60,72,84,.28)',
+    'stroke="rgba(30,42,55,.5)" stroke-width="5"');
+  s+=faceY(P.L-700,P.L-340,P.cabTop-420,P.cabTop-190,P.W,'#243444','stroke="#101a24" stroke-width="5"');
+  s+=faceY(P.L-680,P.L-360,P.cabTop-400,P.cabTop-210,P.W,'#3f6f9a','');
+  /* botoes de emergencia */
+  [700,2450,3800].forEach(function(ex){
+    s+=faceY(ex-55,ex+55,P.cabTop-260,P.cabTop-150,P.W,'#e0c341','stroke="#8d7a1f" stroke-width="4"');
+    s+=faceY(ex-34,ex+34,P.cabTop-240,P.cabTop-172,P.W,C.red,'');
+  });
+
+  /* torre luminosa sobre suporte na travessa superior */
+  s+=box(360,400,170,210,P.glass1,P.top,C.steel);
+  s+=box(330,430,140,240,P.top,P.top+30,C.dark);
+  s+=box(346,414,156,224,P.top+30,P.top+105,C.green);
+  s+=box(346,414,156,224,P.top+105,P.top+180,C.amber);
+  s+=box(346,414,156,224,P.top+180,P.top+255,C.red);
+
+  /* anotacoes */
+  s+=lbl(cx(7),P.ny1,1447,300,-540,'Cabecote de contatos descendente (pneumatico)');
+  s+=lbl(cx(5),P.ny0+35,P.trayZ+55,330,-330,'Ninho ajustavel — mecanicas 1 e 2');
+  s+=lbl(380,190,P.top+255,60,-330,'Torre luminosa');
+  s+=lbl(0,780,1520,-430,-330,'Porta guilhotina vertical + cortina de luz');
+  s+=lbl(cx(1)-26,P.cy0-42,P.trayZ+95,-620,430,'Batente pneumatico + centralizador');
+  s+=lbl(cx(3),520,P.plate+140,-900,1010,'Transferencia puxa/empurra — curso 520 mm');
+  s+=lbl(2600,P.cy1,P.trayZ+62,-360,1220,'Transportador de correntes duplas, indexado');
+  s+=lbl(3800,P.W,P.cabTop-205,300,300,'Botao de emergencia');
+  s+=lbl(P.L-520,P.W,P.cabTop-300,-300,700,'Painel eletrico integrado + IHM');
+  var el=document.getElementById('iso');
+  el.setAttribute('viewBox','-1750 -2600 6900 4850');
+  el.innerHTML=s;
+}
+
+/* ---------- utilitarios de cotagem ortogonal ---------- */
+function dimH(x0,x1,y,txt,fs){
+  fs=fs||58;var t=24;
+  return '<g stroke="#5c6b7a" stroke-width="3" fill="none">'+
+   '<line x1="'+x0+'" y1="'+(y-t)+'" x2="'+x0+'" y2="'+(y+t)+'"/>'+
+   '<line x1="'+x1+'" y1="'+(y-t)+'" x2="'+x1+'" y2="'+(y+t)+'"/>'+
+   '<line x1="'+x0+'" y1="'+y+'" x2="'+x1+'" y2="'+y+'"/></g>'+
+   '<text x="'+((x0+x1)/2)+'" y="'+(y-20)+'" font-size="'+fs+'" fill="#2b3947" '+
+   'text-anchor="middle" font-family="sans-serif">'+txt+'</text>';
+}
+function dimV(x,y0,y1,txt,fs){
+  fs=fs||58;var t=24;
+  return '<g stroke="#5c6b7a" stroke-width="3" fill="none">'+
+   '<line x1="'+(x-t)+'" y1="'+y0+'" x2="'+(x+t)+'" y2="'+y0+'"/>'+
+   '<line x1="'+(x-t)+'" y1="'+y1+'" x2="'+(x+t)+'" y2="'+y1+'"/>'+
+   '<line x1="'+x+'" y1="'+y0+'" x2="'+x+'" y2="'+y1+'"/></g>'+
+   '<text x="'+(x-20)+'" y="'+((y0+y1)/2)+'" font-size="'+fs+'" fill="#2b3947" '+
+   'text-anchor="middle" font-family="sans-serif" transform="rotate(-90 '+(x-20)+','+((y0+y1)/2)+')">'+txt+'</text>';
+}
+function R(x,y,w,h,fill,stroke,extra){
+  return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+fill+'" stroke="'+
+    (stroke||'#4a5866')+'" stroke-width="3" '+(extra||'')+'/>';
+}
+function T(x,y,txt,fs,anchor,fill){
+  return '<text x="'+x+'" y="'+y+'" font-size="'+(fs||52)+'" fill="'+(fill||'#33414f')+
+   '" text-anchor="'+(anchor||'middle')+'" font-family="sans-serif">'+txt+'</text>';
+}
+
+/* ---------- planta baixa ---------- */
+function buildTop(){
+  var s='',i,c;
+  s+=R(0,0,P.L,P.W,'#eef1f4','#39485a');
+  s+=R(0,0,P.L,95,'#e2e7ec','#8a97a4');
+  s+=T(40,66,'canaleta de cabeamento / servicos',46,'start','#6a7784');
+  /* via de transporte */
+  s+=R(0,P.cy0,P.L,P.cy1-P.cy0,'#dde3e9','#39485a');
+  s+=R(0,P.cy0+25,P.L,45,'#7f8a93','#3d4a56');
+  s+=R(0,P.cy1-70,P.L,45,'#7f8a93','#3d4a56');
+  s+=T(P.L/2,P.W+120,'transportador de correntes duplas — indexado (10 posicoes)',46,'middle','#33414f');
+  /* zonas de entrada e saida */
+  s+=R(0,0,P.zone,P.W,'rgba(31,95,158,.07)','#1f5f9e','stroke-dasharray="26 18"');
+  s+=R(P.L-P.zone,0,P.zone,P.W,'rgba(31,95,158,.07)','#1f5f9e','stroke-dasharray="26 18"');
+  s+=T(P.zone/2,150,'entrada',46,'middle','#1f5f9e');
+  s+=T(P.L-P.zone/2,150,'saida',46,'middle','#1f5f9e');
+  /* portas guilhotina (faces de topo) */
+  s+=R(-46,P.cy0-30,46,P.cy1-P.cy0+60,C.blue,'#123f6c');
+  s+=R(P.L,P.cy0-30,46,P.cy1-P.cy0+60,C.blue,'#123f6c');
+  /* estacoes */
+  for(i=0;i<P.n;i++){
+    c=cx(i);
+    s+=R(c-P.pitch/2+8,100,P.pitch-16,470,'rgba(120,140,160,.10)','#9aa6b2','stroke-dasharray="14 12"');
+    s+=R(c-165,P.ny0-15,330,(P.ny1-P.ny0)+30,'#c3ccd4','#5a6773');
+    s+=R(c-150,P.ny0,300,P.ny1-P.ny0,C.tray,'#41505e');
+    s+=R(c-62,205,124,130,C.prod,'#20272e');
+    s+=R(c-150,P.ny0+20,300,30,C.blue,'#123f6c');
+    /* eixo de transferencia */
+    s+='<line x1="'+c+'" y1="'+(P.ny1+40)+'" x2="'+c+'" y2="'+(P.cy0+130)+
+       '" stroke="#1f5f9e" stroke-width="6" stroke-dasharray="22 14"/>';
+    s+='<polygon points="'+c+','+(P.ny1+18)+' '+(c-22)+','+(P.ny1+62)+' '+(c+22)+','+(P.ny1+62)+
+       '" fill="#1f5f9e"/>';
+    s+=R(c-42,P.ny1+70,84,P.cy0-P.ny1-100,'#5a6773','#3b4753');
+    /* batente e sensor */
+    s+=R(c-26,P.cy0-46,52,40,C.blue,'#123f6c');
+    s+=R(c+150,P.cy0-44,26,26,C.amber,'#8d7a1f');
+    s+=T(c,P.ny0-40,(i+1),50,'middle','#1f5f9e');
+  }
+  /* cotas */
+  s+=dimH(0,P.L,P.W+330,'5000');
+  s+=dimH(0,P.zone,P.W+200,'400',46);
+  s+=dimH(P.zone,P.L-P.zone,P.W+200,'4200 (10 x 420)',46);
+  s+=dimH(P.L-P.zone,P.L,P.W+200,'400',46);
+  s+=dimH(cx(0),cx(1),-130,'420 (passo)',46);
+  s+=dimH(cx(4)-150,cx(4)+150,-260,'300 (bandeja)',46);
+  s+=dimV(P.L+250,0,P.W,'1000');
+  s+=dimV(-190,P.ny0,P.ny1,'300',46);
+  var el=document.getElementById('top');
+  el.setAttribute('viewBox','-430 -400 5900 1900');
+  el.innerHTML=s;
+}
+
+/* ---------- vista frontal ---------- */
+function buildFront(){
+  var G=2400, fz=function(z){return G-z;}, s='',i,c;
+  s+='<line x1="-300" y1="'+G+'" x2="'+(P.L+300)+'" y2="'+G+'" stroke="#9aa6b2" stroke-width="6"/>';
+  /* base */
+  s+=R(60,fz(P.plinth),P.L-120,P.plinth,C.dark,'#252c33');
+  s+=R(0,fz(P.cabTop),P.L,P.cabTop-P.plinth,C.grey,'#4a5866');
+  for(i=1;i<5;i++) s+='<line x1="'+(i*1000)+'" y1="'+fz(P.cabTop)+'" x2="'+(i*1000)+'" y2="'+fz(P.plinth)+
+    '" stroke="#697682" stroke-width="4"/>';
+  s+=R(0,fz(P.cabTop-40),P.L,55,C.blue,'#123f6c');
+  s+=R(0,fz(P.plate),P.L,P.plate-P.cabTop,C.alu,'#6e7a86');
+  /* interior visto atraves do policarbonato */
+  for(i=0;i<P.n;i++){
+    c=cx(i);
+    s+=R(c-165,fz(P.trayZ),330,P.trayZ-P.plate,'#aeb8c1','#6e7a86');
+    s+=R(c-150,fz(P.trayZ+P.trayH),300,P.trayH,C.tray,'#5a6773');
+    s+=R(c-62,fz(P.trayZ+P.trayH+165),124,165,C.prod,'#20272e');
+    s+=R(c-62,fz(P.trayZ+P.trayH+185),124,20,'#5c6772','#20272e');
+    s+=R(c-132,fz(1790),20,1790-(P.trayZ+230),C.steel,'#5a6773');
+    s+=R(c+112,fz(1790),20,1790-(P.trayZ+230),C.steel,'#5a6773');
+    s+=R(c-145,fz(1475),290,55,C.blue,'#123f6c');
+    s+=R(c-26,fz(1770),52,295,C.steel,'#5a6773');
+    s+=R(c-90,fz(1810),180,40,C.alu,'#6e7a86');
+    s+=R(c-26,fz(P.trayZ+95),52,125,C.blue,'#123f6c');
+  }
+  /* transportador em primeiro plano (guia frontal semitransparente) */
+  s+=R(0,fz(P.trayZ),P.L,P.trayZ-P.plate,'#8d97a0','#4a5866');
+  [[60,360],[1780,2080],[3200,3500]].forEach(function(t){
+    var m=(t[0]+t[1])/2;
+    s+=R(t[0],fz(P.trayZ+P.trayH),t[1]-t[0],P.trayH,C.tray,'#5a6773');
+    s+=R(m-90,fz(P.trayZ+P.trayH+16),180,16,'#aab4bd','#5a6773');
+  });
+  s+=R(0,fz(P.trayZ+62),P.L,62,'#b0b9c1','#6e7a86','fill-opacity=".72"');
+  /* policarbonato */
+  s+=R(0,fz(P.glass1),P.L,P.glass1-P.glass0,'rgba(88,112,132,0.22)','rgba(70,92,112,.55)');
+  s+='<polygon points="700,'+fz(P.glass1)+' 1150,'+fz(P.glass1)+' 1850,'+fz(P.glass0)+' 1400,'+fz(P.glass0)+
+     '" fill="rgba(255,255,255,.16)"/>';
+  /* estrutura */
+  for(i=0;i<=5;i++){var px=Math.min(Math.max(i*1000-22,0),P.L-45);
+    s+=R(px,fz(P.top),45,P.top-P.plate,C.alu,'#6e7a86');}
+  s+=R(0,fz(P.top),P.L,P.top-P.glass1,C.alu,'#6e7a86');
+  /* portas guilhotina nas extremidades */
+  [-46,P.L].forEach(function(gx){
+    s+=R(gx,fz(P.top),46,P.top-P.glass0,C.alu,'#6e7a86');
+    s+=R(gx-6,fz(1700),58,370,C.blue,'#123f6c');
+    s+=R(gx-4,fz(1975),52,215,C.steel,'#5a6773');
+  });
+  /* torre luminosa */
+  s+=R(340,fz(P.top+30),80,30,C.dark,'#252c33');
+  s+=R(348,fz(P.top+105),64,75,C.green,'#25603a');
+  s+=R(348,fz(P.top+180),64,75,C.amber,'#8d7a1f');
+  s+=R(348,fz(P.top+255),64,75,C.red,'#7d241d');
+  /* IHM e botoes */
+  s+=R(P.L-880,fz(P.cabTop-130),760,(P.cabTop-130)-(P.plinth+60),'rgba(60,72,84,.16)','#3b4753','stroke-dasharray="16 12"');
+  s+=R(P.L-700,fz(P.cabTop-190),360,230,'#243444','#101a24');
+  s+=R(P.L-680,fz(P.cabTop-210),320,190,'#3f6f9a','#1b3a52');
+  [700,2450,3800].forEach(function(ex){
+    s+='<circle cx="'+ex+'" cy="'+fz(P.cabTop-205)+'" r="52" fill="#e0c341" stroke="#8d7a1f" stroke-width="4"/>';
+    s+='<circle cx="'+ex+'" cy="'+fz(P.cabTop-205)+'" r="32" fill="'+C.red+'" stroke="#7d241d" stroke-width="4"/>';
+  });
+  /* cotas */
+  s+=dimH(0,P.L,G+330,'5000');
+  s+=dimH(cx(0),cx(1),fz(P.top)-190,'420',46);
+  s+=dimV(P.L+240,fz(P.trayZ),G,'950');
+  s+=dimV(P.L+470,fz(P.top),G,'2000');
+  var el=document.getElementById('front');
+  el.setAttribute('viewBox','-420 -280 6120 3150');
+  el.innerHTML=s;
+}
+
+/* ---------- corte transversal da estacao ---------- */
+function buildSide(){
+  var G=2400, fz=function(z){return G-z;}, s='';
+  s+='<line x1="-260" y1="'+G+'" x2="'+(P.W+300)+'" y2="'+G+'" stroke="#9aa6b2" stroke-width="6"/>';
+  s+=R(60,fz(P.plinth),P.W-120,P.plinth,C.dark,'#252c33');
+  s+=R(0,fz(P.cabTop),P.W,P.cabTop-P.plinth,C.grey,'#4a5866');
+  s+=R(0,fz(P.plate),P.W,P.plate-P.cabTop,C.alu,'#6e7a86');
+  /* canaleta de cabeamento */
+  s+=R(60,fz(P.cabTop-60),100,130,C.blue,'#123f6c');
+  s+=T(200,fz(P.cabTop-110),'canaleta de cabeamento',42,'start','#33414f');
+  /* montante traseiro e teto */
+  s+=R(0,fz(P.top),45,P.top-P.plate,C.alu,'#6e7a86');
+  s+=R(P.W-45,fz(P.top),45,P.top-P.plate,C.alu,'#6e7a86');
+  s+=R(0,fz(P.top),P.W,P.top-P.glass1,C.alu,'#6e7a86');
+  /* ninho + bandeja + produto */
+  s+=R(P.ny0-15,fz(P.trayZ),(P.ny1-P.ny0)+30,P.trayZ-P.plate,'#aeb8c1','#6e7a86');
+  s+=R(P.ny0,fz(P.trayZ+P.trayH),P.ny1-P.ny0,P.trayH,C.tray,'#5a6773');
+  s+=R(P.ny0+20,fz(P.trayZ+55),30,55,C.blue,'#123f6c');
+  s+=R(205,fz(P.trayZ+P.trayH+165),130,165,C.prod,'#20272e');
+  s+=R(205,fz(P.trayZ+P.trayH+185),130,20,'#5c6772','#20272e');
+  /* cabecote de contatos */
+  s+=R(150,fz(1790),20,1790-(P.trayZ+230),C.steel,'#5a6773');
+  s+=R(380,fz(1790),20,1790-(P.trayZ+230),C.steel,'#5a6773');
+  s+=R(140,fz(1475),260,55,C.blue,'#123f6c');
+  s+=R(190,fz(1420),160,50,C.dark,'#20272e');
+  s+=R(250,fz(1770),52,295,C.steel,'#5a6773');
+  s+=R(140,fz(1810),260,40,C.alu,'#6e7a86');
+  s+='<line x1="400" y1="'+fz(1450)+'" x2="470" y2="'+fz(1450)+'" stroke="#5c6b7a" stroke-width="3"/>';
+  s+=T(485,fz(1436),'cabecote de contatos',42,'start','#33414f');
+  s+='<line x1="302" y1="'+fz(1640)+'" x2="470" y2="'+fz(1640)+'" stroke="#5c6b7a" stroke-width="3"/>';
+  s+=T(485,fz(1626),'cilindro pneumatico',42,'start','#33414f');
+  /* guia linear de transferencia + carro */
+  s+=R(110,fz(P.plate+65),580,50,'#5a6773','#3b4753');
+  s+=R(430,fz(P.plate+140),125,75,C.blue,'#123f6c');
+  /* transportador */
+  s+=R(P.cy0,fz(P.trayZ-30),P.cy1-P.cy0,(P.trayZ-30)-P.plate,'#8d97a0','#4a5866');
+  s+=R(P.cy0+25,fz(P.trayZ),45,30,'#5a6773','#3b4753');
+  s+=R(P.cy1-70,fz(P.trayZ),45,30,'#5a6773','#3b4753');
+  s+=R(P.cy0-16,fz(P.trayZ+62),16,62,C.alu,'#6e7a86');
+  s+=R(P.cy1,fz(P.trayZ+62),16,62,C.alu,'#6e7a86');
+  s+=R(P.cy0+30,fz(P.trayZ+P.trayH),(P.cy1-P.cy0)-60,P.trayH,C.tray,'#5a6773');
+  s+=R(P.cy0-46,fz(P.trayZ+95),40,125,C.blue,'#123f6c');
+  /* policarbonato frontal */
+  s+=R(P.W-36,fz(P.glass1),36,P.glass1-P.glass0,'rgba(88,112,132,0.28)','rgba(70,92,112,.6)');
+  s+='<line x1="'+(P.W-40)+'" y1="'+fz(1690)+'" x2="620" y2="'+fz(1690)+'" stroke="#5c6b7a" stroke-width="3"/>';
+  s+=T(610,fz(1676),'policarbonato fume',42,'end','#33414f');
+  /* curso de transferencia */
+  s+='<line x1="270" y1="'+fz(1230)+'" x2="790" y2="'+fz(1230)+'" stroke="#1f5f9e" stroke-width="6"/>';
+  s+='<polygon points="270,'+fz(1230)+' 314,'+fz(1252)+' 314,'+fz(1208)+'" fill="#1f5f9e"/>';
+  s+='<polygon points="790,'+fz(1230)+' 746,'+fz(1252)+' 746,'+fz(1208)+'" fill="#1f5f9e"/>';
+  s+=T(530,fz(1260),'curso 520',46,'middle','#1f5f9e');
+  /* cotas */
+  s+=dimH(0,P.W,G+300,'1000');
+  s+=dimV(-160,fz(P.trayZ),G,'950');
+  s+=dimV(-380,fz(P.top),G,'2000');
+  var el=document.getElementById('side');
+  el.setAttribute('viewBox','-560 -180 1900 3000');
+  el.innerHTML=s;
+}
+
+/* ---------- vista de extremidade: porta guilhotina ---------- */
+function buildEnd(){
+  var G=2400, fz=function(z){return G-z;}, s='';
+  var o0=572, o1=972, oz0=P.glass0, oz1=P.glass0+350;
+  s+='<line x1="-260" y1="'+G+'" x2="'+(P.W+300)+'" y2="'+G+'" stroke="#9aa6b2" stroke-width="6"/>';
+  s+=R(60,fz(P.plinth),P.W-120,P.plinth,C.dark,'#252c33');
+  s+=R(0,fz(P.cabTop),P.W,P.cabTop-P.plinth,C.grey,'#4a5866');
+  s+=R(0,fz(P.plate),P.W,P.plate-P.cabTop,C.alu,'#6e7a86');
+  /* travessa de base da cabine */
+  s+=R(45,fz(P.glass0),P.W-90,P.glass0-P.plate,'#aeb8c1','#6e7a86');
+  /* moldura da cabine */
+  s+=R(0,fz(P.top),45,P.top-P.plate,C.alu,'#6e7a86');
+  s+=R(P.W-45,fz(P.top),45,P.top-P.plate,C.alu,'#6e7a86');
+  s+=R(0,fz(P.top),P.W,P.top-P.glass1,C.alu,'#6e7a86');
+  s+=R(45,fz(P.glass1),P.W-90,P.glass1-P.glass0,'rgba(88,112,132,0.24)','rgba(70,92,112,.55)');
+  /* vao de passagem das bandejas */
+  s+=R(o0,fz(oz1),o1-o0,oz1-oz0,'#ffffff','#1f5f9e','stroke-dasharray="20 14"');
+  /* guias verticais */
+  s+=R(o0-24,fz(P.top),24,P.top-P.glass0,C.alu,'#6e7a86');
+  s+=R(o1,fz(P.top),24,P.top-P.glass0,C.alu,'#6e7a86');
+  /* folha da porta, elevada */
+  s+=R(o0-14,fz(1700),(o1-o0)+28,370,'rgba(88,112,132,0.55)','#123f6c');
+  s+=R(o0-14,fz(1700),(o1-o0)+28,46,C.blue,'#123f6c');
+  s+=R(o0-14,fz(1376),(o1-o0)+28,46,C.blue,'#123f6c');
+  /* cilindro de acionamento */
+  s+=R(690,fz(1975),150,205,C.steel,'#5a6773');
+  s+=R(745,fz(1770),40,70,'#5a6773','#3b4753');
+  /* cortinas de luz */
+  s+=R(o0-70,fz(oz1+10),26,370,C.amber,'#8d7a1f');
+  s+=R(o1+44,fz(oz1+10),26,370,C.amber,'#8d7a1f');
+  /* transportador atravessando o vao */
+  s+=R(P.cy0,fz(P.trayZ-30),P.cy1-P.cy0,(P.trayZ-30)-P.plate,'#8d97a0','#4a5866');
+  s+=R(P.cy0+30,fz(P.trayZ+P.trayH),(P.cy1-P.cy0)-60,P.trayH,C.tray,'#5a6773');
+  /* legendas com linhas de chamada */
+  function leader(x0,y0,x1,y1,txt){
+    return '<line x1="'+x0+'" y1="'+y0+'" x2="'+x1+'" y2="'+y1+'" stroke="#5c6b7a" stroke-width="3"/>'+
+           T(x0-14,y0+14,txt,42,'end','#33414f');
+  }
+  s+=leader(500,fz(1870),735,fz(1870),'cilindro de acionamento');
+  s+=leader(500,fz(1560),o0+40,fz(1560),'folha em policarbonato fume');
+  s+=leader(430,fz(1120),o0-58,fz(1120),'cortina de luz');
+  s+=leader(430,fz(880),660,fz(880),'transportador');
+  /* cotas */
+  s+=dimH(o0,o1,fz(oz0)+190,'400 (vao)',46);
+  s+=dimV(o1+180,fz(oz1),fz(oz0),'350',46);
+  s+=dimH(0,P.W,G+300,'1000');
+  s+=dimV(-160,fz(P.top),G,'2000');
+  var el=document.getElementById('end');
+  el.setAttribute('viewBox','-420 -180 1760 3000');
+  el.innerHTML=s;
+}
+
+buildIso();buildTop();buildFront();buildSide();buildEnd();
+})();
+</script>
+</body>
+</html>
