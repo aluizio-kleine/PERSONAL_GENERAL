@@ -1,4 +1,4 @@
-<title>Sobra do Mês</title>
+<title>Meu Mês</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -415,11 +415,11 @@ ol.actions .amt{font-family:"IBM Plex Mono",monospace; font-weight:600; font-siz
   <div class="topbar-in">
     <div class="brand">
       <div class="brand-id">
-        <h1>Sobra do Mês</h1>
-        <span class="sub">controle de gastos e plano de saída do vermelho</span>
+        <h1>Meu Mês</h1>
+        <span class="sub">seu dinheiro, só seu</span>
       </div>
       <div class="brand-tools">
-        <div class="monthnav">
+        <div class="monthnav" id="monthNav">
           <button id="prevM" aria-label="Mês anterior">‹</button>
           <span class="label num" id="mLabel">—</span>
           <button id="nextM" aria-label="Próximo mês">›</button>
@@ -430,11 +430,11 @@ ol.actions .amt{font-family:"IBM Plex Mono",monospace; font-weight:600; font-siz
         </div>
       </div>
     </div>
-    <nav class="tabs" role="tablist" id="tabs">
+    <nav class="tabs" role="tablist" id="tabsNav">
       <button role="tab" data-tab="painel" aria-selected="true">Painel</button>
       <button role="tab" data-tab="lancar" aria-selected="false">Lançar</button>
       <button role="tab" data-tab="sim" aria-selected="false">Simulador</button>
-      <button role="tab" data-tab="fixos" aria-selected="false">Fixos &amp; Parcelas</button>
+      <button role="tab" data-tab="fixos" aria-selected="false">Contas &amp; Parcelas</button>
       <button role="tab" data-tab="renda" aria-selected="false">Renda</button>
       <button role="tab" data-tab="plano" aria-selected="false">Plano</button>
     </nav>
@@ -442,6 +442,7 @@ ol.actions .amt{font-family:"IBM Plex Mono",monospace; font-weight:600; font-siz
 </div>
 
 <div class="wrap">
+  <section id="tab-setup" class="stack" hidden></section>
   <section id="tab-painel" class="stack"></section>
   <section id="tab-lancar" class="stack" hidden></section>
   <section id="tab-sim" class="stack" hidden></section>
@@ -450,93 +451,56 @@ ol.actions .amt{font-family:"IBM Plex Mono",monospace; font-weight:600; font-siz
   <section id="tab-plano" class="stack" hidden></section>
 </div>
 
-<script type="application/json" id="app-state">
-{"v":2,"atualizadoEm":"2026-08-24T18:17:38.772Z","mesAtual":"2026-08","renda":{"degraus":[{"id":"r1","mes":"2026-08","bruto":9034,"liquido":6742,"rotulo":"Salário atual"},{"id":"r2","mes":"2026-09","bruto":9485,"liquido":7068,"rotulo":"Aumento de 5%"},{"id":"r3","mes":"2026-12","bruto":10434,"liquido":7757,"rotulo":"Promoção +10% (alvo)"},{"id":"r4","mes":"2027-01","bruto":10955,"liquido":8134,"rotulo":"Aumento seguinte de 5%"}]},"fixos":[{"id":"f1","nome":"Aluguel","valor":1700,"ativo":true},{"id":"f2","nome":"Carro (parcela)","valor":1000,"ativo":true},{"id":"f3","nome":"Condomínio","valor":300,"ativo":true},{"id":"f4","nome":"Luz","valor":120,"ativo":true},{"id":"f5","nome":"Internet","valor":120,"ativo":true},{"id":"f6","nome":"Claude","valor":110,"ativo":true},{"id":"f7","nome":"Assinaturas","valor":100,"ativo":true},{"id":"f8","nome":"Academia","valor":100,"ativo":true},{"id":"f9","nome":"Surfview","valor":30,"ativo":true}],"parcelas":[{"id":"p1","nome":"Seguro do carro","valor":283,"num":2,"total":10,"mesRef":"2026-08"},{"id":"p2","nome":"Fatura parcelada A","valor":225,"num":2,"total":2,"mesRef":"2026-08"},{"id":"p3","nome":"Fatura parcelada B","valor":206,"num":6,"total":10,"mesRef":"2026-08"},{"id":"p4","nome":"Fatura parcelada C","valor":263,"num":6,"total":6,"mesRef":"2026-08"}],"categorias":[{"id":"mercado","nome":"Mercado","tipo":"teto","meta":900,"base":1358,"nota":"a maior fuga do mês passado"},{"id":"gasolina","nome":"Gasolina","tipo":"teto","meta":500,"base":368,"nota":"teto já conta os fins de semana de surf"},{"id":"lazer","nome":"Lazer","tipo":"teto","meta":800,"base":852,"nota":"inclui delivery, rolê, bares, extras"},{"id":"farmacia","nome":"Farmácia","tipo":"livre","meta":0,"base":481,"nota":"sem teto — só acompanha; o valor é a previsão usada na projeção"}],"lancamentos":[{"id":"s1","mes":"2026-08","dia":null,"cat":"mercado","valor":175,"nota":"planilha"},{"id":"s2","mes":"2026-08","dia":null,"cat":"mercado","valor":23,"nota":"planilha"},{"id":"s3","mes":"2026-08","dia":null,"cat":"mercado","valor":250,"nota":"planilha"},{"id":"s4","mes":"2026-08","dia":null,"cat":"mercado","valor":77,"nota":"planilha"},{"id":"s5","mes":"2026-08","dia":null,"cat":"mercado","valor":56,"nota":"planilha"},{"id":"s6","mes":"2026-08","dia":null,"cat":"mercado","valor":15,"nota":"planilha"},{"id":"s7","mes":"2026-08","dia":null,"cat":"mercado","valor":130,"nota":"planilha"},{"id":"s8","mes":"2026-08","dia":null,"cat":"mercado","valor":111,"nota":"planilha"},{"id":"s9","mes":"2026-08","dia":null,"cat":"mercado","valor":321,"nota":"planilha"},{"id":"s10","mes":"2026-08","dia":null,"cat":"mercado","valor":200,"nota":"planilha"},{"id":"s11","mes":"2026-08","dia":null,"cat":"gasolina","valor":184,"nota":"planilha"},{"id":"s12","mes":"2026-08","dia":null,"cat":"gasolina","valor":184,"nota":"planilha"},{"id":"s13","mes":"2026-08","dia":null,"cat":"lazer","valor":58,"nota":"planilha"},{"id":"s14","mes":"2026-08","dia":null,"cat":"lazer","valor":25,"nota":"planilha"},{"id":"s15","mes":"2026-08","dia":null,"cat":"lazer","valor":31,"nota":"planilha"},{"id":"s16","mes":"2026-08","dia":null,"cat":"lazer","valor":30,"nota":"planilha"},{"id":"s17","mes":"2026-08","dia":null,"cat":"lazer","valor":10,"nota":"planilha"},{"id":"s18","mes":"2026-08","dia":null,"cat":"lazer","valor":73,"nota":"planilha"},{"id":"s19","mes":"2026-08","dia":null,"cat":"lazer","valor":4,"nota":"planilha"},{"id":"s20","mes":"2026-08","dia":null,"cat":"lazer","valor":73,"nota":"planilha"},{"id":"s21","mes":"2026-08","dia":null,"cat":"lazer","valor":38,"nota":"planilha"},{"id":"s22","mes":"2026-08","dia":null,"cat":"lazer","valor":110,"nota":"planilha"},{"id":"s23","mes":"2026-08","dia":null,"cat":"lazer","valor":54,"nota":"planilha"},{"id":"s24","mes":"2026-08","dia":null,"cat":"lazer","valor":103,"nota":"planilha"},{"id":"s25","mes":"2026-08","dia":null,"cat":"delivery","valor":25,"nota":"planilha"},{"id":"s26","mes":"2026-08","dia":null,"cat":"delivery","valor":46,"nota":"planilha"},{"id":"s27","mes":"2026-08","dia":null,"cat":"delivery","valor":43,"nota":"planilha"},{"id":"s28","mes":"2026-08","dia":null,"cat":"delivery","valor":43,"nota":"planilha"},{"id":"s29","mes":"2026-08","dia":null,"cat":"delivery","valor":43,"nota":"planilha"},{"id":"s30","mes":"2026-08","dia":null,"cat":"delivery","valor":43,"nota":"planilha"},{"id":"s31","mes":"2026-08","dia":null,"cat":"farmacia","valor":61,"nota":"planilha"},{"id":"s32","mes":"2026-08","dia":null,"cat":"farmacia","valor":420,"nota":"planilha"}],"subcats":[{"id":"delivery","nome":"Delivery","pai":"lazer","base":243}]}
-</script>
 
 <script>
 (function(){
 "use strict";
-const PRISTINE = document.documentElement.outerHTML;
 
-/* ============ seed ============ */
-function CATS_V2(){ return [
-  {id:"mercado",  nome:"Mercado",  tipo:"teto",  meta:900, base:1358, nota:"a maior fuga do mês passado"},
-  {id:"gasolina", nome:"Gasolina", tipo:"teto",  meta:500, base:368,  nota:"teto já conta os fins de semana de surf"},
-  {id:"lazer",    nome:"Lazer",    tipo:"teto",  meta:800, base:852,  nota:"inclui delivery, rolê, bares, extras"},
-  {id:"farmacia", nome:"Farmácia", tipo:"livre", meta:150, base:481,  nota:"sem teto — só acompanha; o valor é a previsão usada na projeção"}
-];}
-function SUBS_V2(){ return [
-  {id:"delivery", nome:"Delivery", pai:"lazer", base:243}
-];}
+/* ============ estado inicial ============ */
+const HOJE = new Date();
+const MES_HOJE = HOJE.getFullYear() + "-" + String(HOJE.getMonth()+1).padStart(2,"0");
 
-function seed(){
-  const M = "2026-08";
-  const L = [];
-  let n = 0;
-  const add = (cat, arr) => arr.forEach(v => L.push({id:"s"+(++n), mes:M, dia:null, cat, valor:v, nota:"planilha"}));
-  add("mercado",  [175,23,250,77,56,15,130,111,321,200]);
-  add("gasolina", [184,184]);
-  add("lazer",    [58,25,31,30,10,73,4,73,38,110,54,103]);
-  add("delivery", [25,46,43,43,43,43]);
-  add("farmacia", [61,420]);
+/* sugestoes do primeiro uso — nada disso entra sem a pessoa escolher */
+const SUG_FIXOS = ["Aluguel","Condomínio","Luz","Água","Gás","Internet","Celular","Plano de saúde",
+  "Transporte","Academia","Streaming","Curso","Seguro","Pet"];
+const SUG_CATS = [
+  {nome:"Mercado",   nota:"compras da casa"},
+  {nome:"Transporte",nota:"combustível, app, ônibus"},
+  {nome:"Lazer",     nota:"bar, rolê, passeio, delivery"},
+  {nome:"Saúde",     nota:"farmácia, consultas"},
+  {nome:"Pessoal",   nota:"roupa, cabelo, presentes"}
+];
+
+function estadoVazio(){
   return {
-    v:2, atualizadoEm:new Date().toISOString(), mesAtual:M,
-    renda:{ degraus:[
-      {id:"r1", mes:"2026-08", bruto:9034,  liquido:6742, rotulo:"Salário atual"},
-      {id:"r2", mes:"2026-09", bruto:9485,  liquido:7068, rotulo:"Aumento de 5%"},
-      {id:"r3", mes:"2026-12", bruto:10434, liquido:7757, rotulo:"Promoção +10% (alvo)"},
-      {id:"r4", mes:"2027-09", bruto:10955, liquido:8134, rotulo:"Aumento seguinte de 5%"}
-    ]},
-    fixos:[
-      {id:"f1", nome:"Aluguel",        valor:1700, ativo:true},
-      {id:"f2", nome:"Carro (parcela)",valor:1000, ativo:true},
-      {id:"f3", nome:"Condomínio",     valor:300,  ativo:true},
-      {id:"f4", nome:"Luz",            valor:120,  ativo:true},
-      {id:"f5", nome:"Internet",       valor:120,  ativo:true},
-      {id:"f6", nome:"Claude",         valor:110,  ativo:true},
-      {id:"f7", nome:"Assinaturas",    valor:100,  ativo:true},
-      {id:"f8", nome:"Academia",       valor:100,  ativo:true},
-      {id:"f9", nome:"Surfview",       valor:30,   ativo:true}
-    ],
-    parcelas:[
-      {id:"p1", nome:"Seguro do carro", valor:283, num:2, total:10, mesRef:"2026-08"},
-      {id:"p2", nome:"Fatura parcelada A", valor:225, num:2, total:2,  mesRef:"2026-08"},
-      {id:"p3", nome:"Fatura parcelada B", valor:206, num:6, total:10, mesRef:"2026-08"},
-      {id:"p4", nome:"Fatura parcelada C", valor:263, num:6, total:6,  mesRef:"2026-08"}
-    ],
-    categorias:CATS_V2(),
-    subcats:SUBS_V2(),
-    lancamentos:L
+    v:2, app:"meu-mes", atualizadoEm:new Date().toISOString(), mesAtual:MES_HOJE,
+    configurado:false,
+    renda:{degraus:[]},
+    fixos:[], parcelas:[], categorias:[], subcats:[], lancamentos:[]
   };
 }
 
-/* ============ state load ============ */
-const LSKEY = "sobra-do-mes/v1";
+/* ============ carga ============ */
+/* Os dados vivem apenas no navegador de quem usa. A página não publica,
+   não envia e não sincroniza nada — não existe cópia em lugar nenhum. */
+const LSKEY = "meu-mes/v1";
 let S;
 function loadState(){
-  let emb=null, loc=null;
-  try{ const t=document.getElementById("app-state").textContent.trim(); const p=JSON.parse(t); if(!p.seed) emb=p; }catch(e){}
-  try{ const t=localStorage.getItem(LSKEY); if(t) loc=JSON.parse(t); }catch(e){}
-  if(emb && loc) return migra((Date.parse(loc.atualizadoEm||0) > Date.parse(emb.atualizadoEm||0)) ? loc : emb);
-  return migra(emb || loc || seed());
+  try{ const t = localStorage.getItem(LSKEY); if(t) return migra(JSON.parse(t)); }catch(e){}
+  return estadoVazio();
 }
 function migra(st){
-  if(!st) return seed();
-  if((st.v||1) < 2){
-    (st.lancamentos||[]).forEach(l => { if(l.cat === "extras") l.cat = "lazer"; });
-    st.categorias = CATS_V2();
-    st.subcats    = SUBS_V2();
-    st.v = 2;
-  }
-  if(!st.subcats) st.subcats = SUBS_V2();
+  if(!st) return estadoVazio();
+  if(!st.subcats) st.subcats = [];
+  if(!st.renda || !Array.isArray(st.renda.degraus)) st.renda = {degraus:[]};
+  ["fixos","parcelas","categorias","lancamentos"].forEach(k => { if(!Array.isArray(st[k])) st[k] = []; });
+  if(st.configurado === undefined) st.configurado = !!(st.renda.degraus.length || st.fixos.length);
   return st;
 }
 S = loadState();
 
-/* ============ persistence ============ */
-let artifactNS = null, artifactTried = false, saveTimer = null;
-let dirty = false, saving = false, soLocal = false;
+/* ============ gravacao ============ */
+let saveTimer = null, dirty = false, falhou = false;
 const flag = document.getElementById("saveflag");
 const saveBtn = document.getElementById("saveBtn");
 
@@ -548,20 +512,29 @@ function haQuanto(iso){
   if(seg < 86400) return "há " + Math.round(seg/3600) + "h";
   return "em " + new Date(t).toLocaleDateString("pt-BR", {day:"2-digit", month:"2-digit"});
 }
-function updateSaveUI(){
-  if(saving){
-    flag.textContent = ""; saveBtn.dataset.state = "saving";
-    saveBtn.textContent = "Salvando"; saveBtn.disabled = true; return;
+function gravar(manual){
+  clearTimeout(saveTimer);
+  try{
+    localStorage.setItem(LSKEY, JSON.stringify(S));
+    dirty = false; falhou = false;
+    if(manual) toast("Salvo neste navegador.");
+  }catch(e){
+    falhou = true;
+    if(manual) toast("O navegador bloqueou a gravação. Baixe o backup em Plano para não perder nada.", true);
   }
+  updateSaveUI();
+}
+function updateSaveUI(){
+  if(!saveBtn) return;
   saveBtn.disabled = false;
-  if(dirty){
+  if(falhou){
+    flag.textContent = "não foi possível gravar";
+    saveBtn.dataset.state = "local"; saveBtn.textContent = "Tentar de novo";
+  } else if(dirty){
     flag.textContent = "não salvo";
     saveBtn.dataset.state = "dirty"; saveBtn.textContent = "Salvar agora";
-  } else if(soLocal){
-    flag.textContent = "só neste aparelho · " + haQuanto(S.atualizadoEm);
-    saveBtn.dataset.state = "local"; saveBtn.textContent = "Tentar de novo";
   } else {
-    flag.textContent = "salvo " + haQuanto(S.atualizadoEm);
+    flag.textContent = "salvo neste navegador · " + haQuanto(S.atualizadoEm);
     saveBtn.dataset.state = "clean"; saveBtn.textContent = "Salvo";
   }
 }
@@ -572,49 +545,11 @@ function toast(txt, bad){
   t.className = "toast show" + (bad ? " bad" : "");
   clearTimeout(t._t); t._t = setTimeout(() => { t.className = "toast" + (bad?" bad":""); }, 3400);
 }
-
-function docWithState(st){
-  const json = JSON.stringify(st).replace(/</g, "\\u003c");
-  const out = PRISTINE.replace(
-    /(<script type="application\/json" id="app-state">)[\s\S]*?(<\/script>)/,
-    (m,a,b) => a + "\n" + json + "\n" + b
-  );
-  return "<!doctype html>\n" + out;
-}
-
 function persist(){
   S.atualizadoEm = new Date().toISOString();
-  try{ localStorage.setItem(LSKEY, JSON.stringify(S)); }catch(e){}
   dirty = true; updateSaveUI();
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(salvar, 2500);
-}
-async function salvar(manual){
-  clearTimeout(saveTimer);
-  if(saving) return;
-  if(!dirty && !manual) return;
-  if(!artifactTried){
-    artifactTried = true;
-    try{ artifactNS = (window.claude && claude.use) ? await claude.use("artifact") : null; }catch(e){ artifactNS = null; }
-  }
-  if(!artifactNS){
-    soLocal = true; dirty = false; updateSaveUI();
-    if(manual) toast("Esta cópia não pode publicar. Os dados ficam neste navegador — baixe o backup em Plano.", true);
-    return;
-  }
-  saving = true; updateSaveUI();
-  const eraDirty = dirty;
-  dirty = false;                       /* otimista: o publish recarrega a página */
-  try{
-    await artifactNS.publish(docWithState(S));
-    saving = false; soLocal = false; updateSaveUI();
-    if(manual) toast("Salvo. Seus dados vão junto com a página, em qualquer aparelho.");
-  }catch(err){
-    saving = false;
-    if(err && err.code === "conflict"){ flag.textContent = "recarregando…"; return; }
-    dirty = eraDirty; soLocal = true; updateSaveUI();
-    if(manual) toast("Não deu para salvar agora. Os dados seguem neste navegador — tente de novo.", true);
-  }
+  saveTimer = setTimeout(() => gravar(false), 900);
 }
 function commit(){ persist(); render(); }
 
@@ -646,7 +581,22 @@ const gastoCat     = (mes,cat) => { const k=filhosDe(cat);
 const variavelTotal= mes => lancsDo(mes).reduce((a,l)=>a+(+l.valor||0),0);
 const metasTotal   = () => S.categorias.reduce((a,c)=>a+(+c.meta||0),0);
 const baseTotal    = () => S.categorias.reduce((a,c)=>a+(+c.base||0),0);
+const temHistorico = mes => mesesComDados(mes).length > 0;
 const catsLanc     = () => S.categorias.reduce((a,c)=>a.concat([c], S.subcats.filter(x=>x.pai===c.id)), []);
+/* referencia = media dos ultimos meses com lancamento, fora o mes que se olha */
+function mesesComDados(exceto){
+  return [...new Set(S.lancamentos.map(l=>l.mes))].filter(m=>m!==exceto).sort();
+}
+function mediaCat(id, exceto){
+  const ms = mesesComDados(exceto).slice(-3);
+  if(!ms.length) return null;
+  return Math.round(ms.reduce((a,m)=>a+gastoCat(m,id),0)/ms.length);
+}
+function refVar(mes){
+  const ms = mesesComDados(mes).slice(-3);
+  if(!ms.length) return variavelTotal(mes);
+  return Math.round(ms.reduce((a,m)=>a+S.lancamentos.filter(l=>l.mes===m).reduce((x,l)=>x+(+l.valor||0),0),0)/ms.length);
+}
 const nomeCat      = id => (S.categorias.find(c=>c.id===id)||S.subcats.find(c=>c.id===id)||{nome:id}).nome;
 /* roda fn com S apontando para outro estado — usado pelo simulador */
 function withState(st, fn){ const old = S; S = st; try{ return fn(); } finally { S = old; } }
@@ -668,7 +618,7 @@ function resumo(mes){
   return {liq, fx, pc, vr, saiu:fx+pc+vr, sobra:liq-(fx+pc+vr)};
 }
 function projecao(nMeses){
-  const start = mi(S.mesAtual), meta = metasTotal(), base = baseTotal(), fx = fixosTotal();
+  const start = mi(S.mesAtual), meta = metasTotal(), base = refVar(S.mesAtual), fx = fixosTotal();
   const out=[];
   for(let i=0;i<nMeses;i++){
     const mes = mk(start+i), liq = liquidoEm(mes), pc = parcelasTotal(mes);
@@ -686,6 +636,25 @@ function renderPainel(){
   const mes = S.mesAtual, r = resumo(mes);
   const root = document.getElementById("tab-painel");
   root.innerHTML = "";
+
+  if(!r.liq && !r.saiu){
+    root.appendChild(el(`
+      <div class="card">
+        <h2 style="margin-bottom:8px">Seu mês ainda está em branco</h2>
+        <p class="prose" style="margin-bottom:16px; max-width:60ch">
+          Comece dizendo quanto entra e quais contas chegam todo mês. Depois é só ir lançando
+          os gastos conforme eles acontecem — o painel se monta sozinho.
+        </p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button class="btn" data-go="renda">Dizer quanto entra</button>
+          <button class="btn ghost" data-go="sim">Montar contas e tetos</button>
+        </div>
+      </div>`));
+    root.querySelectorAll("[data-go]").forEach(b => b.onclick = () => {
+      tab = b.dataset.go; render(); window.scrollTo({top:0, behavior:"instant"});
+    });
+    return;
+  }
 
   const sobraCls = r.sobra >= 0 ? "pos" : "neg";
   root.appendChild(el(`
@@ -799,8 +768,8 @@ function renderPainel(){
     const cat = S.categorias.find(c=>c.id===l.cat);
     const row = el(`
       <div class="row row-lanc">
-        <span class="datechip num">${l.dia ? String(l.dia).padStart(2,"0")+"/"+mShort(l.mes).split("/")[0] : "planilha"}</span>
-        <span class="nm">${esc(cat?cat.nome:l.cat)}${l.nota && l.nota!=="planilha" ? ' <span style="color:var(--muted);font-weight:400">· '+esc(l.nota)+'</span>' : ""}</span>
+        <span class="datechip num">${l.dia ? String(l.dia).padStart(2,"0")+"/"+mShort(l.mes).split("/")[0] : "sem data"}</span>
+        <span class="nm">${esc(cat?cat.nome:l.cat)}${l.nota ? ' <span style="color:var(--muted);font-weight:400">· '+esc(l.nota)+'</span>' : ""}</span>
         <span class="num money">${BRL2.format(l.valor)}</span>
         <button class="btn danger" aria-label="Apagar lançamento">×</button>
       </div>`);
@@ -818,6 +787,19 @@ function renderLancar(){
   const root = document.getElementById("tab-lancar");
   root.innerHTML = "";
   const mes = S.mesAtual;
+  if(!S.categorias.length){
+    root.appendChild(el(`
+      <div class="card">
+        <h2 style="margin-bottom:8px">Antes, crie suas categorias</h2>
+        <p class="prose" style="margin-bottom:16px; max-width:60ch">
+          Mercado, transporte, lazer — os grupos em que seu dinheiro escorre. Você monta os seus
+          no <b>Simulador</b> e depois lança os gastos aqui.
+        </p>
+        <button class="btn" id="goSim">Criar categorias</button>
+      </div>`));
+    root.querySelector("#goSim").onclick = () => { tab = "sim"; render(); window.scrollTo({top:0, behavior:"instant"}); };
+    return;
+  }
   const lista = catsLanc();
   if(!draft.cat || !lista.some(c => c.id === draft.cat)) draft.cat = lista[0].id;
   const today = new Date();
@@ -891,6 +873,176 @@ function renderLancar(){
   root.appendChild(resumoCats);
 }
 
+/* ============ primeiro uso ============ */
+let setupDraft = null;
+function renderSetup(){
+  const root = document.getElementById("tab-setup");
+  root.innerHTML = "";
+  if(!setupDraft) setupDraft = { liquido:"", bruto:"", fixos:[], cats:[], parcelas:[] };
+  const D = setupDraft;
+
+  const card = el(`
+    <div class="card">
+      <div class="card-head" style="margin-bottom:6px">
+        <h2>Vamos montar o seu mês</h2>
+        <span class="hint">leva uns 3 minutos · dá para mudar tudo depois</span>
+      </div>
+      <p class="prose" style="margin-bottom:22px; max-width:62ch">
+        Preencha o que souber de cabeça. Nada aqui precisa estar exato — o app serve justamente
+        para você descobrir os números certos com o tempo.
+      </p>
+
+      <h3 style="margin-bottom:4px">1 · Quanto entra por mês</h3>
+      <p class="prose" style="margin-bottom:12px">O valor que realmente cai na sua conta, já com os descontos.</p>
+      <div class="grid2" style="max-width:520px">
+        <div class="field">
+          <label for="setLiq">Líquido por mês</label>
+          <input id="setLiq" class="num" type="number" min="0" step="50" placeholder="0" value="${esc(D.liquido)}">
+        </div>
+        <div class="field">
+          <label for="setBru">Bruto <span style="text-transform:none; letter-spacing:0; font-weight:400">(opcional)</span></label>
+          <input id="setBru" class="num" type="number" min="0" step="50" placeholder="0" value="${esc(D.bruto)}">
+        </div>
+      </div>
+
+      <h3 style="margin:28px 0 4px">2 · Contas que chegam todo mês</h3>
+      <p class="prose" style="margin-bottom:12px">Toque nas que você tem e coloque o valor. Some as que faltarem no botão do fim.</p>
+      <div class="catchips" id="sugFixos" style="margin-bottom:14px"></div>
+      <div class="rows" id="listFixos"></div>
+      <div style="margin-top:10px"><button class="btn ghost sm" id="addFixoSet">+ outra conta</button></div>
+
+      <h3 style="margin:28px 0 4px">3 · Onde o dinheiro escorre</h3>
+      <p class="prose" style="margin-bottom:12px">
+        Categorias de gasto do dia a dia. O <strong>teto</strong> é quanto você quer se permitir por mês —
+        pode deixar em branco agora e decidir depois de ver o primeiro mês.
+      </p>
+      <div class="catchips" id="sugCats" style="margin-bottom:14px"></div>
+      <div class="rows" id="listCats"></div>
+      <div style="margin-top:10px"><button class="btn ghost sm" id="addCatSet">+ outra categoria</button></div>
+
+      <h3 style="margin:28px 0 4px">4 · Parcelas <span style="font-weight:400; color:var(--muted); font-size:.85rem">— opcional</span></h3>
+      <p class="prose" style="margin-bottom:12px">Coisas que você paga em X vezes e um dia acabam. É o que faz sua sobra crescer sozinha.</p>
+      <div class="rows" id="listParc"></div>
+      <div style="margin-top:10px"><button class="btn ghost sm" id="addParcSet">+ parcela</button></div>
+
+      <div class="totrow" style="margin-top:26px"><span>Sobra estimada</span><span class="num" id="setSobra">—</span></div>
+      <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+        <button class="btn" id="setGo">Começar a usar</button>
+        <button class="btn ghost sm" id="setSkip">pular e começar vazio</button>
+      </div>
+    </div>`);
+
+  const sf = card.querySelector("#sugFixos"), sc = card.querySelector("#sugCats");
+  const lf = card.querySelector("#listFixos"), lc = card.querySelector("#listCats"), lp = card.querySelector("#listParc");
+
+  SUG_FIXOS.forEach(nome => {
+    const on = D.fixos.some(f => f.nome === nome);
+    const b = el(`<button type="button" aria-pressed="${on}">${esc(nome)}</button>`);
+    b.onclick = () => {
+      const i = D.fixos.findIndex(f => f.nome === nome);
+      if(i >= 0) D.fixos.splice(i,1); else D.fixos.push({id:uid(), nome, valor:0, ativo:true});
+      renderSetup();
+    };
+    sf.appendChild(b);
+  });
+  SUG_CATS.forEach(g => {
+    const on = D.cats.some(c => c.nome === g.nome);
+    const b = el(`<button type="button" aria-pressed="${on}">${esc(g.nome)}</button>`);
+    b.onclick = () => {
+      const i = D.cats.findIndex(c => c.nome === g.nome);
+      if(i >= 0) D.cats.splice(i,1);
+      else D.cats.push({id:uid(), nome:g.nome, tipo:"teto", meta:0, nota:g.nota});
+      renderSetup();
+    };
+    sc.appendChild(b);
+  });
+
+  const linha = (obj, campos, box, onDel) => {
+    const row = el(`<div class="row simedit" style="grid-template-columns:${campos.grid}"></div>`);
+    campos.itens.forEach(f => {
+      const inp = el(f.html);
+      inp.addEventListener("input", e => { f.set(e.target.value); if(f.recalc !== false) totais(); });
+      row.appendChild(inp);
+    });
+    const del = el(`<button class="btn danger" aria-label="Remover">×</button>`);
+    del.onclick = onDel;
+    row.appendChild(del);
+    box.appendChild(row);
+  };
+
+  if(!D.fixos.length) lf.appendChild(el(`<p class="empty">Nenhuma conta fixa ainda.</p>`));
+  D.fixos.forEach(f => linha(f, {
+    grid: "1fr 116px 34px",
+    itens: [
+      {html:`<input class="nm plain" type="text" placeholder="Nome da conta" value="${esc(f.nome)}">`, set:v=>{f.nome=v;}, recalc:false},
+      {html:`<input class="num money" type="number" min="0" step="10" placeholder="0" value="${f.valor||""}">`, set:v=>{f.valor=+v||0;}}
+    ]}, lf, () => { D.fixos = D.fixos.filter(x=>x!==f); renderSetup(); }));
+
+  if(!D.cats.length) lc.appendChild(el(`<p class="empty">Nenhuma categoria ainda.</p>`));
+  D.cats.forEach(c => linha(c, {
+    grid: "1fr 116px 34px",
+    itens: [
+      {html:`<input class="nm plain" type="text" placeholder="Nome da categoria" value="${esc(c.nome)}">`, set:v=>{c.nome=v;}, recalc:false},
+      {html:`<input class="num money" type="number" min="0" step="10" placeholder="teto" value="${c.meta||""}">`, set:v=>{c.meta=+v||0;}}
+    ]}, lc, () => { D.cats = D.cats.filter(x=>x!==c); renderSetup(); }));
+
+  if(!D.parcelas.length) lp.appendChild(el(`<p class="empty">Nenhuma parcela — melhor assim.</p>`));
+  D.parcelas.forEach(pp => linha(pp, {
+    grid: "1fr 104px 58px 58px 34px",
+    itens: [
+      {html:`<input class="nm plain" type="text" placeholder="O que é" value="${esc(pp.nome)}">`, set:v=>{pp.nome=v;}, recalc:false},
+      {html:`<input class="num money" type="number" min="0" step="10" placeholder="valor" value="${pp.valor||""}">`, set:v=>{pp.valor=+v||0;}},
+      {html:`<input class="num money" type="number" min="1" step="1" title="parcela atual" value="${pp.num}">`, set:v=>{pp.num=Math.max(1,+v||1);}},
+      {html:`<input class="num money" type="number" min="1" step="1" title="total de parcelas" value="${pp.total}">`, set:v=>{pp.total=Math.max(1,+v||1);}}
+    ]}, lp, () => { D.parcelas = D.parcelas.filter(x=>x!==pp); renderSetup(); }));
+
+  const foco = sel => { const ns = card.querySelectorAll(sel); if(ns.length) ns[ns.length-1].focus(); };
+  card.querySelector("#addFixoSet").onclick = () => { D.fixos.push({id:uid(), nome:"", valor:0, ativo:true}); renderSetup(); foco("#listFixos input[type=text]"); };
+  card.querySelector("#addCatSet").onclick  = () => { D.cats.push({id:uid(), nome:"", tipo:"teto", meta:0, nota:""}); renderSetup(); foco("#listCats input[type=text]"); };
+  card.querySelector("#addParcSet").onclick = () => { D.parcelas.push({id:uid(), nome:"", valor:0, num:1, total:12, mesRef:MES_HOJE}); renderSetup(); foco("#listParc input[type=text]"); };
+
+  const liq = card.querySelector("#setLiq"), bru = card.querySelector("#setBru");
+  liq.addEventListener("input", e => { D.liquido = e.target.value; totais(); });
+  bru.addEventListener("input", e => { D.bruto = e.target.value; });
+
+  function totais(){
+    const l = +D.liquido || 0;
+    const f = D.fixos.reduce((a,x)=>a+(+x.valor||0),0);
+    const t = D.cats.reduce((a,x)=>a+(+x.meta||0),0);
+    const pc = D.parcelas.reduce((a,x)=>a+(+x.valor||0),0);
+    const sobra = l - f - t - pc;
+    const n = card.querySelector("#setSobra");
+    n.textContent = l ? signed(sobra) : "informe quanto entra";
+    n.className = "num " + (l ? (sobra >= 0 ? "pos" : "neg") : "");
+  }
+  totais();
+
+  card.querySelector("#setGo").onclick = () => {
+    const l = +D.liquido || 0;
+    if(!l){ toast("Falta dizer quanto entra por mês.", true); liq.focus(); return; }
+    S.renda.degraus = [{ id:uid(), mes:MES_HOJE, bruto:(+D.bruto||l), liquido:l, rotulo:"Salário atual" }];
+    S.fixos    = D.fixos.filter(f => f.nome.trim() || f.valor).map(f => ({...f, nome:f.nome.trim() || "Conta"}));
+    S.categorias = D.cats.filter(c => c.nome.trim()).map(c => ({...c, nome:c.nome.trim()}));
+    S.parcelas = D.parcelas.filter(pp => pp.nome.trim() || pp.valor).map(pp => ({...pp, nome:pp.nome.trim() || "Parcela", mesRef:MES_HOJE}));
+    S.configurado = true;
+    setupDraft = null; tab = "painel"; commit();
+    toast("Pronto. Agora é só ir lançando os gastos.");
+  };
+  card.querySelector("#setSkip").onclick = () => {
+    S.renda.degraus = [{ id:uid(), mes:MES_HOJE, bruto:0, liquido:0, rotulo:"Salário atual" }];
+    S.configurado = true; setupDraft = null; tab = "renda"; commit();
+  };
+  root.appendChild(card);
+
+  root.appendChild(el(`
+    <div class="callout">
+      <strong>Só você vê isto.</strong> O que você digitar fica gravado apenas neste navegador,
+      neste aparelho. A página não envia nada para lugar nenhum — nem para quem te mandou o link,
+      nem para a internet. Em compensação, se você limpar os dados do navegador, some. Por isso,
+      quando terminar de preencher, baixe o backup lá na aba <strong>Plano</strong>.
+    </div>`));
+}
+
 /* ============ render: SIMULADOR ============ */
 let sim = null;
 function simCopia(){ if(!sim) sim = JSON.parse(JSON.stringify(S)); return sim; }
@@ -930,7 +1082,7 @@ function renderSim(){
           <span class="n" id="simSaiuN">fixos + parcelas + tetos</span>
         </div>
         <div class="tile" style="box-shadow:none">
-          <span class="k">Contra o app atual</span>
+          <span class="k">Contra o que está salvo</span>
           <span class="v num" id="simDelta">—</span>
           <span class="n" id="simDeltaN"></span>
         </div>
@@ -1075,6 +1227,7 @@ function renderSim(){
   const rbT = cT.querySelector("#rowsTetos");
   W.categorias.forEach(c => {
     const gasto = calc(()=>gastoCat(mes, c.id));
+    const med   = calc(()=>mediaCat(c.id, mes));
     const livre = c.tipo === "livre";
     const teto  = +c.meta || 0;
     const maxv  = Math.max(Math.ceil((Math.max(c.base||0, teto) * 1.6) / 100) * 100, 600);
@@ -1094,7 +1247,7 @@ function renderSim(){
         <button class="btn danger" data-del aria-label="Apagar categoria">×</button>
         <input type="range" min="0" max="${maxv}" step="10" value="${teto}" aria-label="Ajustar ${esc(c.nome)}">
         <span class="cmp">
-          <span>gastou <b class="num">${money(gasto)}</b> em ${esc(mShort(mes))}${c.base?` · planilha <b class="num">${money(c.base)}</b>`:""}</span>
+          <span>gastou <b class="num">${money(gasto)}</b> em ${esc(mShort(mes))}${med!=null?` · média <b class="num">${money(med)}</b>`:""}</span>
           <span class="num" data-delta></span>
         </span>
       </div>`);
@@ -1150,8 +1303,9 @@ function renderSim(){
   root.appendChild(el(`
     <div class="callout">
       <strong>Como funciona:</strong> tudo aqui mexe numa cópia. Enquanto você não clicar em
-      <strong>Aplicar ao app</strong>, seus lançamentos, fixos e parcelas de verdade continuam intactos —
+      <strong>Aplicar ao app</strong>, seus lançamentos, contas e parcelas de verdade continuam intactos —
       pode apagar, inventar e exagerar à vontade. <strong>Descartar</strong> volta tudo ao que está salvo.
+      É aqui também que você cria e renomeia suas contas, parcelas e categorias.
     </div>`));
 
   /* ---------- cálculo ---------- */
@@ -1215,10 +1369,11 @@ function renderSim(){
     });
     rbT.querySelectorAll(".simrow").forEach(rw => {
       const c = W.categorias.find(x => x.id === rw.dataset.cat); if(!c) return;
-      const d = (+c.base||0) - (+c.meta||0);
+      const md = calc(()=>mediaCat(c.id, mes));
+      const d = md == null ? null : md - (+c.meta||0);
       const n = rw.querySelector("[data-delta]");
-      n.textContent = !c.base ? "categoria nova" : (d === 0 ? "igual à planilha" : (d > 0 ? "corta " + money(d) : "sobe " + money(-d)));
-      n.style.color = !c.base ? "var(--muted)" : (d > 0 ? "var(--good-ink)" : (d < 0 ? "var(--serious-ink)" : "var(--muted)"));
+      n.textContent = d == null ? "sem histórico ainda" : (d === 0 ? "igual à sua média" : (d > 0 ? "corta " + money(d) : "sobe " + money(-d)));
+      n.style.color = d == null ? "var(--muted)" : (d > 0 ? "var(--good-ink)" : (d < 0 ? "var(--serious-ink)" : "var(--muted)"));
       const g = calc(()=>gastoCat(mes, c.id));
       rw.style.background = (c.tipo!=="livre" && g > (+c.meta||0))
         ? "color-mix(in srgb, var(--critical) 7%, transparent)" : "";
@@ -1266,10 +1421,10 @@ function renderFixos(){
 
   const fc = el(`
     <div class="card">
-      <div class="card-head"><h2>Custos fixos</h2><span class="hint">todo mês, sem data para acabar</span></div>
+      <div class="card-head"><h2>Contas fixas</h2><span class="hint">todo mês, sem data para acabar</span></div>
       <div class="rows"></div>
       <div class="totrow"><span>Total fixo</span><span class="num">${money(fixosTotal())}</span></div>
-      <div style="margin-top:14px"><button class="btn ghost sm" id="addFixo">+ adicionar custo fixo</button></div>
+      <div style="margin-top:14px"><button class="btn ghost sm" id="addFixo">+ adicionar conta fixa</button></div>
     </div>`);
   const fb = fc.querySelector(".rows");
   S.fixos.forEach(f => {
@@ -1340,6 +1495,26 @@ function renderRenda(){
   root.innerHTML = "";
   const mes = S.mesAtual, bruto = brutoEm(mes), liq = liquidoEm(mes);
   const degraus = S.renda.degraus.slice().sort((a,b)=>mi(a.mes)-mi(b.mes));
+  if(!degraus.length){
+    const c = el(`
+      <div class="card">
+        <h2 style="margin-bottom:8px">Quanto entra por mês?</h2>
+        <p class="prose" style="margin-bottom:16px; max-width:60ch">O valor que cai na conta, já com os descontos.</p>
+        <div class="grid2" style="max-width:460px; margin-bottom:16px">
+          <div class="field"><label for="q1">Líquido</label><input id="q1" class="num" type="number" min="0" step="50" placeholder="0"></div>
+          <div class="field"><label for="q2">Bruto (opcional)</label><input id="q2" class="num" type="number" min="0" step="50" placeholder="0"></div>
+        </div>
+        <button class="btn" id="q3">Salvar</button>
+      </div>`);
+    c.querySelector("#q3").onclick = () => {
+      const l = +c.querySelector("#q1").value || 0;
+      if(!l){ toast("Coloque quanto entra por mês.", true); return; }
+      S.renda.degraus.push({id:uid(), mes:S.mesAtual, bruto:(+c.querySelector("#q2").value||l), liquido:l, rotulo:"Salário atual"});
+      commit();
+    };
+    root.appendChild(c);
+    return;
+  }
 
   root.appendChild(el(`
     <div class="tiles">
@@ -1422,44 +1597,59 @@ function renderPlano(){
   const root = document.getElementById("tab-plano");
   root.innerHTML = "";
   const mes = S.mesAtual, N = 14, proj = projecao(N), fx = fixosTotal();
+  const liqH = liquidoEm(mes), pcH = parcelasTotal(mes), teto = metasTotal();
   const acum = proj.reduce((a,p)=>a+p.plano, 0);
-  const acumAtual = proj.reduce((a,p)=>a+p.atual, 0);
   const hoje = proj[0];
-  const cortes = baseTotal() - metasTotal();
+  const ref  = refVar(mes);
+  const temHist = temHistorico(mes);
+
+  if(!liqH){
+    root.appendChild(el(`
+      <div class="card"><p class="empty">
+        Preencha quanto entra por mês na aba <b>Renda</b> e o plano aparece aqui.
+      </p></div>`));
+    return;
+  }
 
   root.appendChild(el(`
     <div class="tiles">
       <div class="tile hero">
         <div class="stripe" style="background:${acum>=0?"var(--good)":"var(--critical)"}"></div>
-        <span class="k">Reserva em ${N} meses, seguindo o plano</span>
+        <span class="k">Se seguir os tetos, em ${N} meses você junta</span>
         <span class="v num ${acum>=0?"pos":"neg"}">${signed(acum)}</span>
-        <span class="n">sem mudar nada: <span class="num">${signed(acumAtual)}</span></span>
+        <span class="n">${acum>=0 ? "somando o que sobra todo mês" : "é o quanto você ficaria devendo — os tetos precisam descer"}</span>
       </div>
-      <div class="tile"><span class="k">Sobra hoje</span><span class="v num ${hoje.atual>=0?"pos":"neg"}">${signed(hoje.atual)}</span><span class="n">no ritmo atual de gastos</span></div>
-      <div class="tile"><span class="k">Sobra com o plano</span><span class="v num ${hoje.plano>=0?"pos":"neg"}">${signed(hoje.plano)}</span><span class="n">já neste mês</span></div>
+      <div class="tile">
+        <span class="k">Sobra com os tetos</span>
+        <span class="v num ${hoje.plano>=0?"pos":"neg"}">${signed(hoje.plano)}</span>
+        <span class="n">em ${esc(mShort(mes))}</span>
+      </div>
+      <div class="tile">
+        <span class="k">${temHist ? "Sobra no ritmo atual" : "Já gasto neste mês"}</span>
+        <span class="v num ${temHist ? ((liqH-fx-pcH-ref)>=0?"pos":"neg") : ""}">${temHist ? signed(liqH-fx-pcH-ref) : money(variavelTotal(mes))}</span>
+        <span class="n">${temHist ? "média dos últimos meses: "+money(ref) : "lance seus gastos para comparar"}</span>
+      </div>
     </div>`));
 
-  /* --- chart --- */
+  /* ---------- gráfico ---------- */
   const W=760, H=290, PL=54, PR=16, PT=26, PB=42;
   const iw = W-PL-PR, ih = H-PT-PB;
-  const vals = proj.flatMap(p=>[p.plano,p.atual]);
+  const vals = proj.flatMap(p => temHist ? [p.plano, p.atual] : [p.plano]);
   const vmax = Math.max(...vals, 0), vmin = Math.min(...vals, 0);
   const pad = (vmax-vmin)*0.12 || 200;
   const yhi = vmax+pad, ylo = vmin-pad;
   const y = v => PT + (yhi-v)/(yhi-ylo)*ih;
   const bw = iw/proj.length, bar = Math.min(30, bw*0.5);
   const y0 = y(0);
-
   const ticks = [];
-  const stepT = Math.max(500, Math.ceil((yhi-ylo)/5/500)*500);
+  const stepT = Math.max(200, Math.ceil((yhi-ylo)/5/200)*200);
   for(let t=Math.ceil(ylo/stepT)*stepT; t<=yhi; t+=stepT) ticks.push(t);
 
   const bars = proj.map((p,i)=>{
     const cx = PL + bw*i + bw/2;
     const yy = p.plano>=0 ? y(p.plano) : y0;
     const hh = Math.max(2, Math.abs(y(p.plano)-y0));
-    const col = p.plano>=0 ? "var(--good)" : "var(--critical)";
-    return `<rect class="bar" data-i="${i}" x="${(cx-bar/2).toFixed(1)}" y="${yy.toFixed(1)}" width="${bar}" height="${hh.toFixed(1)}" rx="4" fill="${col}"/>`;
+    return `<rect class="bar" data-i="${i}" x="${(cx-bar/2).toFixed(1)}" y="${yy.toFixed(1)}" width="${bar}" height="${hh.toFixed(1)}" rx="4" fill="${p.plano>=0?"var(--good)":"var(--critical)"}"/>`;
   }).join("");
   const linePts = proj.map((p,i)=> (PL+bw*i+bw/2).toFixed(1)+","+y(p.atual).toFixed(1)).join(" ");
   const dots = proj.map((p,i)=>`<circle cx="${(PL+bw*i+bw/2).toFixed(1)}" cy="${y(p.atual).toFixed(1)}" r="3.2" fill="var(--surface)" stroke="var(--ink-2)" stroke-width="2"/>`).join("");
@@ -1468,20 +1658,19 @@ function renderPlano(){
     <div class="card">
       <div class="card-head">
         <h2>Os próximos ${N} meses</h2>
-        <span class="hint">sobra mensal, em reais</span>
+        <span class="hint">quanto sobra por mês, em reais</span>
       </div>
       <div class="legend" style="margin:0 0 10px">
-        <div><i style="background:var(--good)"></i>Com o plano <span style="color:var(--muted)">(metas + parcelas quitando + aumentos)</span></div>
-        <div><i style="background:var(--ink-2); border-radius:99px; width:9px; height:9px"></i>Sem mudar nada</div>
+        <div><i style="background:var(--good)"></i>Seguindo os tetos</div>
+        ${temHist ? `<div><i style="background:var(--ink-2); border-radius:99px; width:9px; height:9px"></i>No ritmo dos últimos meses</div>` : ""}
       </div>
       <div class="chartbox">
         <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Sobra mensal projetada para os próximos ${N} meses">
           ${ticks.map(t=>`<line x1="${PL}" x2="${W-PR}" y1="${y(t).toFixed(1)}" y2="${y(t).toFixed(1)}" stroke="var(--grid)" stroke-width="1"/>
-            <text x="${PL-9}" y="${(y(t)+4).toFixed(1)}" text-anchor="end" font-size="10.5" fill="var(--muted)" font-family="IBM Plex Mono, monospace">${t===0?"0":(t/1000).toFixed(t%1000?1:0)+"k"}</text>`).join("")}
+            <text x="${PL-9}" y="${(y(t)+4).toFixed(1)}" text-anchor="end" font-size="10.5" fill="var(--muted)" font-family="IBM Plex Mono, monospace">${t===0?"0":(Math.abs(t)>=1000?(t/1000).toFixed(t%1000?1:0)+"k":t)}</text>`).join("")}
           <line x1="${PL}" x2="${W-PR}" y1="${y0.toFixed(1)}" y2="${y0.toFixed(1)}" stroke="var(--axis)" stroke-width="1.5"/>
           ${bars}
-          <polyline points="${linePts}" fill="none" stroke="var(--ink-2)" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round"/>
-          ${dots}
+          ${temHist ? `<polyline points="${linePts}" fill="none" stroke="var(--ink-2)" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round"/>${dots}` : ""}
           ${proj.map((p,i)=>`<text x="${(PL+bw*i+bw/2).toFixed(1)}" y="${H-PB+18}" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono, monospace">${mShort(p.mes)}</text>`).join("")}
           ${proj.map((p,i)=>`<rect class="hit" data-i="${i}" x="${(PL+bw*i).toFixed(1)}" y="${PT}" width="${bw.toFixed(1)}" height="${ih}" fill="transparent"/>`).join("")}
         </svg>
@@ -1490,13 +1679,12 @@ function renderPlano(){
       <div style="margin-top:12px"><button class="btn ghost sm" id="tblBtn" aria-expanded="false">ver os números</button></div>
       <div id="tblBox" hidden>
         <table class="data">
-          <thead><tr><th>Mês</th><th>Líquido</th><th>Fixos</th><th>Parcelas</th><th>Variáveis</th><th>Sobra</th><th>Sem mudar</th></tr></thead>
+          <thead><tr><th>Mês</th><th>Entra</th><th>Fixos</th><th>Parcelas</th><th>Tetos</th><th>Sobra</th></tr></thead>
           <tbody>
             ${proj.map(p=>`<tr>
               <td>${mShort(p.mes)}</td><td class="num">${money(p.liq)}</td><td class="num">${money(p.fx)}</td>
-              <td class="num">${money(p.pc)}</td><td class="num">${money(metasTotal())}</td>
-              <td class="num ${p.plano>=0?"pos":"neg"}">${signed(p.plano)}</td>
-              <td class="num ${p.atual>=0?"pos":"neg"}">${signed(p.atual)}</td></tr>`).join("")}
+              <td class="num">${money(p.pc)}</td><td class="num">${money(teto)}</td>
+              <td class="num ${p.plano>=0?"pos":"neg"}">${signed(p.plano)}</td></tr>`).join("")}
           </tbody>
         </table>
       </div>
@@ -1506,8 +1694,8 @@ function renderPlano(){
   chart.querySelectorAll(".hit").forEach(h => {
     const show = e => {
       const p = proj[+h.dataset.i];
-      tip.innerHTML = `<b>${mShort(p.mes)}</b> · líquido <b>${money(p.liq)}</b><br>
-        com o plano <b>${signed(p.plano)}</b><br>sem mudar <b>${signed(p.atual)}</b>` +
+      tip.innerHTML = `<b>${mShort(p.mes)}</b> · entra <b>${money(p.liq)}</b><br>sobra <b>${signed(p.plano)}</b>` +
+        (temHist ? `<br>no ritmo atual <b>${signed(p.atual)}</b>` : "") +
         (p.pc ? `<br><span style="opacity:.7">parcelas ${money(p.pc)}</span>` : `<br><span style="opacity:.7">sem parcelas</span>`);
       const r = box.getBoundingClientRect();
       const x = (e.clientX ?? r.left+r.width/2) - r.left + box.scrollLeft;
@@ -1524,147 +1712,151 @@ function renderPlano(){
   tb.onclick = () => { const o = tbx.hidden; tbx.hidden = !o; tb.setAttribute("aria-expanded", String(o)); tb.textContent = o ? "esconder os números" : "ver os números"; };
   root.appendChild(chart);
 
-  /* --- diagnosis --- */
-  const cats = S.categorias.map(c=>({...c, corte:(+c.base||0)-(+c.meta||0)}))
-    .sort((a,b) => ((a.tipo==="livre")-(b.tipo==="livre")) || (b.corte-a.corte));
-  const liqH = liquidoEm(mes);
-  const carro = (S.fixos.find(f=>/carro/i.test(f.nome))?.valor||0)
-              + (S.parcelas.find(p=>/seguro/i.test(p.nome))?.valor||0)
-              + (S.categorias.find(c=>c.id==="gasolina")?.base||0);
-  const moradia = (S.fixos.find(f=>/aluguel/i.test(f.nome))?.valor||0) + (S.fixos.find(f=>/condom/i.test(f.nome))?.valor||0);
-  const COMIDA = (S.categorias.find(c=>c.id==="mercado")?.base||0) + (S.subcats.find(c=>c.id==="delivery")?.base||0);
+  /* ---------- comprometimento ---------- */
+  const preso = fx + pcH;
+  const pctPreso = preso/liqH*100;
+  const grande = S.fixos.filter(f=>f.ativo).map(f=>({nome:f.nome, v:+f.valor||0, tipo:"fixo"}))
+    .concat(S.parcelas.filter(p=>parcelaAtiva(p,mes)).map(p=>({nome:p.nome, v:+p.valor||0, tipo:"parcela"})))
+    .concat(S.categorias.map(c=>({nome:c.nome, v:+c.meta||0, tipo:"teto"})))
+    .filter(x=>x.v>0).sort((a,b)=>b.v-a.v).slice(0,6);
+  const maxG = grande.length ? grande[0].v : 1;
 
   root.appendChild(el(`
     <div class="card">
-      <div class="card-head"><h2>O diagnóstico</h2><span class="hint">com base no mês da planilha</span></div>
-      <p class="prose" style="margin-bottom:14px">
-        Você recebe <strong class="num">${money(liqH)}</strong> líquidos e gasta <strong class="num">${money(fx+parcelasTotal(mes)+baseTotal())}</strong>.
-        A conta não fecha por <strong class="num neg">${money(Math.abs(hoje.atual))}</strong> todo mês — e isso vira dívida no cartão,
-        que vira parcela nova, que aperta o mês seguinte. Quebrar esse ciclo é a prioridade número um.
-      </p>
+      <div class="card-head"><h2>O peso de cada coisa</h2><span class="hint">sobre o que entra: ${money(liqH)}</span></div>
+      <div class="meters" style="margin-bottom:16px">
+        ${grande.map(g=>`
+          <div class="meter">
+            <span class="mname">${esc(g.nome)} <span class="chip-state st-livre">${g.tipo}</span></span>
+            <span class="mval num">${money(g.v)} <em>${(g.v/liqH*100).toFixed(0)}%</em></span>
+            <span class="track"><span class="fill" style="width:${(g.v/maxG*100).toFixed(1)}%; background:var(--ord-2)"></span></span>
+          </div>`).join("")}
+      </div>
       <div class="levers">
-        <div class="lever">
-          <span class="k">Moradia</span><span class="v num">${money(moradia)}</span>
-          <span class="n">${(moradia/liqH*100).toFixed(0)}% do líquido · aluguel + condomínio</span>
+        <div class="lever ${pctPreso>60?"":"win"}">
+          <span class="k">Comprometido antes do mês começar</span>
+          <span class="v num">${pctPreso.toFixed(0)}%</span>
+          <span class="n">fixos ${money(fx)} + parcelas ${money(pcH)}</span>
         </div>
         <div class="lever">
-          <span class="k">Carro</span><span class="v num">${money(carro)}</span>
-          <span class="n">${(carro/liqH*100).toFixed(0)}% do líquido · parcela + seguro + gasolina</span>
+          <span class="k">Livre para o dia a dia</span>
+          <span class="v num">${money(liqH-preso)}</span>
+          <span class="n">é daqui que saem mercado, transporte e lazer</span>
         </div>
         <div class="lever">
-          <span class="k">Comida</span><span class="v num">${money(COMIDA)}</span>
-          <span class="n">${(COMIDA/liqH*100).toFixed(0)}% do líquido · mercado + delivery</span>
-        </div>
-        <div class="lever">
-          <span class="k">Sobra para o resto</span><span class="v num">${money(liqH-moradia-carro)}</span>
-          <span class="n">depois de moradia e carro</span>
+          <span class="k">Tetos somados</span>
+          <span class="v num ${teto>liqH-preso?"neg":"pos"}">${money(teto)}</span>
+          <span class="n">${teto>liqH-preso ? "não cabem no que sobrou" : "cabem, sobram "+money(liqH-preso-teto)}</span>
         </div>
       </div>
       <p class="prose" style="margin-top:14px">
-        Moradia e carro juntos comem <strong class="num">${((moradia+carro)/liqH*100).toFixed(0)}%</strong> do que entra.
-        A regra prática é ficar abaixo de 50% nos dois somados — você está acima, e é por isso que qualquer
-        deslize no mercado ou na farmácia estoura o mês inteiro.
+        ${pctPreso > 60
+          ? `Com <strong>${pctPreso.toFixed(0)}%</strong> comprometido antes do mês começar, sobra pouco espaço para escolher.
+             Acima de 60% qualquer imprevisto vira dívida. As duas saídas são baixar uma conta fixa grande
+             (as três primeiras da lista acima) ou esperar as parcelas quitarem.`
+          : `<strong>${pctPreso.toFixed(0)}%</strong> comprometido é um lugar confortável — abaixo dos 60% em que o mês
+             começa a apertar. O que decide seu resultado agora é o dia a dia, não as contas fixas.`}
       </p>
     </div>`));
 
-  /* --- where to cut --- */
+  /* ---------- onde cortar ---------- */
+  const cats = S.categorias.map(c => {
+    const g = gastoCat(mes, c.id), m = mediaCat(c.id, mes), t = +c.meta||0;
+    return {c, g, m, t, excesso: (m!=null && c.tipo!=="livre") ? m-t : 0};
+  }).sort((a,b)=>b.excesso-a.excesso);
+
   const cc = el(`
     <div class="card">
-      <div class="card-head"><h2>Onde cortar, em ordem de impacto</h2><span class="hint num">${signed(cortes)}/mês · <a href="#" id="irSim" style="color:var(--accent-ink)">ajustar no simulador</a></span></div>
+      <div class="card-head"><h2>Onde dá para apertar</h2><span class="hint">${temHist ? "teto contra a sua média" : "aparece quando você tiver alguns meses lançados"}</span></div>
       <ol class="actions"></ol>
     </div>`);
   const cb = cc.querySelector("ol");
-  const dicas = {
-    mercado:"Dez compras no mês passado, várias delas pequenas. Uma lista fechada antes de sair de casa e uma ida por semana é onde este corte aparece — é a maior sozinha.",
-    farmacia:"Sem teto, só acompanhando. O mês da planilha teve uma compra de R$ 420 que puxou tudo; se for remédio de uso contínuo, vale olhar genérico ou programa de desconto do laboratório.",
-    lazer:"O teto de R$ 800 cobre delivery, rolê e o que antes era \u201cextras\u201d. Lançar o delivery separado continua valendo: são seis pedidos no mês, quatro deles de R$ 43, um hábito de dia fixo. É o primeiro lugar a apertar se o teto começar a estourar antes do dia 25.",
-    gasolina:"Teto de R$ 500 já conta os fins de semana de surf. Neste mês você gastou R$ 368 porque não foi — não use isso como referência."
-  };
-  cats.forEach(c => {
+  if(!S.categorias.length){
+    cb.appendChild(el(`<li><div><div class="t">Nenhuma categoria ainda</div><div class="d">Crie as suas no <b>Simulador</b> para começar a acompanhar.</div></div><span class="amt" style="color:var(--muted)">—</span></li>`));
+  } else cats.forEach(({c,g,m,t,excesso}) => {
     if(c.tipo === "livre"){
-      cb.appendChild(el(`<li><div><div class="t">${esc(c.nome)} — sem teto</div><div class="d">${esc(dicas[c.id]||"")}</div></div><span class="amt" style="color:var(--muted)">acompanhar</span></li>`));
+      cb.appendChild(el(`<li><div><div class="t">${esc(c.nome)} — sem teto</div><div class="d">Você escolheu só acompanhar esta. ${m!=null?"Sua média é "+money(m)+" por mês.":""}</div></div><span class="amt" style="color:var(--muted)">acompanhar</span></li>`));
       return;
     }
-    if(c.corte <= 0){
-      cb.appendChild(el(`<li><div><div class="t">${esc(c.nome)}: teto de ${money(c.meta)}</div><div class="d">${esc(dicas[c.id]||"Está dentro do teto.")}</div></div><span class="amt" style="color:var(--muted)">${c.corte===0?"igual":"folga "+money(-c.corte)}</span></li>`));
+    if(m == null){
+      cb.appendChild(el(`<li><div><div class="t">${esc(c.nome)}: teto de ${money(t)}</div><div class="d">Gastou ${money(g)} até agora neste mês. Depois de um mês fechado dá para comparar com a sua média.</div></div><span class="amt" style="color:var(--muted)">novo</span></li>`));
+      return;
+    }
+    if(excesso <= 0){
+      cb.appendChild(el(`<li><div><div class="t">${esc(c.nome)}: teto de ${money(t)}</div><div class="d">Sua média é ${money(m)} — já cabe no teto. Não precisa mexer.</div></div><span class="amt" style="color:var(--muted)">${excesso===0?"no limite":"folga "+money(-excesso)}</span></li>`));
       return;
     }
     cb.appendChild(el(`
       <li>
         <div>
-          <div class="t">${esc(c.nome)}: de ${money(c.base)} para ${money(c.meta)}</div>
-          <div class="d">${esc(dicas[c.id]||"")}</div>
+          <div class="t">${esc(c.nome)}: de ${money(m)} para ${money(t)}</div>
+          <div class="d">É a diferença entre o que você costuma gastar e o teto que escolheu. ${excesso > liqH*0.05 ? "É um dos cortes que mais mudam o seu mês." : "Corte pequeno, mas soma."}</div>
         </div>
-        <span class="amt pos">${signed(c.corte)}</span>
+        <span class="amt pos">${signed(excesso)}</span>
       </li>`));
   });
-  const irSim = cc.querySelector("#irSim");
-  if(irSim) irSim.onclick = e => { e.preventDefault(); tab="sim"; render(); window.scrollTo({top:0,behavior:"instant"}); };
   root.appendChild(cc);
 
-  /* --- timeline --- */
+  /* ---------- linha do tempo ---------- */
   const marcos = [];
-  const parcOrd = S.parcelas.slice().sort((a,b)=>mi(parcelaFim(a))-mi(parcelaFim(b)));
-  parcOrd.forEach(p => marcos.push({mes:parcelaFim(p), tipo:"parcela", txt:`<b>${esc(p.nome)}</b> quita`, sub:`+${money(p.valor)} por mês a partir do mês seguinte`}));
-  S.renda.degraus.slice(1).forEach((d,i) => marcos.push({mes:d.mes, tipo:"renda", txt:`<b>${esc(d.rotulo)}</b>`, sub:`+${money(d.liquido - S.renda.degraus[i].liquido)} por mês no líquido`}));
+  S.parcelas.slice().sort((a,b)=>mi(parcelaFim(a))-mi(parcelaFim(b)))
+    .forEach(p => marcos.push({mes:parcelaFim(p), txt:`<b>${esc(p.nome)}</b> quita`, sub:`+${money(p.valor)} por mês a partir do mês seguinte`}));
+  const degs = S.renda.degraus.slice().sort((a,b)=>mi(a.mes)-mi(b.mes));
+  degs.slice(1).forEach((d,i) => marcos.push({mes:d.mes, txt:`<b>${esc(d.rotulo)}</b>`, sub:`+${money(d.liquido - degs[i].liquido)} por mês no líquido`}));
   marcos.sort((a,b)=>mi(a.mes)-mi(b.mes));
-  root.appendChild(el(`
+  if(marcos.length) root.appendChild(el(`
     <div class="card">
-      <div class="card-head"><h2>Linha do tempo</h2><span class="hint">tudo que melhora sua sobra sozinho</span></div>
+      <div class="card-head"><h2>Linha do tempo</h2><span class="hint">o que melhora sua sobra sozinho</span></div>
       <div class="steps">
         ${marcos.map(m=>`<div class="step"><span class="when">${mShort(m.mes)}</span><span class="what">${m.txt}<span class="sub">${esc(m.sub)}</span></span></div>`).join("")}
       </div>
     </div>`));
 
-  /* --- earnings strategy --- */
+  /* ---------- reserva ---------- */
+  const despMes = fx + pcH + teto;
+  const alvo = despMes * 6;
+  const sobraM = hoje.plano;
+  const meses = sobraM > 0 ? Math.ceil(alvo/sobraM) : null;
   root.appendChild(el(`
     <div class="card">
-      <div class="card-head"><h2>Estratégia para ganhar mais</h2><span class="hint">o outro lado da conta</span></div>
-      <ol class="actions">
-        <li>
-          <div><div class="t">Trate a promoção como um projeto com prazo</div>
-          <div class="d">Você tem até dezembro. Escreva os 3 resultados que a promoção exige, marque uma conversa com seu gestor ainda este mês para confirmar que são esses mesmos, e leve evidência a cada checkpoint. Promoção que depende de percepção costuma escorregar; promoção com critério escrito, não.</div></div>
-          <span class="amt pos">+R$ 689/mês</span>
-        </li>
-        <li>
-          <div><div class="t">Peça o aumento de 5% por escrito antes de setembro</div>
-          <div class="d">Ele já está no seu planejamento, mas ainda não caiu na conta. Confirme a data efetiva — um mês de atraso custa ${money(326)}.</div></div>
-          <span class="amt pos">+R$ 326/mês</span>
-        </li>
-        <li>
-          <div><div class="t">Reserve 6h por semana para uma segunda fonte</div>
-          <div class="d">Com o líquido atual, cada R$ 500/mês extra equivale a um aumento bruto de ~7%. Freelas na sua área, um projeto pequeno recorrente ou consultoria pontual chegam nesse valor mais rápido do que uma promoção — e não dependem de aprovação de ninguém.</div></div>
-          <span class="amt pos">+R$ 500/mês</span>
-        </li>
-        <li>
-          <div><div class="t">Venda o que está parado</div>
-          <div class="d">Não é renda recorrente, mas é o jeito mais rápido de matar as parcelas que ainda faltam e antecipar a virada do gráfico acima em vários meses.</div></div>
-          <span class="amt" style="color:var(--muted)">uma vez</span>
-        </li>
-        <li>
-          <div><div class="t">Depois que a sobra ficar positiva, automatize</div>
-          <div class="d">Transferência automática no dia do salário para uma conta separada, no valor da sobra prevista. Guardar o que sobra no fim do mês nunca funciona; sobrar o que já foi guardado, sim. Primeiro alvo: ${money(fx+parcelasTotal(mes)+metasTotal())} — um mês inteiro de despesas como reserva de emergência.</div></div>
-          <span class="amt pos">reserva</span>
-        </li>
-      </ol>
+      <div class="card-head"><h2>Reserva de emergência</h2><span class="hint">o primeiro objetivo, antes de qualquer outro</span></div>
+      <div class="levers">
+        <div class="lever win">
+          <span class="k">Alvo</span><span class="v num">${money(alvo)}</span>
+          <span class="n">6 meses de despesa (${money(despMes)} por mês)</span>
+        </div>
+        <div class="lever">
+          <span class="k">Guardando ${money(Math.max(0,sobraM))}/mês</span>
+          <span class="v num">${meses ? meses + (meses===1?" mês":" meses") : "—"}</span>
+          <span class="n">${meses ? "para chegar lá" : "primeiro a sobra precisa ficar positiva"}</span>
+        </div>
+      </div>
+      <p class="prose" style="margin-top:14px">
+        ${sobraM > 0
+          ? `Programe a transferência para o dia em que o dinheiro cai, não para o fim do mês.
+             Guardar o que sobra quase nunca funciona; sobrar o que já foi guardado, sim.`
+          : `Enquanto a sobra estiver negativa, guardar não adianta — o dinheiro volta como dívida no cartão.
+             Use o <strong>Simulador</strong> para achar a combinação de tetos que fecha o mês no azul primeiro.`}
+      </p>
     </div>`));
 
-  /* --- backup --- */
+  /* ---------- backup ---------- */
   const ec = el(`
     <div class="card">
-      <div class="card-head"><h2>Backup e dados</h2><span class="hint">salvo automaticamente · ${esc(haQuanto(S.atualizadoEm))}</span></div>
+      <div class="card-head"><h2>Backup e dados</h2><span class="hint">gravado ${esc(haQuanto(S.atualizadoEm))}</span></div>
       <p class="prose" style="margin-bottom:14px">
-        Tudo que você lança fica gravado na própria página — não precisa exportar nada para consultar depois,
-        nem para eu ver seus números. O botão <strong>Salvar</strong> lá em cima força a gravação na hora,
-        e o mesmo dado abre em qualquer aparelho. Os arquivos abaixo são a cópia de segurança:
-        o <strong>JSON</strong> restaura o app inteiro, o <strong>CSV</strong> serve para abrir na planilha.
+        Tudo que você preenche fica <strong>só neste navegador, neste aparelho</strong>. Nada é enviado
+        para a internet nem para quem te passou o link. O outro lado disso é que, se você limpar os dados
+        do navegador ou trocar de celular, some. Baixe o <strong>JSON</strong> de vez em quando: é ele que
+        traz tudo de volta, e é como você leva seus dados para outro aparelho.
       </p>
       <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
-        <button class="btn ghost sm" id="jsonBtn">Baixar backup completo (JSON)</button>
+        <button class="btn ghost sm" id="jsonBtn">Baixar backup (JSON)</button>
         <button class="btn ghost sm" id="csvBtn">Baixar lançamentos (CSV)</button>
         <label class="btn ghost sm filebtn">Restaurar de um backup
           <input type="file" accept="application/json,.json" id="restoreIn">
         </label>
+        <button class="btn ghost sm" id="wipeBtn" style="margin-left:auto; color:var(--critical-ink)">Apagar tudo</button>
       </div>
     </div>`);
 
@@ -1675,17 +1867,15 @@ function renderPlano(){
     try{ await dl.save({filename, data}); toast("Arquivo gerado: " + filename); }
     catch(e){ if(!(e && e.code === "cancelled")) toast("O download não foi concluído.", true); }
   };
-
   ec.querySelector("#csvBtn").onclick = () => {
     const rows = [["mes","dia","categoria","valor","nota"]].concat(
       S.lancamentos.map(l => [l.mes, l.dia||"", nomeCat(l.cat), String(l.valor).replace(".",","), l.nota||""])
     );
-    baixar("sobra-do-mes-lancamentos.csv",
+    baixar("meu-mes-lancamentos.csv",
       "﻿" + rows.map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(";")).join("\n"));
   };
   ec.querySelector("#jsonBtn").onclick = () =>
-    baixar("sobra-do-mes-" + S.mesAtual + ".json", JSON.stringify(S, null, 2));
-
+    baixar("meu-mes-" + S.mesAtual + ".json", JSON.stringify(S, null, 2));
   ec.querySelector("#restoreIn").onchange = e => {
     const f = e.target.files && e.target.files[0];
     e.target.value = "";
@@ -1700,22 +1890,37 @@ function renderPlano(){
         toast("Arquivo inválido — não é um backup deste app.", true); return;
       }
       const n = novo.lancamentos.length;
-      if(!confirm("Restaurar este backup (" + n + " lançamentos)?\n\nOs dados que estão no app agora serão substituídos.")) return;
-      S = migra(novo);
-      tab = "painel";
-      commit();
+      if(!confirm("Restaurar este backup (" + n + " lançamentos)?\n\nO que está no app agora será substituído.")) return;
+      S = migra(novo); tab = "painel"; commit();
       toast("Backup restaurado: " + n + " lançamentos.");
     };
     rd.readAsText(f);
   };
+  ec.querySelector("#wipeBtn").onclick = () => {
+    if(!confirm("Apagar tudo e começar do zero?\n\nIsto remove seus lançamentos, contas e tetos deste navegador. Não dá para desfazer.")) return;
+    S = estadoVazio(); setupDraft = null; tab = "painel"; commit();
+    toast("Tudo apagado. Recomeçando do zero.");
+  };
   root.appendChild(ec);
 }
+
 
 /* ============ shell ============ */
 let tab = "painel";
 function render(){
   const _ml = mLabel(S.mesAtual);
   document.getElementById("mLabel").textContent = _ml.charAt(0).toUpperCase() + _ml.slice(1);
+  const setup = !S.configurado;
+  document.getElementById("tabsNav").hidden = setup;
+  document.getElementById("monthNav").hidden = setup;
+  document.getElementById("tab-setup").hidden = !setup;
+  if(setup){
+    ["painel","lancar","sim","fixos","renda","plano"].forEach(t => { document.getElementById("tab-"+t).hidden = true; });
+    renderSetup();
+    updateSaveUI();
+    return;
+  }
+  document.getElementById("tab-setup").innerHTML = "";
   document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab===tab)));
   ["painel","lancar","sim","fixos","renda","plano"].forEach(t => { document.getElementById("tab-"+t).hidden = (t!==tab); });
   if(tab==="painel") renderPainel();
@@ -1725,12 +1930,12 @@ function render(){
   if(tab==="renda")  renderRenda();
   if(tab==="plano")  renderPlano();
 }
-document.getElementById("tabs").addEventListener("click", e => {
+document.getElementById("tabsNav").addEventListener("click", e => {
   const b = e.target.closest("button[data-tab]"); if(!b) return;
   tab = b.dataset.tab; render(); window.scrollTo({top:0, behavior:"instant"});
 });
-saveBtn.onclick = () => salvar(true);
-setInterval(() => { if(!dirty && !saving) updateSaveUI(); }, 30000);
+saveBtn.onclick = () => gravar(true);
+setInterval(() => { if(!dirty) updateSaveUI(); }, 30000);
 const irMes = d => { S.mesAtual = mk(mi(S.mesAtual)+d); if(sim) sim.mesAtual = S.mesAtual; commit(); };
 document.getElementById("prevM").onclick = () => irMes(-1);
 document.getElementById("nextM").onclick = () => irMes(1);
