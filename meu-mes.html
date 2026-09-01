@@ -1039,7 +1039,8 @@ function renderSetup(){
       <strong>Só você vê isto.</strong> O que você digitar fica gravado apenas neste navegador,
       neste aparelho. A página não envia nada para lugar nenhum — nem para quem te mandou o link,
       nem para a internet. Em compensação, se você limpar os dados do navegador, some. Por isso,
-      quando terminar de preencher, baixe o backup lá na aba <strong>Plano</strong>.
+      quando terminar de preencher, copie o backup lá na aba <strong>Plano</strong> e mande
+      num e-mail para você mesma.
     </div>`));
 }
 
@@ -1844,56 +1845,100 @@ function renderPlano(){
   const ec = el(`
     <div class="card">
       <div class="card-head"><h2>Backup e dados</h2><span class="hint">gravado ${esc(haQuanto(S.atualizadoEm))}</span></div>
-      <p class="prose" style="margin-bottom:14px">
+      <p class="prose" style="margin-bottom:16px">
         Tudo que você preenche fica <strong>só neste navegador, neste aparelho</strong>. Nada é enviado
         para a internet nem para quem te passou o link. O outro lado disso é que, se você limpar os dados
-        do navegador ou trocar de celular, some. Baixe o <strong>JSON</strong> de vez em quando: é ele que
-        traz tudo de volta, e é como você leva seus dados para outro aparelho.
+        do navegador ou trocar de celular, some. O backup abaixo é o seu seguro: copie o texto e mande
+        num e-mail para você mesma de vez em quando.
       </p>
-      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
-        <button class="btn ghost sm" id="jsonBtn">Baixar backup (JSON)</button>
-        <button class="btn ghost sm" id="csvBtn">Baixar lançamentos (CSV)</button>
-        <label class="btn ghost sm filebtn">Restaurar de um backup
+
+      <h3 style="margin-bottom:8px">Guardar</h3>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px">
+        <button class="btn ghost sm" id="genJson">Backup completo</button>
+        <button class="btn ghost sm" id="genCsv">Só os lançamentos (planilha)</button>
+      </div>
+      <textarea id="bkOut" readonly rows="5" placeholder="Toque num dos botões acima para gerar o texto do backup."
+        style="width:100%; font-family:'IBM Plex Mono',monospace; font-size:.72rem; line-height:1.5;
+               background:var(--surface-2); border:1px solid var(--line-strong); border-radius:9px;
+               padding:10px 12px; color:var(--ink); resize:vertical"></textarea>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px">
+        <button class="btn sm" id="copyBk">Copiar</button>
+        <span class="prose" id="bkHint" style="font-size:.8rem"></span>
+      </div>
+
+      <h3 style="margin:26px 0 8px">Restaurar</h3>
+      <p class="prose" style="margin-bottom:10px">
+        Cole aqui o backup completo que você guardou — ou escolha o arquivo, se salvou como <code>.json</code>.
+      </p>
+      <textarea id="bkIn" rows="3" placeholder="Cole aqui o texto do backup…"
+        style="width:100%; font-family:'IBM Plex Mono',monospace; font-size:.72rem; line-height:1.5;
+               background:var(--surface-2); border:1px solid var(--line-strong); border-radius:9px;
+               padding:10px 12px; color:var(--ink); resize:vertical"></textarea>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px">
+        <button class="btn ghost sm" id="restoreBtn">Restaurar do texto</button>
+        <label class="btn ghost sm filebtn">Escolher arquivo
           <input type="file" accept="application/json,.json" id="restoreIn">
         </label>
         <button class="btn ghost sm" id="wipeBtn" style="margin-left:auto; color:var(--critical-ink)">Apagar tudo</button>
       </div>
     </div>`);
 
-  const baixar = async (filename, data) => {
-    let dl = null;
-    try{ dl = (window.claude && claude.use) ? await claude.use("downloads") : null; }catch(e){}
-    if(!dl){ toast("Download indisponível nesta visualização.", true); return; }
-    try{ await dl.save({filename, data}); toast("Arquivo gerado: " + filename); }
-    catch(e){ if(!(e && e.code === "cancelled")) toast("O download não foi concluído.", true); }
-  };
-  ec.querySelector("#csvBtn").onclick = () => {
+  const out = ec.querySelector("#bkOut"), hint = ec.querySelector("#bkHint");
+  const csv = () => {
     const rows = [["mes","dia","categoria","valor","nota"]].concat(
       S.lancamentos.map(l => [l.mes, l.dia||"", nomeCat(l.cat), String(l.valor).replace(".",","), l.nota||""])
     );
-    baixar("meu-mes-lancamentos.csv",
-      "﻿" + rows.map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(";")).join("\n"));
+    return rows.map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(";")).join("\n");
   };
-  ec.querySelector("#jsonBtn").onclick = () =>
-    baixar("meu-mes-" + S.mesAtual + ".json", JSON.stringify(S, null, 2));
+  ec.querySelector("#genJson").onclick = () => {
+    out.value = JSON.stringify(S);
+    hint.textContent = "Backup completo pronto — é este que restaura o app inteiro.";
+    out.focus(); out.setSelectionRange(0, 0);
+  };
+  ec.querySelector("#genCsv").onclick = () => {
+    out.value = csv();
+    hint.textContent = "Cole numa planilha (Excel, Google Sheets) para ver os gastos em tabela.";
+    out.focus(); out.setSelectionRange(0, 0);
+  };
+  ec.querySelector("#copyBk").onclick = async () => {
+    if(!out.value){ toast("Gere um backup primeiro.", true); return; }
+    try{
+      await navigator.clipboard.writeText(out.value);
+      toast("Copiado. Cole num e-mail para você mesma.");
+      return;
+    }catch(e){}
+    try{
+      out.focus(); out.select(); out.setSelectionRange(0, out.value.length);
+      if(document.execCommand("copy")){ toast("Copiado. Cole num e-mail para você mesma."); return; }
+    }catch(e){}
+    out.focus(); out.select();
+    toast("Selecionei o texto — use copiar do seu teclado.", true);
+  };
+
+  const aplicarBackup = (txt) => {
+    let novo = null;
+    try{ novo = JSON.parse(txt); }
+    catch(err){ toast("Texto inválido — não parece um backup deste app.", true); return; }
+    if(!novo || !Array.isArray(novo.lancamentos) || !Array.isArray(novo.categorias) || !Array.isArray(novo.fixos)){
+      toast("Texto inválido — não parece um backup deste app.", true); return;
+    }
+    const n = novo.lancamentos.length;
+    if(!confirm("Restaurar este backup (" + n + " lançamentos)?\n\nO que está no app agora será substituído.")) return;
+    S = migra(novo); tab = "painel"; commit();
+    toast("Backup restaurado: " + n + " lançamentos.");
+  };
+  ec.querySelector("#restoreBtn").onclick = () => {
+    const t = ec.querySelector("#bkIn").value.trim();
+    if(!t){ toast("Cole o texto do backup primeiro.", true); return; }
+    aplicarBackup(t);
+  };
   ec.querySelector("#restoreIn").onchange = e => {
     const f = e.target.files && e.target.files[0];
     e.target.value = "";
     if(!f) return;
     const rd = new FileReader();
     rd.onerror = () => toast("Não deu para ler o arquivo.", true);
-    rd.onload = () => {
-      let novo = null;
-      try{ novo = JSON.parse(rd.result); }
-      catch(err){ toast("Arquivo inválido — não é um backup deste app.", true); return; }
-      if(!novo || !Array.isArray(novo.lancamentos) || !Array.isArray(novo.categorias) || !Array.isArray(novo.fixos)){
-        toast("Arquivo inválido — não é um backup deste app.", true); return;
-      }
-      const n = novo.lancamentos.length;
-      if(!confirm("Restaurar este backup (" + n + " lançamentos)?\n\nO que está no app agora será substituído.")) return;
-      S = migra(novo); tab = "painel"; commit();
-      toast("Backup restaurado: " + n + " lançamentos.");
-    };
+    rd.onload  = () => aplicarBackup(rd.result);
     rd.readAsText(f);
   };
   ec.querySelector("#wipeBtn").onclick = () => {
