@@ -33,7 +33,7 @@ tasks:
     due_time: "12:15"
     size: grande
     weight: 30
-    status: todo
+    status: done
     steps:
       - "Revisar fontes, coleta e armazenamento de dados"
       - "Revisar tratamento e pré-processamento"
@@ -51,7 +51,7 @@ tasks:
     due_time: "08:40"
     size: grande
     weight: 30
-    status: todo
+    status: done
     steps:
       - "Definir o tema (o mesmo do seminário final)"
       - "Levantar e ler as referências"
@@ -105,20 +105,29 @@ tasks:
 
   - id: ml-project
     course: machine-learning
-    title: "Projeto final: desenvolver e escrever"
+    title: "Projeto final: relatório e código"
     type: paper
-    due: 2026-10-05
-    due_time: "23:59"
+    due: 2026-10-03
+    due_time: "23:40"
     size: grande
-    weight: 30
+    weight: 20
     status: todo
     steps:
-      - "Escolher o problema e o conjunto de dados"
-      - "Definir um baseline"
-      - "Treinar e ajustar os modelos"
-      - "Avaliar os resultados"
+      - "Ler o Project_ML.pdf antes de começar"
+      - "Escolher o tema: opção 1 (recomendada) ou opção 2"
+      - "Confirmar se a escolha do tema e do grupo na planilha ainda está aberta"
+      - "Desenvolver o projeto"
       - "Escrever o relatório"
-    notes: "ESTIMATED. 40% of the grade. Deliberately dated two days before the presentation so the work is finished before the slides."
+      - "Enviar relatório e código pelo Moodle"
+    notes: >
+      CONFIRMADO pelo Moodle: vence sábado 03/10 às 23:40. O projeto vale 40%
+      da disciplina, divididos em 50% relatório e código (estes 20%) e 50%
+      apresentação. A opção 1 é recomendada, especialmente para quem for cursar
+      Inteligência Artificial Generativa. ATENÇÃO: o texto do enunciado se
+      contradiz, diz "03/10, sexta-feira, às 23:00", mas 03/10/2026 é sábado e
+      o campo de vencimento marca 23:40; e manda escolher o tema na planilha
+      "até dia 24 de junho", data que já passou. Parece texto reaproveitado de
+      outra edição. Confirme com o professor se a planilha ainda vale.
 
   - id: ml-project-pres
     course: machine-learning
@@ -127,12 +136,18 @@ tasks:
     due: 2026-10-07
     due_time: "12:00"
     size: medio
-    weight: 10
+    weight: 20
     status: todo
     steps:
       - "Montar os slides a partir do relatório"
-      - "Ensaiar a apresentação"
-    notes: "ESTIMATED, week 9 of 9, Wednesday slot."
+      - "Ensaiar"
+      - "Confirmar a data com o professor"
+    notes: >
+      Vale 20%, a metade dos 40% do projeto, e conta também as respostas às
+      perguntas do professor. DATA A CONFIRMAR: o enunciado diz "na aula do dia
+      10/10, quarta-feira", mas 10/10/2026 é sábado e ML tem aula quarta e
+      sexta. Deixei em 07/10, a quarta da semana 9, que é o que bate com o
+      plano de ensino e com "quarta-feira". Pergunte e me diga a data real.
 
   - id: ml-assignments
     course: machine-learning
@@ -147,7 +162,7 @@ tasks:
       - "Perguntar ao prof. Antonelo na aula de quarta"
       - "Anotar datas e formato"
       - "Me mandar aqui no chat para eu cadastrar"
-    notes: "Assignment #1 já está cadastrado (28/08). Faltam as datas do #2 e do #3, que completam os 20%. Perguntar ao prof. Antonelo na quarta."
+    notes: "Assignments #1 (28/08) e #2 (15/09) cadastrados. Falta só a data do #3, que fecha os 20%."
 
   - id: ml-assign-1
     course: machine-learning
@@ -157,7 +172,7 @@ tasks:
     due_time: "22:28"
     size: grande
     weight: 7
-    status: todo
+    status: done
     notes: >
       CONFIRMADO pelo Moodle. Prof. Eric Antonelo. Vale por volta de 7%: os 20%
       de practical assignments divididos entre até três trabalhos. Entrega um
@@ -180,13 +195,35 @@ tasks:
       - "Escrever o relatório em PDF com plots, tabelas, discussão e conclusão"
       - "Colocar print com o nome completo no início do código e zipar tudo"
 
+  - id: ml-assign-2
+    course: machine-learning
+    title: "Assignment #2: Neural network learning"
+    type: reading
+    due: 2026-09-15
+    due_time: "03:15"
+    size: medio
+    weight: 7
+    status: todo
+    steps:
+      - "Ler o PDF do questionário anexado no Moodle"
+      - "Ler o artigo recomendado, Deep Learning (opcional, mas ajuda)"
+      - "Revisar as aulas de Redes Neurais I, Redes Neurais II e CNN"
+      - "Responder o questionário com as suas próprias palavras"
+      - "Enviar pelo Moodle"
+    notes: >
+      CONFIRMADO pelo Moodle. Vence terça 15/09 às 03:15. Segundo dos practical
+      assignments, por volta de 7%. Pré-requisito: as aulas de Redes Neurais I,
+      II e CNN. O enunciado permite usar IA generativa para estudar e revisar
+      conceitos, mas as respostas têm que ser escritas por você e refletir o seu
+      entendimento; pode haver verificação de autoria por amostragem.
+
   # ------------------------------------------------- Inteligência Artificial (60/25/15)
   - id: ia-seminario
     course: ia
-    title: "Seminário"
+    title: "Seminário: slides e apresentação"
     type: presentation
-    due: 2026-09-29
-    due_time: "12:00"
+    due: 2026-10-08
+    due_time: "22:42"
     size: grande
     weight: 25
     status: todo
@@ -195,7 +232,12 @@ tasks:
       - "Levantar a bibliografia"
       - "Montar os slides"
       - "Ensaiar"
-    notes: "ESTIMATED, week 8 of 8, Tuesday slot. 25% of the grade."
+      - "Postar os slides em PDF no Moodle até 08/10"
+      - "Apresentar nos dias 6 ou 8 de outubro"
+    notes: >
+      CONFIRMADO pelo Moodle, era estimativa minha em 29/09. As apresentações
+      são nos dias 6 e 8 de outubro e os slides em PDF vão no Moodle até
+      08/10 às 22:42. 25% da nota.
 
   - id: ia-trabalhos
     course: ia
@@ -277,6 +319,30 @@ tasks:
       - "Ensaiar"
     notes: "ESTIMATED, seminars run in weeks 9-10 (09/10 and 16/10). 20% of the grade."
 
+  - id: sma-tp1
+    course: sma
+    title: "Trabalho Prático 1 (CNP)"
+    type: assignment
+    due: 2026-09-21
+    due_time: "22:59"
+    size: grande
+    weight: 15
+    status: todo
+    steps:
+      - "Ler o enunciado: tp-cnp.pdf, no Moodle"
+      - "Me mandar o PDF para eu detalhar estes passos"
+      - "Modelar o problema com o Contract Net Protocol"
+      - "Implementar em JaCaMo"
+      - "Testar o comportamento dos agentes"
+      - "Escrever o relatório e enviar pelo Moodle"
+    notes: >
+      CONFIRMADO pelo Moodle. Prof. Jomi Hübner, vence segunda 21/09 às 22:59.
+      Pelo nome do arquivo, tp-cnp.pdf, deve ser sobre Contract Net Protocol,
+      o protocolo de negociação por leilão entre agentes. Faz parte dos
+      experimentos práticos, que valem 30%; os 15% aqui são suposição minha,
+      metade, porque não sei quantos trabalhos são. Eu não recebi o PDF, então
+      os passos são a estrutura usual, não o que o professor pediu.
+
   - id: sma-projeto
     course: sma
     title: "Projeto final (JaCaMo)"
@@ -324,7 +390,7 @@ tasks:
     due_time: "23:59"
     size: medio
     weight: 10
-    status: todo
+    status: done
     steps:
       - "Ler Dresner & Stone (2008), 65 páginas, comece cedo"
       - "1. Por que SMA é uma boa abordagem para transporte inteligente?"
@@ -362,7 +428,7 @@ tasks:
     due: 2026-08-25
     due_time: "23:59"
     size: medio
-    status: todo
+    status: done
     steps:
       - "Revisar correlação"
       - "Revisar regressão linear"
@@ -379,7 +445,7 @@ tasks:
     due: 2026-09-01
     due_time: "23:59"
     size: grande
-    status: todo
+    status: done
     steps:
       - "Carregar o conjunto de dados de preço de casas"
       - "Limpar os dados: valores nulos e outliers"
