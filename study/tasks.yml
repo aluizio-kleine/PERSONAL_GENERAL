@@ -254,6 +254,27 @@ tasks:
       - "Me mandar aqui no chat"
     notes: "60% of this discipline is trabalhos práticos with no dates in the plan, the single largest unknown across all five courses. Ask Prof. Hubner Tuesday."
 
+  - id: ia-leitura-2
+    course: ia
+    title: "Segunda Leitura: survey de planejamento"
+    type: reading
+    due: 2026-09-14
+    due_time: "22:42"
+    size: medio
+    weight: 5
+    status: todo
+    steps:
+      - "Ler o artigo indicado no 6-leitura-planning-survey.pdf, no Moodle"
+      - "Me mandar o PDF para eu detalhar as questões aqui"
+      - "Responder as questões"
+      - "Postar as respostas em PDF no Moodle"
+    notes: >
+      CONFIRMADO pelo Moodle. Prof. Jomi Hübner, vence segunda 14/09 às 22:42,
+      respostas em PDF. Pelo nome do arquivo é um survey sobre planejamento
+      automático, que casa com as semanas 4 e 5 do plano de ensino. Eu não
+      recebi o PDF, então não sei as questões e os passos são genéricos.
+      Vale 5%, um terço dos 15% dos questionários de leitura.
+
   - id: ia-leitura-3
     course: ia
     title: "Terceira Leitura: knowledge level"
@@ -306,7 +327,7 @@ tasks:
 
   - id: ia-quest-agi
     course: ia
-    title: "Questionário \"Limites da IA\", 5 questões"
+    title: "Primeira Leitura: \"Limites da IA\", 5 questões"
     type: reading
     due: 2026-08-20
     due_time: "23:59"
@@ -392,7 +413,7 @@ tasks:
     due_time: "12:00"
     size: medio
     weight: 0
-    status: todo
+    status: done
     steps:
       - "Pedir material e gravações ao prof. Hübner"
       - "Semana 1: introdução a SMA"
