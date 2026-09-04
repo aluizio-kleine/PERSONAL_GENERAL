@@ -254,6 +254,30 @@ tasks:
       - "Me mandar aqui no chat"
     notes: "60% of this discipline is trabalhos práticos with no dates in the plan, the single largest unknown across all five courses. Ask Prof. Hubner Tuesday."
 
+  - id: ia-leitura-3
+    course: ia
+    title: "Terceira Leitura: knowledge level"
+    type: reading
+    due: 2026-09-28
+    due_time: "22:42"
+    size: medio
+    weight: 5
+    status: todo
+    steps:
+      - "Ler o artigo indicado no 2-knowledge-level.pdf, no Moodle"
+      - "Me mandar o PDF para eu detalhar as questões aqui"
+      - "Responder as questões"
+      - "Postar as respostas em PDF no Moodle"
+    notes: >
+      CONFIRMADO pelo Moodle. Prof. Jomi Hübner, vence segunda 28/09 às 22:42,
+      respostas postadas em PDF. Pelo nome do arquivo deve ser sobre o
+      Knowledge Level do Newell, que casa com a parte de representação de
+      conhecimento do plano de ensino. Eu não recebi o PDF, então não sei as
+      questões; os passos são genéricos até você me mandar. Os questionários de
+      leitura valem 15% no total e "Terceira Leitura" indica pelo menos três,
+      então dividi em 5% cada, inclusive corrigindo o da AGI que eu havia
+      chutado em 8%.
+
   - id: ia-trabalho-busca
     course: ia
     title: "Primeiro trabalho prático: busca (elevadores)"
@@ -287,7 +311,7 @@ tasks:
     due: 2026-08-20
     due_time: "23:59"
     size: medio
-    weight: 8
+    weight: 5
     status: done
     steps:
       - "Ler o artigo (Agüera y Arcas & Norvig, 2023)"
