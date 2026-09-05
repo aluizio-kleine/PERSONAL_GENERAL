@@ -765,11 +765,10 @@ function renderPainel(){
   const lb = lc.querySelector(".rows");
   if(!ls.length) lb.appendChild(el(`<p class="empty">Nada lançado ainda. Vá em <b>Lançar</b> para começar.</p>`));
   shown.forEach(l => {
-    const cat = S.categorias.find(c=>c.id===l.cat);
     const row = el(`
       <div class="row row-lanc">
         <span class="datechip num">${l.dia ? String(l.dia).padStart(2,"0")+"/"+mShort(l.mes).split("/")[0] : "sem data"}</span>
-        <span class="nm">${esc(cat?cat.nome:l.cat)}${l.nota ? ' <span style="color:var(--muted);font-weight:400">· '+esc(l.nota)+'</span>' : ""}</span>
+        <span class="nm">${esc(nomeCat(l.cat))}${l.nota ? ' <span style="color:var(--muted);font-weight:400">· '+esc(l.nota)+'</span>' : ""}</span>
         <span class="num money">${BRL2.format(l.valor)}</span>
         <button class="btn danger" aria-label="Apagar lançamento">×</button>
       </div>`);
