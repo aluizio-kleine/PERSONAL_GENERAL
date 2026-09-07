@@ -569,7 +569,10 @@ const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<"
 const el = (h) => { const t=document.createElement("template"); t.innerHTML=h.trim(); return t.content.firstElementChild; };
 
 /* ============ model ============ */
-const fixosTotal = () => S.fixos.filter(f=>f.ativo).reduce((a,f)=>a+(+f.valor||0),0);
+const fixoVale = (f, mes) => f.ativo !== false
+  && (!f.de  || mi(mes) >= mi(f.de))
+  && (!f.ate || mi(mes) <= mi(f.ate));
+const fixosTotal = (mes) => S.fixos.filter(f=>fixoVale(f, mes||S.mesAtual)).reduce((a,f)=>a+(+f.valor||0),0);
 const parcelaAtiva = (p, mes) => { const d = mi(mes)-mi(p.mesRef); return d>=0 && d <= (p.total - p.num); };
 const parcelasNo   = mes => S.parcelas.filter(p=>parcelaAtiva(p,mes));
 const parcelasTotal= mes => parcelasNo(mes).reduce((a,p)=>a+(+p.valor||0),0);
@@ -614,14 +617,14 @@ function brutoEm(mes){
   return v;
 }
 function resumo(mes){
-  const liq=liquidoEm(mes), fx=fixosTotal(), pc=parcelasTotal(mes), vr=variavelTotal(mes);
+  const liq=liquidoEm(mes), fx=fixosTotal(mes), pc=parcelasTotal(mes), vr=variavelTotal(mes);
   return {liq, fx, pc, vr, saiu:fx+pc+vr, sobra:liq-(fx+pc+vr)};
 }
 function projecao(nMeses){
-  const start = mi(S.mesAtual), meta = metasTotal(), base = refVar(S.mesAtual), fx = fixosTotal();
+  const start = mi(S.mesAtual), meta = metasTotal(), base = refVar(S.mesAtual);
   const out=[];
   for(let i=0;i<nMeses;i++){
-    const mes = mk(start+i), liq = liquidoEm(mes), pc = parcelasTotal(mes);
+    const mes = mk(start+i), liq = liquidoEm(mes), pc = parcelasTotal(mes), fx = fixosTotal(mes);
     out.push({ mes, liq, pc, fx, plano: liq-fx-pc-meta, atual: liq-fx-pc-base });
   }
   return out;
@@ -1160,15 +1163,19 @@ function renderSim(){
   if(!W.fixos.length) rbF.appendChild(el(`<p class="empty">Nenhum custo fixo neste cenário.</p>`));
   W.fixos.forEach(f => {
     const row = el(`
-      <div class="row simedit" style="grid-template-columns:1fr 116px 34px 34px; ${f.ativo?"":"opacity:.45"}">
+      <div class="row simedit" style="grid-template-columns:1fr 110px 112px 112px 34px 34px; ${calc(()=>fixoVale(f,mes))?"":"opacity:.5"}">
         <input class="nm plain" type="text" value="${esc(f.nome)}">
         ${num(f.valor)}
+        <input type="month" class="num" value="${esc(f.de||"")}" title="começa em" style="padding:6px 8px;font-size:.78rem">
+        <input type="month" class="num" value="${esc(f.ate||"")}" title="termina em" style="padding:6px 8px;font-size:.78rem">
         <button class="btn danger" title="${f.ativo?"Desligar neste cenário":"Religar"}">${f.ativo?"◉":"○"}</button>
         <button class="btn danger" aria-label="Apagar" data-del>×</button>
       </div>`);
-    const [nm, vl] = row.querySelectorAll("input");
+    const [nm, vl, de, ate] = row.querySelectorAll("input");
     nm.addEventListener("input", e => { f.nome = e.target.value; });
     bind(vl, v => { f.valor = +v||0; });
+    de.addEventListener("input",  e => { f.de  = e.target.value || undefined; simRefresh(); });
+    ate.addEventListener("input", e => { f.ate = e.target.value || undefined; simRefresh(); });
     row.querySelectorAll("button")[0].onclick = () => { f.ativo = !f.ativo; renderSim(); };
     row.querySelector("[data-del]").onclick = () => { W.fixos = W.fixos.filter(x=>x.id!==f.id); renderSim(); };
     rbF.appendChild(row);
@@ -1311,11 +1318,11 @@ function renderSim(){
   /* ---------- cálculo ---------- */
   function simRefresh(){
     const r = calc(() => {
-      const fx = fixosTotal(), pc = parcelasTotal(mes), teto = metasTotal(), liq = liquidoEm(mes);
+      const fx = fixosTotal(mes), pc = parcelasTotal(mes), teto = metasTotal(), liq = liquidoEm(mes);
       return {fx, pc, teto, liq, saiu:fx+pc+teto, sobra:liq-fx-pc-teto, base:baseTotal()};
     });
     const real = withState(S, () => {
-      const fx = fixosTotal(), pc = parcelasTotal(S.mesAtual), teto = metasTotal();
+      const fx = fixosTotal(S.mesAtual), pc = parcelasTotal(S.mesAtual), teto = metasTotal();
       return liquidoEm(S.mesAtual) - fx - pc - teto;
     });
     const dif = r.sobra - real;
@@ -1381,8 +1388,8 @@ function renderSim(){
 
     cC.querySelector("#simCen").innerHTML = cenarios.map(cn => {
       const x = calc(() => {
-        const l = liquidoEm(cn.mes), pp = parcelasTotal(cn.mes);
-        return {l, pp, n:parcelasNo(cn.mes).length, sb: l - r.fx - pp - r.teto};
+        const l = liquidoEm(cn.mes), pp = parcelasTotal(cn.mes), fxm = fixosTotal(cn.mes);
+        return {l, pp, fxm, n:parcelasNo(cn.mes).length, sb: l - fxm - pp - r.teto};
       });
       return `<div class="cen">
         <span class="k">${esc(cn.rot)} · ${esc(mShort(cn.mes))}</span>
@@ -1391,7 +1398,7 @@ function renderSim(){
       </div>`;
     }).join("");
     const ult = cenarios[cenarios.length-1];
-    const sbU = calc(() => liquidoEm(ult.mes) - r.fx - parcelasTotal(ult.mes) - r.teto);
+    const sbU = calc(() => liquidoEm(ult.mes) - fixosTotal(ult.mes) - parcelasTotal(ult.mes) - r.teto);
     cC.querySelector("#simProsa").innerHTML =
       `Mantendo este cenário, você sai de <strong class="num">${signed(r.sobra)}</strong> em ${esc(mShort(mes))} ` +
       `para <strong class="num">${signed(sbU)}</strong> por mês em ${esc(mShort(ult.mes))}.`;
@@ -1423,20 +1430,32 @@ function renderFixos(){
     <div class="card">
       <div class="card-head"><h2>Contas fixas</h2><span class="hint">todo mês, sem data para acabar</span></div>
       <div class="rows"></div>
-      <div class="totrow"><span>Total fixo</span><span class="num">${money(fixosTotal())}</span></div>
+      <div class="totrow"><span>Total fixo</span><span class="num">${money(fixosTotal(mes))}</span></div>
       <div style="margin-top:14px"><button class="btn ghost sm" id="addFixo">+ adicionar conta fixa</button></div>
     </div>`);
   const fb = fc.querySelector(".rows");
   S.fixos.forEach(f => {
+    const vale = fixoVale(f, mes);
+    const aviso = !f.ativo ? "desligado"
+      : (f.de && mi(mes) < mi(f.de)) ? "pausado — volta em " + mShort(f.de)
+      : (f.ate && mi(mes) > mi(f.ate)) ? "encerrado em " + mShort(f.ate)
+      : (f.ate ? "até " + mShort(f.ate) : (f.de ? "desde " + mShort(f.de) : ""));
     const row = el(`
-      <div class="row row-fix" style="${f.ativo?"":"opacity:.45"}">
-        <input class="nm" type="text" value="${esc(f.nome)}">
+      <div class="row row-fix simedit" style="grid-template-columns:1fr 116px 118px 118px 34px; ${vale?"":"opacity:.5"}">
+        <span>
+          <input class="nm plain" type="text" value="${esc(f.nome)}">
+          ${aviso ? `<span class="snote" style="display:block;font-size:.75rem;color:${f.de&&mi(mes)<mi(f.de)?"var(--warning-ink)":"var(--muted)"}">${esc(aviso)}</span>` : ""}
+        </span>
         <input class="num money" type="number" min="0" step="10" value="${f.valor}">
-        <button class="btn danger" title="${f.ativo?"Desativar":"Reativar"}">${f.ativo?"◉":"○"}</button>
+        <input type="month" class="num" value="${esc(f.de||"")}" title="começa em (deixe vazio para sempre)" style="padding:6px 8px;font-size:.78rem">
+        <input type="month" class="num" value="${esc(f.ate||"")}" title="termina em (deixe vazio para sempre)" style="padding:6px 8px;font-size:.78rem">
+        <button class="btn danger" title="${f.ativo?"Desativar de vez":"Reativar"}">${f.ativo?"◉":"○"}</button>
       </div>`);
-    const [nm, vl] = row.querySelectorAll("input");
-    nm.onchange = e => { f.nome = e.target.value; commit(); };
-    vl.onchange = e => { f.valor = +e.target.value||0; commit(); };
+    const [nm, vl, de, ate] = row.querySelectorAll("input");
+    nm.onchange  = e => { f.nome = e.target.value; commit(); };
+    vl.onchange  = e => { f.valor = +e.target.value||0; commit(); };
+    de.onchange  = e => { f.de  = e.target.value || undefined; commit(); };
+    ate.onchange = e => { f.ate = e.target.value || undefined; commit(); };
     row.querySelector("button").onclick = () => { f.ativo = !f.ativo; commit(); };
     fb.appendChild(row);
   });
@@ -1480,6 +1499,14 @@ function renderFixos(){
     S.parcelas.push({id:uid(), nome:"Nova parcela", valor:0, num:1, total:12, mesRef:S.mesAtual}); commit();
   };
   root.appendChild(pc);
+
+  root.appendChild(el(`
+    <div class="callout">
+      <strong>Pausar sem apagar:</strong> os campos de mês em cada conta fixa dizem
+      <em>a partir de quando</em> e <em>até quando</em> ela pesa. Uma conta que está pausada e volta
+      depois é só colocar o mês da volta no primeiro campo — a projeção já conta com ela voltando,
+      em vez de fingir que sumiu para sempre.
+    </div>`));
 
   root.appendChild(el(`
     <div class="callout">
@@ -1596,7 +1623,7 @@ function renderRenda(){
 function renderPlano(){
   const root = document.getElementById("tab-plano");
   root.innerHTML = "";
-  const mes = S.mesAtual, N = 14, proj = projecao(N), fx = fixosTotal();
+  const mes = S.mesAtual, N = 14, proj = projecao(N), fx = fixosTotal(mes);
   const liqH = liquidoEm(mes), pcH = parcelasTotal(mes), teto = metasTotal();
   const acum = proj.reduce((a,p)=>a+p.plano, 0);
   const hoje = proj[0];
