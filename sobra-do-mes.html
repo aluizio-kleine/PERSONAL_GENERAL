@@ -329,7 +329,19 @@ input:focus,select:focus{border-color:var(--accent); outline:none; box-shadow:0 
 .row:last-of-type{border-bottom:0}
 .row-fix{grid-template-columns:1fr 116px 34px}
 .row-parc{grid-template-columns:1fr 110px 96px 34px}
-.row-lanc{grid-template-columns:auto 1fr auto 30px}
+.row-lanc{grid-template-columns:auto 1fr auto auto}
+.row-lanc .acoes{display:flex; gap:0}
+.row-lanc-edit{grid-template-columns:104px 1fr 58px 1.2fr auto auto; gap:8px; align-items:center}
+.row-lanc-edit input, .row-lanc-edit select{padding:6px 9px; font-size:.86rem}
+.row-lanc-edit select{background:var(--surface-2); border:1px solid var(--line-strong); border-radius:9px; width:100%}
+@media (max-width:640px){
+  .row-lanc-edit{display:flex !important; flex-wrap:wrap; gap:8px}
+  .row-lanc-edit > [data-n]{flex:1 1 100%; order:5}
+  .row-lanc-edit > select{flex:1 1 130px}
+  .row-lanc-edit > input[data-v]{width:96px}
+  .row-lanc-edit > input[data-d]{width:58px}
+  .row-lanc-edit > button{flex:1 1 0; order:6}
+}
 .row .nm{font-weight:500; font-size:.9rem; overflow:hidden; text-overflow:ellipsis}
 .row input{padding:6px 9px; font-size:.86rem}
 .row .money{text-align:right}
@@ -632,6 +644,19 @@ const mShort = m => { const [y,mm]=m.split("-").map(Number); return MESES[mm-1]+
 const uid = () => Math.random().toString(36).slice(2,9);
 const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const el = (h) => { const t=document.createElement("template"); t.innerHTML=h.trim(); return t.content.firstElementChild; };
+/* aceita "43,90", "43.90", "1.234,56" e "1234,5" */
+function parseVal(t){
+  let x = String(t == null ? "" : t).trim().replace(/[^\d.,-]/g, "");
+  if(!x) return 0;
+  const pontos = (x.match(/\./g) || []).length;
+  if(x.indexOf(",") >= 0) x = x.replace(/\./g, "").replace(",", ".");
+  else if(pontos > 1)     x = x.replace(/\./g, "");
+  return +x || 0;
+}
+const fmtIn = v => (Math.round((+v||0)*100)/100).toString().replace(".", ",");
+/* campo de dinheiro: text + teclado decimal, porque type=number rejeita virgula */
+const inVal = (v, extra) =>
+  `<input type="text" inputmode="decimal" class="num money" value="${fmtIn(v)}"${extra||""}>`;
 
 /* ============ model ============ */
 const fixoVale = (f, mes) => f.ativo !== false
@@ -684,7 +709,39 @@ const STC = {good:"var(--good)", warn:"var(--warning)", bad:"var(--critical)"};
 const STL = {good:"no ritmo", warn:"no limite", bad:"estourou"};
 
 /* ============ render: PAINEL ============ */
-let verTudo = false;
+let verTudo = false, editando = null;
+
+function linhaEdicao(l){
+  const row = el(`
+    <div class="row row-lanc-edit">
+      <input data-v type="text" inputmode="decimal" class="num money" value="${fmtIn(l.valor)}" aria-label="Valor">
+      <select data-c aria-label="Categoria">
+        ${catsLanc().map(c=>`<option value="${esc(c.id)}"${c.id===l.cat?" selected":""}>${esc(c.nome)}</option>`).join("")}
+      </select>
+      <input data-d type="number" min="1" max="31" class="num" value="${l.dia||""}" placeholder="dia" aria-label="Dia">
+      <input data-n type="text" value="${esc(l.nota||"")}" placeholder="descrição" aria-label="Descrição">
+      <button class="btn sm" data-ok>Salvar</button>
+      <button class="btn ghost sm" data-no>Cancelar</button>
+    </div>`);
+  const salvar = () => {
+    const v = parseVal(row.querySelector("[data-v]").value);
+    if(!v || v<=0){ toast("O valor precisa ser maior que zero.", true); row.querySelector("[data-v]").focus(); return; }
+    l.valor = v;
+    l.cat   = row.querySelector("[data-c]").value;
+    l.dia   = +row.querySelector("[data-d]").value || null;
+    l.nota  = row.querySelector("[data-n]").value.trim();
+    editando = null; commit();
+    toast("Lançamento atualizado.");
+  };
+  row.querySelector("[data-ok]").onclick = salvar;
+  row.querySelector("[data-no]").onclick = () => { editando = null; renderPainel(); };
+  row.querySelectorAll("input").forEach(i => i.onkeydown = e => {
+    if(e.key === "Enter") salvar();
+    if(e.key === "Escape"){ editando = null; renderPainel(); }
+  });
+  setTimeout(()=>{ const f=row.querySelector("[data-v]"); if(f){ f.focus(); f.select(); } }, 0);
+  return row;
+}
 function renderPainel(){
   const mes = S.mesAtual, r = resumo(mes);
   const root = document.getElementById("tab-painel");
@@ -799,14 +856,19 @@ function renderPainel(){
   const lb = lc.querySelector(".rows");
   if(!ls.length) lb.appendChild(el(`<p class="empty">Nada lançado ainda. Vá em <b>Lançar</b> para começar.</p>`));
   shown.forEach(l => {
+    if(editando === l.id){ lb.appendChild(linhaEdicao(l)); return; }
     const row = el(`
       <div class="row row-lanc">
         <span class="datechip num">${l.dia ? String(l.dia).padStart(2,"0")+"/"+mShort(l.mes).split("/")[0] : "fatura"}</span>
         <span class="nm">${esc(nomeCat(l.cat))}${l.nota && l.nota!=="planilha" ? ' <span style="color:var(--muted);font-weight:400">· '+esc(l.nota)+'</span>' : ""}</span>
         <span class="num money">${BRL2.format(l.valor)}</span>
-        <button class="btn danger" aria-label="Apagar lançamento">×</button>
+        <span class="acoes">
+          <button class="btn danger" data-ed title="Editar" aria-label="Editar lançamento">✎</button>
+          <button class="btn danger" data-del title="Apagar" aria-label="Apagar lançamento">×</button>
+        </span>
       </div>`);
-    row.querySelector("button").onclick = () => { S.lancamentos = S.lancamentos.filter(x=>x.id!==l.id); commit(); };
+    row.querySelector("[data-ed]").onclick  = () => { editando = l.id; renderPainel(); };
+    row.querySelector("[data-del]").onclick = () => { S.lancamentos = S.lancamentos.filter(x=>x.id!==l.id); commit(); };
     lb.appendChild(row);
   });
   const vt = lc.querySelector("#verTudo");
@@ -832,7 +894,7 @@ function renderLancar(){
       <div style="display:flex; flex-direction:column; gap:16px">
         <div class="field">
           <label for="vIn">Valor</label>
-          <input id="vIn" class="amount-in num" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0,00" value="${esc(draft.valor)}">
+          <input id="vIn" class="amount-in num" type="text" inputmode="decimal" placeholder="0,00" value="${esc(draft.valor)}">
           <div class="quickvals">
             ${[20,43,50,80,120,200].map(v=>`<button type="button" data-v="${v}">+${v}</button>`).join("")}
             <button type="button" data-clear="1">limpar</button>
@@ -855,7 +917,7 @@ function renderLancar(){
   const vIn = card.querySelector("#vIn");
   card.querySelectorAll(".quickvals button").forEach(b => b.onclick = () => {
     if(b.dataset.clear){ vIn.value=""; }
-    else vIn.value = ((+vIn.value||0) + (+b.dataset.v)).toFixed(2).replace(/\.00$/,"");
+    else vIn.value = fmtIn(parseVal(vIn.value) + (+b.dataset.v));
     vIn.focus();
   });
   card.querySelectorAll(".catchips button").forEach(b => b.onclick = () => {
@@ -863,7 +925,7 @@ function renderLancar(){
     card.querySelectorAll(".catchips button").forEach(x => x.setAttribute("aria-pressed", String(x.dataset.cat===draft.cat)));
   });
   const submit = () => {
-    const v = +vIn.value;
+    const v = parseVal(vIn.value);
     if(!v || v<=0){ vIn.focus(); return; }
     S.lancamentos.push({ id:uid(), mes, dia:+card.querySelector("#dIn").value||null, cat:draft.cat, valor:v, nota:card.querySelector("#nIn").value.trim() });
     draft = {cat:draft.cat, valor:"", dia:+card.querySelector("#dIn").value||null, nota:""};
@@ -942,8 +1004,10 @@ function renderSim(){
     </div>`);
   root.appendChild(cabeca);
 
-  const num = (val, on, extra) =>
-    `<input class="num money" type="number" step="${extra&&extra.step||10}" min="${extra&&extra.min!=null?extra.min:0}" value="${val}"${extra&&extra.title?` title="${esc(extra.title)}"`:""}>`;
+  /* dinheiro aceita virgula; contagem (parcela X de Y) continua numerica */
+  const num = (val, on, extra) => (extra && extra.conta)
+    ? `<input class="num money" type="number" step="1" min="${extra.min!=null?extra.min:0}" value="${val}"${extra.title?` title="${esc(extra.title)}"`:""}>`
+    : inVal(val, extra&&extra.title ? ` title="${esc(extra.title)}"` : "");
   const bind = (inp, set) => {
     inp.addEventListener("input", e => { set(e.target.value); simRefresh(); });
   };
@@ -974,8 +1038,8 @@ function renderSim(){
     const [rot, mm, br, lq] = row.querySelectorAll("input");
     rot.addEventListener("input", e => { d.rotulo = e.target.value; });
     mm.addEventListener("input",  e => { d.mes = e.target.value; simRefresh(); });
-    bind(br, v => { d.bruto = +v||0; });
-    bind(lq, v => { d.liquido = +v||0; });
+    bind(br, v => { d.bruto = parseVal(v); });
+    bind(lq, v => { d.liquido = parseVal(v); });
     row.querySelector("button").onclick = () => {
       if(W.renda.degraus.length <= 1){ toast("Você precisa de pelo menos um degrau de salário.", true); return; }
       W.renda.degraus = W.renda.degraus.filter(x=>x.id!==d.id); renderSim();
@@ -1020,7 +1084,7 @@ function renderSim(){
       </div>`);
     const [nm, vl, de, ate] = row.querySelectorAll("input");
     nm.addEventListener("input", e => { f.nome = e.target.value; });
-    bind(vl, v => { f.valor = +v||0; });
+    bind(vl, v => { f.valor = parseVal(v); });
     de.addEventListener("input",  e => { f.de  = e.target.value || undefined; simRefresh(); });
     ate.addEventListener("input", e => { f.ate = e.target.value || undefined; simRefresh(); });
     row.querySelectorAll("button")[0].onclick = () => { f.ativo = !f.ativo; renderSim(); };
@@ -1050,14 +1114,14 @@ function renderSim(){
       <div class="row simedit" style="grid-template-columns:1fr 104px 58px 58px 96px 34px; ${ativa?"":"opacity:.45"}">
         <input class="nm plain" type="text" value="${esc(p.nome)}">
         ${num(p.valor, null, {step:1})}
-        ${num(p.num,   null, {step:1, min:1, title:"parcela atual"})}
-        ${num(p.total, null, {step:1, min:1, title:"total de parcelas"})}
+        ${num(p.num,   null, {conta:1, min:1, title:"parcela atual"})}
+        ${num(p.total, null, {conta:1, min:1, title:"total de parcelas"})}
         <span class="snote" style="text-align:right" data-fim></span>
         <button class="btn danger" aria-label="Apagar parcela">×</button>
       </div>`);
     const [nm, vl, nn, tt] = row.querySelectorAll("input");
     nm.addEventListener("input", e => { p.nome = e.target.value; });
-    bind(vl, v => { p.valor = +v||0; });
+    bind(vl, v => { p.valor = parseVal(v); });
     bind(nn, v => { p.num   = Math.max(1, +v||1); });
     bind(tt, v => { p.total = Math.max(1, +v||1); });
     rbP.appendChild(row);
@@ -1290,14 +1354,14 @@ function renderFixos(){
           <input class="nm plain" type="text" value="${esc(f.nome)}">
           ${aviso ? `<span class="snote" style="display:block;font-size:.75rem;color:${f.de&&mi(mes)<mi(f.de)?"var(--warning-ink)":"var(--muted)"}">${esc(aviso)}</span>` : ""}
         </span>
-        <input class="num money" type="number" min="0" step="10" value="${f.valor}">
+        ${inVal(f.valor)}
         <input type="month" class="num" value="${esc(f.de||"")}" title="começa em (deixe vazio para sempre)" style="padding:6px 8px;font-size:.78rem">
         <input type="month" class="num" value="${esc(f.ate||"")}" title="termina em (deixe vazio para sempre)" style="padding:6px 8px;font-size:.78rem">
         <button class="btn danger" title="${f.ativo?"Desativar de vez":"Reativar"}">${f.ativo?"◉":"○"}</button>
       </div>`);
     const [nm, vl, de, ate] = row.querySelectorAll("input");
     nm.onchange  = e => { f.nome = e.target.value; commit(); };
-    vl.onchange  = e => { f.valor = +e.target.value||0; commit(); };
+    vl.onchange  = e => { f.valor = parseVal(e.target.value); commit(); };
     de.onchange  = e => { f.de  = e.target.value || undefined; commit(); };
     ate.onchange = e => { f.ate = e.target.value || undefined; commit(); };
     row.querySelector("button").onclick = () => { f.ativo = !f.ativo; commit(); };
@@ -1326,7 +1390,7 @@ function renderFixos(){
           <input class="nm" type="text" value="${esc(p.nome)}" style="border:0;background:none;padding:2px 0;font-weight:600">
           <span class="dots" style="margin-top:4px">${dots}</span>
         </span>
-        <input class="num money" type="number" min="0" step="1" value="${p.valor}">
+        ${inVal(p.valor)}
         <span style="font-size:.78rem; color:var(--muted); text-align:right">
           ${ativa ? Math.min(pagoAte,p.total)+" de "+p.total : "quitada"}<br>
           <span style="color:var(--ink-2)">${ativa ? "até "+mShort(parcelaFim(p)) : "&nbsp;"}</span>
@@ -1335,7 +1399,7 @@ function renderFixos(){
       </div>`);
     const [nm, vl] = row.querySelectorAll("input");
     nm.onchange = e => { p.nome = e.target.value; commit(); };
-    vl.onchange = e => { p.valor = +e.target.value||0; commit(); };
+    vl.onchange = e => { p.valor = parseVal(e.target.value); commit(); };
     row.querySelector("button.danger").onclick = () => { S.parcelas = S.parcelas.filter(x=>x.id!==p.id); commit(); };
     pb.appendChild(row);
   });
@@ -1396,15 +1460,15 @@ function renderRenda(){
           </span>
         </span>
         <input type="month" value="${esc(d.mes)}" class="num" style="padding:6px 8px;font-size:.8rem">
-        <input class="num money" type="number" step="1" value="${d.bruto}" title="bruto">
-        <input class="num money" type="number" step="1" value="${d.liquido}" title="líquido">
+        ${inVal(d.bruto, ' title="bruto"')}
+        ${inVal(d.liquido, ' title="líquido"')}
         <button class="btn danger" aria-label="Apagar degrau">×</button>
       </div>`);
     const ins = row.querySelectorAll("input");
     ins[0].onchange = e => { d.rotulo = e.target.value; commit(); };
     ins[1].onchange = e => { d.mes = e.target.value; commit(); };
-    ins[2].onchange = e => { d.bruto = +e.target.value||0; commit(); };
-    ins[3].onchange = e => { d.liquido = +e.target.value||0; commit(); };
+    ins[2].onchange = e => { d.bruto = parseVal(e.target.value); commit(); };
+    ins[3].onchange = e => { d.liquido = parseVal(e.target.value); commit(); };
     row.querySelector("button.danger").onclick = () => { S.renda.degraus = S.renda.degraus.filter(x=>x.id!==d.id); commit(); };
     db.appendChild(row);
   });
@@ -1744,6 +1808,7 @@ function render(){
   document.getElementById("mLabel").textContent = _ml.charAt(0).toUpperCase() + _ml.slice(1);
   document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab===tab)));
   ["painel","lancar","sim","fixos","renda","plano"].forEach(t => { document.getElementById("tab-"+t).hidden = (t!==tab); });
+  if(tab!=="painel") editando = null;
   if(tab==="painel") renderPainel();
   if(tab==="lancar") renderLancar();
   if(tab==="sim")    renderSim();
