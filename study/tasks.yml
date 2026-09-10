@@ -262,7 +262,7 @@ tasks:
     due_time: "22:42"
     size: medio
     weight: 5
-    status: todo
+    status: done
     steps:
       - "Ler o artigo indicado no 6-leitura-planning-survey.pdf, no Moodle"
       - "Me mandar o PDF para eu detalhar as questões aqui"
@@ -307,7 +307,7 @@ tasks:
     due_time: "22:59"
     size: grande
     weight: 20
-    status: todo
+    status: done
     steps:
       - "Ler o enunciado: Trabalho de Busca -- Elevadores.pdf, no Moodle"
       - "Me mandar o PDF para eu detalhar estes passos"
@@ -324,6 +324,33 @@ tasks:
       disse quantos trabalhos são; corrija quando souber. Eu não recebi o PDF
       do enunciado, então os passos abaixo são a estrutura usual de um
       trabalho de busca, não o que o professor pediu de fato.
+
+  - id: ia-trabalho-planejamento
+    course: ia
+    title: "Segundo trabalho prático: planejamento automático"
+    type: assignment
+    due: 2026-10-19
+    due_time: "22:56"
+    size: grande
+    weight: 20
+    status: todo
+    steps:
+      - "Abrir o enunciado pelo link \"Enunciado em aqui\", no Moodle"
+      - "Me mandar o enunciado para eu detalhar estes passos"
+      - "Modelar o domínio de planejamento (estado inicial, ações, objetivo)"
+      - "Escrever o domínio e o problema no formalismo pedido"
+      - "Rodar o planejador e conferir o plano gerado"
+      - "Testar em cenários diferentes"
+      - "Escrever o relatório com os resultados"
+      - "Enviar pelo Moodle"
+    notes: >
+      CONFIRMADO pelo Moodle. Prof. Jomi Hübner, vence segunda 19/10 às 22:56.
+      Segundo dos trabalhos práticos que valem 60% da nota de IA. O peso de 20%
+      aqui é a mesma suposição que fiz no trabalho de busca, 60 dividido por
+      três; corrija quando souber quantos trabalhos são. O enunciado está atrás
+      de um link no Moodle e eu não o recebi, então os passos abaixo são a
+      estrutura usual de um trabalho de planejamento, não o que o professor
+      pediu de fato.
 
   - id: ia-quest-agi
     course: ia
@@ -523,7 +550,7 @@ tasks:
     due: 2026-09-07
     due_time: "23:59"
     size: medio
-    status: todo
+    status: done
     steps:
       - "Abrir o teste no Moodle a partir de 25/08"
       - "Estudar o conteúdo de inferências e testes estatísticos"
@@ -540,7 +567,7 @@ tasks:
     due: 2026-09-08
     due_time: "20:30"
     size: medio
-    status: todo
+    status: done
     steps:
       - "Montar a apresentação a partir dos exercícios E1, E2 e E3"
       - "Ensaiar"
