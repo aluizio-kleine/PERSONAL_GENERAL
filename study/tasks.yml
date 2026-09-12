@@ -75,7 +75,7 @@ tasks:
     due_time: "08:00"
     size: medio
     weight: 30
-    status: todo
+    status: done
     steps:
       - "Reaproveitar a pesquisa do artigo científico"
       - "Montar os slides"
@@ -162,7 +162,7 @@ tasks:
       - "Perguntar ao prof. Antonelo na aula de quarta"
       - "Anotar datas e formato"
       - "Me mandar aqui no chat para eu cadastrar"
-    notes: "Assignments #1 (28/08) e #2 (15/09) cadastrados. Falta só a data do #3, que fecha os 20%."
+    notes: "Fechado: #1 em 28/08, #2 em 15/09 e #3 em 29/09, os três cadastrados."
 
   - id: ml-assign-1
     course: machine-learning
@@ -216,6 +216,34 @@ tasks:
       II e CNN. O enunciado permite usar IA generativa para estudar e revisar
       conceitos, mas as respostas têm que ser escritas por você e refletir o seu
       entendimento; pode haver verificação de autoria por amostragem.
+
+  - id: ml-assign-3
+    course: machine-learning
+    title: "Assignment #3: Reinforcement Learning"
+    type: assignment
+    due: 2026-09-29
+    due_time: "23:05"
+    size: grande
+    weight: 6
+    status: todo
+    steps:
+      - "Ler o enunciado: Assignment__3_RL.pdf, no Moodle"
+      - "Me mandar o PDF para eu detalhar estes passos"
+      - "Baixar os dois templates: policyeval_grid2_template.py e value_iteration2_template.py"
+      - "Completar a avaliação de política (policy evaluation) no grid"
+      - "Completar a iteração de valor (value iteration)"
+      - "Rodar os dois e comparar os resultados"
+      - "Escrever o relatório com os plots e a discussão"
+      - "Enviar pelo Moodle"
+    notes: >
+      CONFIRMADO pelo Moodle. Prof. Eric Antonelo, vence terça 29/09 às 23:05.
+      Último dos três practical assignments, que somam 20% da nota: com os 7%
+      que dei ao #1 e ao #2, sobram 6% para este. O enunciado veio em
+      Assignment__3_RL.pdf com dois templates em Python anexados,
+      policyeval_grid2_template.py e value_iteration2_template.py, então é
+      trabalho de código mais relatório, no mesmo formato do #1. Eu não recebi
+      o PDF, então os passos abaixo saem dos nomes dos templates, não do que o
+      professor pediu de fato.
 
   # ------------------------------------------------- Inteligência Artificial (60/25/15)
   - id: ia-seminario
