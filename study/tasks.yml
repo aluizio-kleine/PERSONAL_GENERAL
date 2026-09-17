@@ -94,7 +94,7 @@ tasks:
     due_time: "12:00"
     size: grande
     weight: 40
-    status: todo
+    status: done
     steps:
       - "Revisar regressão"
       - "Revisar classificação e regularização"
@@ -203,7 +203,7 @@ tasks:
     due_time: "03:15"
     size: medio
     weight: 7
-    status: todo
+    status: done
     steps:
       - "Ler o PDF do questionário anexado no Moodle"
       - "Ler o artigo recomendado, Deep Learning (opcional, mas ajuda)"
@@ -406,18 +406,32 @@ tasks:
   # ------------------------------------------------- Sistemas Multiagentes (40/30/20/10)
   - id: sma-seminario
     course: sma
-    title: "Seminário"
+    title: "Seminário: estado da arte em SMA"
     type: presentation
-    due: 2026-10-09
-    due_time: "12:00"
+    due: 2026-11-06
+    due_time: "22:00"
     size: grande
     weight: 20
     status: todo
     steps:
-      - "Escolher o artigo/tema"
-      - "Montar os slides"
-      - "Ensaiar"
-    notes: "ESTIMATED, seminars run in weeks 9-10 (09/10 and 16/10). 20% of the grade."
+      - "Formar o grupo, de 3 a 4 integrantes"
+      - "Escolher uma técnica ou ferramenta de SMA que não foi vista no curso"
+      - "Levantar a bibliografia, a profundidade da pesquisa é critério de nota"
+      - "Montar os slides, cuidando da organização e da qualidade visual"
+      - "Ensaiar cronometrado, a apresentação é de 20 minutos"
+      - "Dividir a fala, a participação de todos os integrantes é avaliada"
+      - "Apresentar em 30/10 ou 06/11"
+      - "Postar os slides no Moodle DEPOIS da apresentação, até 06/11 às 22:00"
+    notes: >
+      CONFIRMADO pelo Moodle, era estimativa minha em 09/10. O objetivo é
+      apresentar e discutir com a turma o estado da arte de técnicas e
+      ferramentas de sistemas multiagentes que não foram vistas no curso.
+      As apresentações são em 30/10 e 06/11, em grupos de 3 a 4 integrantes,
+      20 minutos cada, e os slides vão para o Moodle depois de apresentar.
+      Critérios: profundidade da pesquisa, riqueza e abrangência da pesquisa
+      bibliográfica, segurança e clareza na apresentação, organização dos
+      slides, qualidade visual, uso do tempo, visão crítica e participação de
+      todos os integrantes. 20% da nota.
 
   - id: sma-tp1
     course: sma
@@ -442,6 +456,53 @@ tasks:
       experimentos práticos, que valem 30%; os 15% aqui são suposição minha,
       metade, porque não sei quantos trabalhos são. Eu não recebi o PDF, então
       os passos são a estrutura usual, não o que o professor pediu.
+
+  - id: sma-tp2
+    course: sma
+    title: "Trabalho Prático 2 (leilões)"
+    type: assignment
+    due: 2026-10-06
+    due_time: "23:59"
+    size: grande
+    weight: 15
+    status: todo
+    steps:
+      - "Ler o enunciado: tp-auction.pdf, no Moodle"
+      - "Me mandar o PDF para eu detalhar estes passos"
+      - "Modelar o mecanismo de leilão entre os agentes"
+      - "Implementar em JaCaMo"
+      - "Testar o comportamento dos agentes e os resultados do leilão"
+      - "Escrever o relatório e enviar pelo Moodle"
+    notes: >
+      CONFIRMADO pelo Moodle. Prof. Jomi Hübner, vence terça 06/10 às 23:59.
+      Pelo nome do arquivo, tp-auction.pdf, é sobre leilões, o passo seguinte
+      ao Contract Net Protocol do TP1. Faz parte dos experimentos práticos,
+      que valem 30%; os 15% aqui são a metade, agora que sei que são pelo
+      menos dois trabalhos. Eu não recebi o PDF, então os passos são a
+      estrutura usual, não o que o professor pediu.
+
+  - id: sma-quest-acl
+    course: sma
+    title: "Leitura 2: ACL, linguagem de comunicação entre agentes"
+    type: reading
+    due: 2026-09-28
+    due_time: "23:59"
+    size: medio
+    weight: 5
+    status: todo
+    steps:
+      - "Ler o 2-ACL.pdf, no Moodle"
+      - "Me mandar o PDF para eu detalhar as questões aqui"
+      - "Responder as questões"
+      - "Enviar pelo Moodle"
+    notes: >
+      CONFIRMADO pelo Moodle. Vence segunda 28/09 às 23:59. Pelo nome do
+      arquivo, 2-ACL.pdf, é sobre Agent Communication Language, o assunto da
+      semana 3, que você perdeu por causa do choque com Ciência de Dados.
+      Os questionários de leitura valem 10% no total e esta é a segunda, então
+      dividi em 5% cada e corrigi o peso do questionário da abordagem MAS, que
+      eu havia deixado com os 10% inteiros. Eu não recebi o PDF, então não sei
+      as questões.
 
   - id: sma-projeto
     course: sma
@@ -489,7 +550,7 @@ tasks:
     due: 2026-08-27
     due_time: "23:59"
     size: medio
-    weight: 10
+    weight: 5
     status: done
     steps:
       - "Ler Dresner & Stone (2008), 65 páginas, comece cedo"
@@ -508,17 +569,21 @@ tasks:
 
   - id: sma-experimentos
     course: sma
-    title: "Experimentos práticos (ongoing)"
-    type: assignment
+    title: "Experimentos práticos (agora são o TP1 e o TP2)"
+    type: admin
     due:
     due_time: ""
-    size: medio
-    weight: 30
-    status: doing
+    size: pequeno
+    weight: 0
+    status: done
     steps:
-      - "Acompanhar os experimentos propostos em aula"
-      - "Me avisar quando cada um for atribuído"
-    notes: "30% of the grade, spread across the semester in JaCaMo. Tell me when each is assigned."
+      - "Descobrir quais são os experimentos práticos"
+    notes: >
+      Era o espaço reservado para os 30% de experimentos práticos, enquanto eu
+      não sabia quais eram. Agora sei: são o Trabalho Prático 1 (CNP) e o
+      Trabalho Prático 2 (leilões), cada um com 15%. Os 30% estão contados lá,
+      então este item fica zerado para não somar duas vezes. Se aparecer um
+      terceiro experimento, me avise e eu redivido os pesos.
 
   # ------------------------------------------------- Estatística
   - id: est-trabalho
