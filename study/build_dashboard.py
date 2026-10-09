@@ -192,7 +192,12 @@ def build_model(courses_doc: dict, tasks_doc: dict) -> dict:
                 a, b = items[i]["slot"], items[j]["slot"]
                 if minutes(a.get("start")) < minutes(b.get("end")) and \
                    minutes(b.get("start")) < minutes(a.get("end")):
-                    pairs.append((items[i]["course"].get("name", ""), items[j]["course"].get("name", "")))
+                    ends = [as_date(items[i]["course"].get("ends")),
+                            as_date(items[j]["course"].get("ends"))]
+                    ends = [d.isoformat() for d in ends if d]
+                    pairs.append((items[i]["course"].get("name", ""),
+                                  items[j]["course"].get("name", ""),
+                                  min(ends) if ends else None))
         if pairs:
             clashes[key] = pairs
 
@@ -232,7 +237,8 @@ def brief(m: dict) -> str:
         lines += ["", f"ATRASADO ({len(late)}):"]
         lines += [f"  - {x['title']} [{x['course_name']}] {countdown(x['days'])}" for x in late]
 
-    todays = m["week"][DAY_KEYS[today.weekday()]]
+    todays = [x for x in m["week"][DAY_KEYS[today.weekday()]]
+              if not (as_date(x["course"].get("ends")) and as_date(x["course"]["ends"]) < today)]
     if todays:
         lines += ["", "Aulas hoje:"]
         for item in todays:
@@ -901,6 +907,7 @@ function renderBrief(sch) {
   var dayKey = DAYK[TODAY.getDay() === 0 ? 6 : TODAY.getDay() - 1];
   var classes = [];
   DATA.courses.forEach(function (c) {
+    if (c.ends && c.ends < TODAY_ISO) return;
     (c.schedule || []).forEach(function (s) {
       if (s.dayKey === dayKey) classes.push({ c: c, s: s });
     });
@@ -1687,8 +1694,15 @@ function renderHeading() {
     String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear() + ' em ' + DATA.tz + '.';
 }
 
+function expireClasses() {
+  document.querySelectorAll('[data-ends]').forEach(function (el) {
+    if (el.dataset.ends < TODAY_ISO) el.remove();
+  });
+}
+
 function render() {
   var sch = schedule();
+  expireClasses();
   renderHeading();
   renderSaveState();
   renderBrief(sch);
@@ -1751,8 +1765,10 @@ def render_timetable(m: dict) -> str:
             s, e = minutes(slot.get("start")), minutes(slot.get("end"))
             w = 100 / lanes
             cid = course.get("id")
+            cends = as_date(course.get("ends"))
+            ends_attr = f' data-ends="{cends.isoformat()}"' if cends else ""
             blocks += (
-                f'<div class="blk" style="--c:var(--c-{cid});--on-c:var(--on-{cid});'
+                f'<div class="blk"{ends_attr} style="--c:var(--c-{cid});--on-c:var(--on-{cid});'
                 f'top:{100 * (s - TIMETABLE_START) / span:.3f}%;'
                 f'height:{100 * (e - s) / span:.3f}%;'
                 f'left:{lane * w:.3f}%;width:{w:.3f}%">'
@@ -1763,8 +1779,11 @@ def render_timetable(m: dict) -> str:
 
     note = ""
     if m["clashes"]:
-        pairs = "; ".join(f"{a} × {b}" for v in m["clashes"].values() for a, b in v)
-        note = (f'<div class="note-box warn" style="margin-top:12px">'
+        flat = [x for v in m["clashes"].values() for x in v]
+        pairs = "; ".join(f"{a} × {b}" for a, b, _ in flat)
+        ends = [e for _, _, e in flat if e]
+        ends_attr = f' data-ends="{min(ends)}"' if len(ends) == len(flat) and ends else ""
+        note = (f'<div class="note-box warn"{ends_attr} style="margin-top:12px">'
                 f'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
                 f'stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M12 3l9 16H3z"/>'
                 f'<path d="M12 10v4"/><path d="M12 17v.4"/></svg>'

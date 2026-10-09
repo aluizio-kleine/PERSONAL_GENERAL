@@ -13,11 +13,35 @@
     "ia-leitura-2": "done",
     "cd-sf": "done",
     "ml-assign-2": "done",
-    "ml-exam": "done"
+    "ml-exam": "done",
+    "sma-tp1": "done",
+    "ia-leitura-3": "done",
+    "sma-quest-acl": "done",
+    "ml-assign-3": "done",
+    "ml-project": "done",
+    "sma-tp2": "done",
+    "ia-seminario": "done"
   },
-  "edits": {},
+  "edits": {
+    "ml-project": {
+      "title": "Projeto final: relatório e código",
+      "course": "machine-learning",
+      "type": "paper",
+      "due": "2026-10-06",
+      "size": "grande",
+      "weight": 20
+    },
+    "ml-project-pres": {
+      "title": "Apresentação do projeto",
+      "course": "machine-learning",
+      "type": "presentation",
+      "due": "2026-10-09",
+      "size": "medio",
+      "weight": 20
+    }
+  },
   "added": [],
   "steps": {},
   "version": 3,
-  "savedAt": 1789636513180
+  "savedAt": 1791483709429
 }

@@ -107,11 +107,11 @@ tasks:
     course: machine-learning
     title: "Projeto final: relatório e código"
     type: paper
-    due: 2026-10-03
+    due: 2026-10-06
     due_time: "23:40"
     size: grande
     weight: 20
-    status: todo
+    status: done
     steps:
       - "Ler o Project_ML.pdf antes de começar"
       - "Escolher o tema: opção 1 (recomendada) ou opção 2"
@@ -133,7 +133,7 @@ tasks:
     course: machine-learning
     title: "Apresentação do projeto"
     type: presentation
-    due: 2026-10-07
+    due: 2026-10-09
     due_time: "12:00"
     size: medio
     weight: 20
@@ -225,7 +225,7 @@ tasks:
     due_time: "23:05"
     size: grande
     weight: 6
-    status: todo
+    status: done
     steps:
       - "Ler o enunciado: Assignment__3_RL.pdf, no Moodle"
       - "Me mandar o PDF para eu detalhar estes passos"
@@ -254,7 +254,7 @@ tasks:
     due_time: "22:42"
     size: grande
     weight: 25
-    status: todo
+    status: done
     steps:
       - "Escolher o tema com o professor"
       - "Levantar a bibliografia"
@@ -311,7 +311,7 @@ tasks:
     due_time: "22:42"
     size: medio
     weight: 5
-    status: todo
+    status: done
     steps:
       - "Ler o artigo indicado no 2-knowledge-level.pdf, no Moodle"
       - "Me mandar o PDF para eu detalhar as questões aqui"
@@ -441,7 +441,7 @@ tasks:
     due_time: "22:59"
     size: grande
     weight: 15
-    status: todo
+    status: done
     steps:
       - "Ler o enunciado: tp-cnp.pdf, no Moodle"
       - "Me mandar o PDF para eu detalhar estes passos"
@@ -465,7 +465,7 @@ tasks:
     due_time: "23:59"
     size: grande
     weight: 15
-    status: todo
+    status: done
     steps:
       - "Ler o enunciado: tp-auction.pdf, no Moodle"
       - "Me mandar o PDF para eu detalhar estes passos"
@@ -488,8 +488,8 @@ tasks:
     due: 2026-09-28
     due_time: "23:59"
     size: medio
-    weight: 5
-    status: todo
+    weight: 3
+    status: done
     steps:
       - "Ler o 2-ACL.pdf, no Moodle"
       - "Me mandar o PDF para eu detalhar as questões aqui"
@@ -503,6 +503,28 @@ tasks:
       dividi em 5% cada e corrigi o peso do questionário da abordagem MAS, que
       eu havia deixado com os 10% inteiros. Eu não recebi o PDF, então não sei
       as questões.
+
+  - id: sma-quest-social
+    course: sma
+    title: "Leitura 3: ação social"
+    type: reading
+    due: 2026-10-28
+    due_time: "23:00"
+    size: medio
+    weight: 3
+    status: todo
+    steps:
+      - "Ler o 3-SocialAction.pdf, no Moodle"
+      - "Me mandar o PDF para eu detalhar as questões aqui"
+      - "Responder as questões"
+      - "Enviar pelo Moodle"
+    notes: >
+      CONFIRMADO pelo Moodle. Vence quarta 28/10 às 23:00. Pelo nome do
+      arquivo, 3-SocialAction.pdf, é sobre ação social entre agentes. Com três
+      leituras conhecidas e 10% no total, baixei as três para 3% cada; sobra
+      1% que eu não sei onde cai, provavelmente arredondamento ou uma quarta
+      leitura ainda não publicada. Eu não recebi o PDF, então não sei as
+      questões.
 
   - id: sma-projeto
     course: sma
@@ -550,7 +572,7 @@ tasks:
     due: 2026-08-27
     due_time: "23:59"
     size: medio
-    weight: 5
+    weight: 3
     status: done
     steps:
       - "Ler Dresner & Stone (2008), 65 páginas, comece cedo"
