@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Mangueira Hidráulica Vistas 3D</title>
+<style>
+  @page { size: A4 landscape; margin: 10mm; }
+  * { box-sizing: border-box; }
+  body { font-family: Arial, Helvetica, sans-serif; color: #111; background: #fff; margin: 0; font-size: 11px; }
+  .sheet { width: 277mm; height: 190mm; border: 1.5px solid #111; padding: 5mm; display: flex; flex-direction: column; gap: 3mm; page-break-after: always; overflow: hidden; }
+  .sheet:last-child { page-break-after: auto; }
+  header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1.5px solid #111; padding-bottom: 2mm; }
+  h1 { font-size: 17px; margin: 0; }
+  .sub { font-size: 11px; color: #444; margin-top: 1mm; }
+  .tb { border-collapse: collapse; font-size: 10px; }
+  .tb td { border: 1px solid #111; padding: 1mm 2mm; min-width: 24mm; }
+  .tb td.k { background: #eee; font-weight: bold; min-width: 16mm; }
+  .frame { border: 1px solid #bbb; background: #f4f5f7; }
+  svg.view { display: block; width: 100%; height: auto; }
+  .details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+  .card { border: 1px solid #bbb; background: #f4f5f7; display: flex; flex-direction: column; }
+  .card img { display: block; width: 100%; height: 56mm; object-fit: cover; }
+  .card .cap { flex: 1; background: #fff; border-top: 1px solid #bbb; padding: 1.5mm 2mm; font-size: 10px; line-height: 1.3; }
+  .card .cap b { display: block; font-size: 11px; }
+  .vlabel { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: .05em; color: #444; margin-bottom: 1mm; }
+  table.list { border-collapse: collapse; width: 100%; font-size: 10px; }
+  table.list th, table.list td { border: 1px solid #111; padding: 1.2mm 1.6mm; text-align: left; vertical-align: top; }
+  table.list th { background: #eee; }
+  .note { font-size: 10px; color: #333; }
+</style>
+</head>
+<body>
+
+<!-- ============ FOLHA 1: PERSPECTIVA + DETALHES ============ -->
+<div class="sheet">
+  <header>
+    <div>
+      <h1>Conjunto de mangueira hidráulica com derivação (1 entrada → 2 saídas)</h1>
+      <div class="sub">Ilustração 3D — vista em perspectiva e detalhes das conexões (ilustrativo)</div>
+    </div>
+    <table class="tb">
+      <tr><td class="k">Desenho</td><td>MH-001 rev. 0</td><td class="k">Folha</td><td>1 / 3</td></tr>
+      <tr><td class="k">Data</td><td>09/10/2026</td><td class="k">Escala</td><td>sem escala</td></tr>
+    </table>
+  </header>
+
+  <div>
+    <div class="vlabel">Vista geral em perspectiva</div>
+    <div class="frame">
+      <svg class="view" viewBox="0 0 2400 760" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+        <image href="img/hero.png" x="0" y="0" width="2400" height="760"/>
+        <g stroke="#111" stroke-width="3" fill="none">
+          <polyline points="220,374 170,560 130,560"/>
+          <polyline points="301,348 360,200 400,200"/>
+          <polyline points="695,266 760,110 800,110"/>
+          <polyline points="980,250 1100,190 1140,190"/>
+          <polyline points="906,516 980,650 1020,650"/>
+          <polyline points="2179,439 2080,300 2040,300"/>
+        </g>
+        <g fill="#111">
+          <circle cx="220" cy="374" r="7"/><circle cx="301" cy="348" r="7"/><circle cx="695" cy="266" r="7"/>
+          <circle cx="980" cy="250" r="7"/><circle cx="906" cy="516" r="7"/><circle cx="2179" cy="439" r="7"/>
+        </g>
+        <g font-size="34">
+          <text x="40" y="610" font-weight="bold">① DKO TB22 MACHO</text><text x="40" y="650" fill="#444">entrada</text>
+          <text x="300" y="150" font-weight="bold">② DERIVAÇÃO</text><text x="300" y="188" fill="#444">1 entrada → 2 saídas</text>
+          <text x="810" y="100" font-weight="bold">③ RAMAL A — 600 mm</text>
+          <text x="1150" y="180" font-weight="bold">④ DKO TB15 FÊMEA</text><text x="1150" y="218" fill="#444">saída A</text>
+          <text x="1030" y="662" font-weight="bold">③ RAMAL B — 1500 mm</text>
+          <text x="1660" y="290" font-weight="bold">④ DKO TB15 FÊMEA</text><text x="1660" y="328" fill="#444">saída B</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="details">
+    <div class="card">
+      <img src="img/inlet.png" alt="Detalhe da entrada DKO TB22 macho">
+      <div class="cap"><b>Detalhe ① — Entrada DKO TB22 macho</b>Rosca externa M30×2 (série L) com cone interno 24°.</div>
+    </div>
+    <div class="card">
+      <img src="img/block.png" alt="Detalhe da derivação">
+      <div class="cap"><b>Detalhe ② — Derivação</b>Bloco 1→2 com terminais prensados nas duas saídas. Construção a critério do fornecedor.</div>
+    </div>
+    <div class="card">
+      <img src="img/outlet.png" alt="Detalhe da saída DKO TB15 fêmea">
+      <div class="cap"><b>Detalhe ④ — Saída DKO TB15 fêmea giratória</b>Porca giratória M22×1,5 (série L), cone 24° com O-ring.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FOLHA 2: VISTA SUPERIOR ============ -->
+<div class="sheet">
+  <header>
+    <div>
+      <h1>Conjunto de mangueira hidráulica com derivação (1 entrada → 2 saídas)</h1>
+      <div class="sub">Ilustração 3D — vista superior com comprimentos</div>
+    </div>
+    <table class="tb">
+      <tr><td class="k">Desenho</td><td>MH-001 rev. 0</td><td class="k">Folha</td><td>2 / 3</td></tr>
+      <tr><td class="k">Data</td><td>09/10/2026</td><td class="k">Escala</td><td>sem escala</td></tr>
+    </table>
+  </header>
+
+  <div>
+    <div class="vlabel">Vista superior</div>
+    <div class="frame">
+      <svg class="view" viewBox="0 0 2400 800" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+        <image href="img/top.png" x="0" y="0" width="2400" height="800"/>
+        <!-- reference points -->
+        <g stroke="#c0392b" stroke-width="3">
+          <line x1="152" y1="300" x2="152" y2="424"/><line x1="122" y1="362" x2="182" y2="362" stroke-dasharray="8 6"/>
+          <line x1="981" y1="94" x2="981" y2="174"/>
+          <line x1="2335" y1="611" x2="2335" y2="691"/>
+        </g>
+        <g stroke="#111" stroke-width="3" fill="none">
+          <polyline points="152,300 152,250 110,250"/>
+          <polyline points="584,125 560,60 520,60"/>
+          <polyline points="981,94 1030,60 1070,60"/>
+          <polyline points="1500,620 1460,740 1420,740"/>
+          <polyline points="2335,611 2290,520 2250,520"/>
+          <polyline points="53,362 53,470 90,470"/>
+        </g>
+        <g font-size="34">
+          <text x="20" y="235" fill="#c0392b" font-weight="bold">centro da derivação</text>
+          <text x="20" y="515" font-weight="bold">① DKO TB22 MACHO</text>
+          <text x="90" y="72" font-weight="bold" font-size="40">RAMAL A = 600 mm</text>
+          <text x="1080" y="72" font-weight="bold">④ DKO TB15 FÊMEA</text>
+          <text x="880" y="752" font-weight="bold" font-size="40">RAMAL B = 1500 mm</text>
+          <text x="1770" y="508" font-weight="bold">④ DKO TB15 FÊMEA</text>
+          <text x="2380" y="740" fill="#c0392b" font-weight="bold" font-size="28" text-anchor="end">face da conexão</text><text x="1000" y="215" fill="#c0392b" font-weight="bold" font-size="28">face da conexão</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:4mm">
+    <table class="list" style="flex:1.6">
+      <tr><th style="width:8mm">Item</th><th style="width:34mm">Descrição</th><th>Especificação</th><th style="width:12mm">Qtd.</th></tr>
+      <tr><td>①</td><td>Conexão de entrada</td><td><b>DKO TB22 macho</b> — tubo Ø22 série L, rosca M30×2 ¹</td><td>1</td></tr>
+      <tr><td>②</td><td>Derivação</td><td>1 entrada → 2 saídas — construção a sugerir pelo fornecedor</td><td>1</td></tr>
+      <tr><td>③</td><td>Mangueira hidráulica</td><td>Ramal A <b>600 mm</b> · Ramal B <b>1500 mm</b> — tipo e DN conforme pressão</td><td>2</td></tr>
+      <tr><td>④</td><td>Conexão de saída</td><td><b>DKO TB15 fêmea giratória</b> — tubo Ø15 série L, rosca M22×1,5 ¹</td><td>2</td></tr>
+    </table>
+    <div class="note" style="flex:1">
+      <b>Notas</b><br>
+      1. Comprimentos medidos ao longo da mangueira, do centro da derivação até a face da conexão de saída.<br>
+      2. ¹ Roscas presumidas pela série L — confirmar com o fornecedor.<br>
+      3. Imagens 3D ilustrativas; dimensões, dados de aplicação e lista completa na folha 3.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
