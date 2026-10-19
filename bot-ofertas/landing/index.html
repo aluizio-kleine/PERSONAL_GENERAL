@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ofertas de Eletro</title>
+<meta name="description" content="Eletrodomésticos com desconto de verdade, todo dia, no Telegram.">
+<style>
+  :root {
+    --fundo: #10131c; --cartao: #1a1f2c; --texto: #f4f6fb; --suave: #a9b0c2;
+    --amarelo: #ffd60a; --verde: #2ee59d; --telegram: #2aabee; --whats: #25d366;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; background: var(--fundo); color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    display: flex; align-items: center; justify-content: center; padding: 24px 16px;
+  }
+  main { width: 100%; max-width: 440px; text-align: center; }
+  .selo {
+    display: inline-block; background: var(--amarelo); color: #10131c; font-weight: 800;
+    padding: 6px 14px; border-radius: 999px; font-size: 14px; letter-spacing: .02em;
+  }
+  h1 { font-size: 30px; line-height: 1.15; margin: 18px 0 10px; }
+  h1 span { color: var(--verde); }
+  p.sub { color: var(--suave); font-size: 17px; line-height: 1.45; margin: 0 0 24px; }
+  ul {
+    list-style: none; padding: 18px 20px; margin: 0 0 26px; text-align: left;
+    background: var(--cartao); border-radius: 18px;
+  }
+  li { padding: 8px 0; font-size: 16px; line-height: 1.4; }
+  .botao {
+    display: block; padding: 18px; border-radius: 16px; font-size: 19px; font-weight: 800;
+    text-decoration: none; color: #fff; margin-bottom: 12px;
+  }
+  .telegram { background: var(--telegram); box-shadow: 0 8px 24px rgba(42, 171, 238, .35); }
+  .whats { background: transparent; border: 2px solid var(--whats); color: var(--whats); font-size: 16px; padding: 14px; }
+  small { display: block; color: var(--suave); font-size: 12px; line-height: 1.5; margin-top: 18px; }
+</style>
+</head>
+<body>
+<main>
+  <span class="selo">GRÁTIS · SAIA QUANDO QUISER</span>
+  <h1>Eletrodomésticos com <span>desconto de verdade</span>, todo dia</h1>
+  <p class="sub">Air fryer, cafeteira, aspirador, liquidificador e mais, com preços da Shopee e do Mercado Livre.</p>
+  <ul>
+    <li>🔍 Comparamos com o histórico de preços: <b>nada de desconto falso</b></li>
+    <li>⚡ Ofertas relâmpago e cupons saem <b>primeiro no Telegram</b></li>
+    <li>🔕 Dá para silenciar o canal e olhar só quando quiser</li>
+  </ul>
+  <a id="telegram" class="botao telegram" href="#">Entrar no canal do Telegram</a>
+  <a id="whatsapp" class="botao whats" href="#">Prefiro o grupo do WhatsApp</a>
+  <small>Os links das ofertas são de afiliado: você paga o mesmo preço e o canal ganha uma pequena comissão. Preços sujeitos a alteração.</small>
+</main>
+<script>
+  // Um link de convite por origem (crie com /convite nome no bot). Ex.: pagina.html?origem=anuncio-a
+  const CONVITES = {
+    padrao: "https://t.me/seucanal",
+    "anuncio-a": "https://t.me/+COLE_AQUI",
+    "anuncio-b": "https://t.me/+COLE_AQUI",
+    instagram: "https://t.me/+COLE_AQUI",
+    tiktok: "https://t.me/+COLE_AQUI"
+  };
+  const WHATSAPP = "https://chat.whatsapp.com/COLE_AQUI";
+
+  const origem = new URLSearchParams(location.search).get("origem");
+  const convite = CONVITES[origem] && !CONVITES[origem].includes("COLE_AQUI") ? CONVITES[origem] : CONVITES.padrao;
+  document.getElementById("telegram").href = convite;
+  document.getElementById("whatsapp").href = WHATSAPP;
+</script>
+</body>
+</html>

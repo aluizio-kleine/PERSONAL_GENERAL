@@ -1,0 +1,9 @@
+services:
+  robo:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PASTA_DADOS: /dados
+    volumes:
+      - ./dados:/dados

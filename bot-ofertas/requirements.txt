@@ -1,0 +1,8 @@
+requests==2.32.3
+python-dotenv==1.1.0
+APScheduler==3.11.0
+Pillow==11.3.0
+edge-tts==7.2.3
+google-api-python-client==2.170.0
+google-auth==2.40.3
+tzdata==2025.2
