@@ -163,6 +163,7 @@ details.more > .inner { padding: 0 14px 14px; display: grid; gap: 10px; }
 .t-prazo, .t-fechar { background: var(--bad) !important; } .t-pedido { background: var(--accent) !important; } .t-medicao, .t-servico { background: var(--info) !important; }
 .t-entrega, .t-instalacao, .t-precisa { background: var(--ok) !important; } .t-pagamento { background: var(--warn) !important; } .t-calc { background: repeating-linear-gradient(var(--muted) 0 4px, transparent 4px 7px) !important; }
 .tag { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--muted); }
+.tag.lc { text-transform: none; letter-spacing: 0; font-size: 0.8rem; color: var(--ink); }
 
 /* Pagamentos */
 .ptable { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
@@ -501,12 +502,19 @@ function evRow(e) {
   const d = e.date ? `<div class="d"><b>${e.date.slice(8, 10)}</b><span>${WD[dt(e.date).getDay()]}</span></div>` : `<div class="d"><span>sem data</span></div>`;
   const range = e.fim && e.fim !== e.date ? ` até ${fmtDW(e.fim)}` : '';
   const togglable = e.kind !== 'calc' && S.canWrite;
-  const kindTag = { ev: TIPOS[e.tipo] || 'Data', pg: 'Pagamento', fechar: 'Compra', precisa: 'Prazo final', calc: 'Estimativa' }[e.kind];
+  const onItem = e.kind === 'fechar' || e.kind === 'precisa' || e.kind === 'calc';
+  const when = e.date ? fmtDW(e.date) : '';
+  const kindTag = {
+    ev: TIPOS[e.tipo] || 'Data', pg: 'Pagamento',
+    fechar: `Fechar a compra até ${when}`,
+    precisa: `Precisa estar pronto até ${when}`,
+    calc: `Chegada prevista ${when} (pedido + ${e.it.prazoDias} dias)`
+  }[e.kind];
   return `<div class="ev ${e.done ? 'done' : ''}">
     ${d}<span class="tline t-${esc(e.tipo)}"></span>
     <div class="body" data-open="${esc(e.it.id)}" role="button" tabindex="0">
-      <span class="t">${esc(e.kind === 'fechar' || e.kind === 'precisa' ? `${e.title}: ${e.it.nome}` : e.title)}</span>
-      <span class="sub"><span class="tag">${kindTag}</span>${e.kind === 'fechar' || e.kind === 'precisa' ? '' : `<span>${esc(e.it.nome)}</span>`}<span class="apto ${e.it.apto === 'ambos' ? 'ambos' : ''}">${e.it.apto === 'ambos' ? '801+802' : esc(e.it.apto)}</span>${range ? `<span>${range}</span>` : ''}${r && !e.done ? `<span class="due ${r.cls}">${r.txt}</span>` : ''}</span>
+      <span class="t">${esc(onItem ? e.it.nome : e.title)}</span>
+      <span class="sub"><span class="tag ${onItem ? 'lc' : ''}">${esc(kindTag)}</span>${onItem ? '' : `<span>${esc(e.it.nome)}</span>`}<span class="apto ${e.it.apto === 'ambos' ? 'ambos' : ''}">${e.it.apto === 'ambos' ? '801+802' : esc(e.it.apto)}</span>${range ? `<span>${range}</span>` : ''}${r && !e.done ? `<span class="due ${r.cls}">${r.txt}</span>` : ''}</span>
     </div>
     <div class="right">${e.kind === 'pg' ? `<span class="num">${money(e.valor * fac(e.it))}</span>` : ''}${togglable ? `<input type="checkbox" aria-label="Marcar como feito" data-tog="${e.kind}|${esc(e.it.id)}|${esc(e.ref || '')}" ${e.done ? 'checked' : ''}>` : ''}</div>
   </div>`;
