@@ -116,6 +116,11 @@ details.more > .inner { padding: 0 14px 14px; display: grid; gap: 10px; }
 .row { display: grid; grid-template-columns: 4px minmax(0, 1fr) auto; gap: 12px; align-items: center; width: 100%; text-align: left; border: 0; background: transparent; padding: 10px 14px 10px 0; border-top: 1px solid var(--line); }
 .row:first-child { border-top: 0; }
 .row:hover { background: var(--surface-2); }
+.row[role="button"] { cursor: pointer; }
+.side-row { display: flex; gap: 6px; align-items: center; justify-content: flex-end; flex-wrap: wrap; }
+.paybtn { border: 1px solid var(--line); background: var(--surface); color: var(--muted); font-size: 0.72rem; font-weight: 600; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+.paybtn:hover { border-color: var(--ok); color: var(--ok); }
+.paybtn.on { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
 .row .stripe { align-self: stretch; border-radius: 0 3px 3px 0; background: var(--line); }
 .row .main { min-width: 0; display: grid; gap: 3px; }
 .row .name { font-weight: 600; overflow-wrap: anywhere; }
@@ -322,8 +327,11 @@ const blobUrl = id => '/_blob/' + id;
 const fac = it => (S.apto !== 'todos' && it.apto === 'ambos') ? 0.5 : 1;
 const inApto = it => S.apto === 'todos' || it.apto === S.apto || it.apto === 'ambos';
 // Item comprado sem parcelas lançadas conta como pago à vista pelo valor total.
-const autoPaid = it => isClosed(it) && !(it.pagamentos || []).length && it.valor != null;
-const paidOf = it => autoPaid(it) ? +it.valor : (it.pagamentos || []).filter(p => p.pago).reduce((s, p) => s + (+p.valor || 0), 0);
+// "quitado" marcado na lista: true = pago por inteiro; false = só as parcelas pagas.
+const parcelasPagas = it => (it.pagamentos || []).filter(p => p.pago).reduce((s, p) => s + (+p.valor || 0), 0);
+const autoPaid = it => it.quitado === undefined && isClosed(it) && !(it.pagamentos || []).length && it.valor != null;
+const paidOf = it => it.quitado === true ? (it.valor != null ? +it.valor : parcelasPagas(it)) : autoPaid(it) ? +it.valor : parcelasPagas(it);
+const isPaid = it => it.quitado === true || (it.valor != null && it.valor > 0 && paidOf(it) >= it.valor - 0.5);
 const plannedOf = it => (it.pagamentos || []).reduce((s, p) => s + (+p.valor || 0), 0);
 const isClosed = it => STATUS_ORDER.indexOf(it.status) >= 2;
 const isArrived = it => STATUS_ORDER.indexOf(it.status) >= 3;
@@ -331,7 +339,7 @@ const isArrived = it => STATUS_ORDER.indexOf(it.status) >= 3;
 function entriesOf(it) {
   const out = [];
   for (const ev of it.eventos || []) out.push({ kind: 'ev', it, ref: ev.id, tipo: ev.tipo || 'outro', title: ev.titulo || TIPOS[ev.tipo] || 'Data', date: ev.data || null, fim: ev.fim || null, done: !!ev.feito });
-  for (const p of it.pagamentos || []) if (p.venc || !p.pago) out.push({ kind: 'pg', it, ref: p.id, tipo: 'pagamento', title: p.desc || 'Pagamento', date: p.venc || null, done: !!p.pago, valor: +p.valor || 0 });
+  for (const p of it.pagamentos || []) if (p.venc || !p.pago) out.push({ kind: 'pg', it, ref: p.id, tipo: 'pagamento', title: p.desc || 'Pagamento', date: p.venc || null, done: !!p.pago || it.quitado === true, valor: +p.valor || 0 });
   if (it.fecharAte) out.push({ kind: 'fechar', it, tipo: 'fechar', title: 'Fechar compra até', date: it.fecharAte, done: isClosed(it) });
   if (it.precisaAte) out.push({ kind: 'precisa', it, tipo: 'precisa', title: 'Precisa estar pronto até', date: it.precisaAte, done: isArrived(it) });
   const ped = (it.eventos || []).find(e => e.tipo === 'pedido' && e.data);
@@ -479,7 +487,11 @@ function itemRow(it) {
   const f = fac(it);
   const pl = paidOf(it), tot = it.valor;
   const val = tot != null ? `<span class="val">${money(tot * f)}${it.estimado ? '<span class="est">est.</span>' : ''}</span>` : `<span class="val none">sem valor</span>`;
-  const bar = tot && pl ? `<span class="minibar" title="Pago ${money(pl)}"><i style="width:${Math.min(100, pl / tot * 100).toFixed(0)}%"></i></span>` : '';
+  const paid = isPaid(it);
+  const payBtn = S.canWrite
+    ? `<button type="button" class="paybtn ${paid ? 'on' : ''}" data-act="pay" data-id="${esc(it.id)}" aria-pressed="${paid}">${paid ? '✓ Pago' : 'Marcar pago'}</button>`
+    : (paid ? '<span class="paybtn on">✓ Pago</span>' : '');
+  const bar = tot && pl && !paid ? `<span class="minibar" title="Pago ${money(pl)}"><i style="width:${Math.min(100, pl / tot * 100).toFixed(0)}%"></i></span>` : '';
   const sub = [
     `<span class="apto ${it.apto === 'ambos' ? 'ambos' : ''}">${it.apto === 'ambos' ? '801+802' : esc(it.apto)}</span>`,
     it.qtd ? `<span>Qtd ${esc(it.qtd)}</span>` : '',
@@ -487,11 +499,11 @@ function itemRow(it) {
     it.fornecedor ? `<span>${esc(it.fornecedor)}</span>` : '',
     nx ? (() => { const r = relDue(nx.date); return `<span class="due ${r.cls}">${esc(shortTitle(nx))} ${fmtD(nx.date)} · ${r.txt}</span>`; })() : ''
   ].filter(Boolean).join('');
-  return `<button type="button" class="row" data-open="${esc(it.id)}">
+  return `<div class="row" data-open="${esc(it.id)}" role="button" tabindex="0">
     <span class="stripe st-${esc(it.status)}"></span>
     <span class="main"><span class="name">${esc(it.nome)}</span><span class="sub">${sub}</span></span>
-    <span class="side">${val}<span class="pill st-${esc(it.status)}">${esc(STATUS[it.status] || it.status)}</span>${bar}</span>
-  </button>`;
+    <span class="side">${val}<span class="side-row"><span class="pill st-${esc(it.status)}">${esc(STATUS[it.status] || it.status)}</span>${payBtn}</span>${bar}</span>
+  </div>`;
 }
 function shortTitle(e) {
   if (e.kind === 'fechar') return 'Fechar até';
@@ -558,11 +570,14 @@ function pagView() {
     <tbody>${rows.map(tr).join('')}</tbody><tfoot>${tr(tot)}</tfoot></table></div></section>`;
   const list = S.items.filter(inApto);
   const pend = [], pagos = [];
-  for (const it of list) for (const p of it.pagamentos || []) (p.pago ? pagos : pend).push({ kind: 'pg', it, ref: p.id, tipo: 'pagamento', title: p.desc || 'Pagamento', date: p.pago ? (p.dataPago || null) : (p.venc || null), done: !!p.pago, valor: +p.valor || 0 });
-  for (const it of list) if (autoPaid(it)) pagos.push({ kind: 'auto', it, tipo: 'pagamento', title: 'Pago na compra', date: null, done: true, valor: +it.valor });
+  for (const it of list) if (it.quitado !== true) for (const p of it.pagamentos || []) (p.pago ? pagos : pend).push({ kind: 'pg', it, ref: p.id, tipo: 'pagamento', title: p.desc || 'Pagamento', date: p.pago ? (p.dataPago || null) : (p.venc || null), done: !!p.pago, valor: +p.valor || 0 });
+  for (const it of list) {
+    if (it.quitado === true) pagos.push({ kind: 'auto', it, tipo: 'pagamento', title: 'Pago (quitado)', date: null, done: true, valor: paidOf(it) });
+    else if (autoPaid(it)) pagos.push({ kind: 'auto', it, tipo: 'pagamento', title: 'Pago na compra', date: null, done: true, valor: +it.valor });
+  }
   pend.sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999'));
   pagos.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-  const semParcela = list.filter(it => it.valor != null && isClosed(it) && (it.pagamentos || []).length && it.valor - plannedOf(it) > 0.5);
+  const semParcela = list.filter(it => it.valor != null && it.quitado !== true && isClosed(it) && (it.pagamentos || []).length && it.valor - plannedOf(it) > 0.5);
   html += `<section><h3 class="sec-h">A pagar<small>${money(pend.reduce((s, e) => s + e.valor * fac(e.it), 0))}</small></h3>${pend.length ? `<div class="list">${pend.map(evRow).join('')}</div>` : '<div class="empty">Nenhuma parcela em aberto.</div>'}</section>`;
   if (semParcela.length) html += `<section><h3 class="sec-h">Saldo sem parcela lançada<small>abra o item e lance o restante</small></h3><div class="list">${semParcela.map(it => `<button type="button" class="row" data-open="${esc(it.id)}"><span class="stripe st-${esc(it.status)}"></span><span class="main"><span class="name">${esc(it.nome)}</span><span class="sub"><span class="apto">${it.apto === 'ambos' ? '801+802' : esc(it.apto)}</span></span></span><span class="side"><span class="val">${money((it.valor - plannedOf(it)) * fac(it))}</span></span></button>`).join('')}</div></section>`;
   html += `<section><h3 class="sec-h">Pagos<small>${money(pagos.reduce((s, e) => s + e.valor * fac(e.it), 0))}</small></h3>${pagos.length ? `<div class="list">${pagos.map(evRow).join('')}</div>` : '<div class="empty">Nenhum pagamento marcado como pago.</div>'}</section>`;
@@ -636,6 +651,7 @@ function renderSheet() {
         <label class="f">Quantidade<input data-f="qtd" data-num inputmode="numeric" value="${esc(numIn(d.qtd))}" id="f-qtd"></label>
       </div>
       <label class="chk"><input type="checkbox" data-f="estimado" ${d.estimado ? 'checked' : ''} id="f-est"> Valor estimado (ainda não fechado)</label>
+      <label class="chk"><input type="checkbox" data-f="quitado" ${isPaid(d) ? 'checked' : ''} id="f-quitado"> Pago (quitado)</label>
       <div class="grid2">
         <label class="f">Fechar compra até<input type="date" data-f="fecharAte" value="${esc(d.fecharAte || '')}" id="f-fechar"></label>
         <label class="f">Precisa estar pronto até<input type="date" data-f="precisaAte" value="${esc(d.precisaAte || '')}" id="f-precisa"></label>
@@ -715,7 +731,8 @@ function resolveWho() {
 }
 function sumline(d) {
   const planned = plannedOf(d), paid = paidOf(d);
-  if (!d.pagamentos.length) return `<span class="hint">${isClosed(d) && d.valor != null ? 'Sem parcelas: como está comprado, o valor total conta como pago.' : 'Sem parcelas: ao marcar como Comprado, o valor total passa a contar como pago.'}</span>`;
+  if (d.quitado === true) return `<span class="hint">Marcado como pago: o valor total conta como pago.</span>`;
+  if (!d.pagamentos.length) return `<span class="hint">${autoPaid(d) ? 'Sem parcelas: como está comprado, o valor total conta como pago.' : 'Sem parcelas lançadas.'}</span>`;
   const diff = d.valor != null ? d.valor - planned : null;
   return `<span>Pago <b class="num">${money(paid)}</b> de <span class="num">${money(planned)}</span> lançados</span>${diff != null && Math.abs(diff) > 0.5 ? `<span class="due ${diff > 0 ? 'soon' : 'late'}">${diff > 0 ? `faltam ${money(diff)} sem parcela` : `${money(-diff)} acima do valor`}</span>` : ''}`;
 }
@@ -761,7 +778,7 @@ async function onUpload(input) {
   }
 }
 
-function syncDraftFromInputs() { panel.querySelectorAll('input,select,textarea').forEach(el => { if (el.dataset.f || el.dataset.l) onDraftInput({ target: el }); }); }
+function syncDraftFromInputs() { panel.querySelectorAll('input,select,textarea').forEach(el => { if (el.dataset.f === 'quitado') return; if (el.dataset.f || el.dataset.l) onDraftInput({ target: el }); }); }
 async function onSave() {
   syncDraftFromInputs();
   const d = draft;
@@ -824,6 +841,16 @@ document.addEventListener('click', e => {
   else if (a === 'close') closeSheet(false);
   else if (a === 'reload') { const id = draft && draft.id; closeSheet(false); if (S.items.some(x => x.id === id)) openItem(id); else toast('Este item foi excluído.'); }
   else if (a === 'hidedone') { S.hideDone = !S.hideDone; saveUi(); render(); }
+  else if (a === 'pay') {
+    const src = S.items.find(x => x.id === t.dataset.id); if (!src) return;
+    const on = !isPaid(src);
+    if (!on && src.valor != null && parcelasPagas(src) >= src.valor - 0.5) { toast('As parcelas deste item estão marcadas como pagas. Abra o item para mudar.'); return; }
+    const it = clone(src);
+    it.quitado = on;
+    if (on && !isClosed(it)) it.status = 'encomendado';
+    saveItem(it);
+    toast(on ? 'Marcado como pago.' : 'Desmarcado.');
+  }
   else if (a === 'save') onSave();
   else if (a === 'copy') {
     const ta = document.getElementById('bk-out');
@@ -867,7 +894,7 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && !sheet.hidden) closeSheet(false);
-  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.ev .body')) { e.preventDefault(); openItem(e.target.dataset.open); }
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.ev .body, .row[data-open]')) { e.preventDefault(); openItem(e.target.dataset.open); }
 });
 document.addEventListener('change', e => {
   const t = e.target;
