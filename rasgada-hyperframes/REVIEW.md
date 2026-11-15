@@ -33,3 +33,11 @@
 - A câmera da pausa (21 a 23,5 s) deixa o surfista baixo no quadro e as linhas 1 e 2 quase paralelas.
   Com mais tempo: subir o alvo da câmera uns 0,4 m e apontar a linha 2 para os olhos, não para o topo da cabeça.
 - A mixagem não foi medida em LUFS no arquivo final.
+
+## Narração (versão de teste)
+- Voz local Kokoro `pm_alex` em pt-br: grátis, mas soa sintética. A HeyGen (plano Free) e o Runway
+  (plano Free) recusaram gerar voz; para a versão final, troque os mp3 em `assets/audio/voz/` por uma voz
+  melhor ou pela sua própria gravação, com os mesmos nomes.
+- Cada fala começa ~0,2 s depois do corte da sua cena; "Rasgada perfeita!" cai junto do popup do replay.
+- A música desce para 40% sob a voz (lane de volume em `#trilha`) e a voz tem highpass, presença em 3 kHz,
+  compressor e limiter (`data-fx-chain`). Medido com `hyperframes audio`, não ouvido.
