@@ -1,0 +1,8 @@
+{
+  "name": "rasgada-ps2",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Animacao 3D estilo PS2: como dar uma rasgada no surf",
+  "scripts": { "render": "node render.cjs" },
+  "dependencies": { "three": "0.169.0", "@fontsource/press-start-2p": "5.1.0" }
+}
