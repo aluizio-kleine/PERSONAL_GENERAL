@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="pt-BR" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/lib/gsap.min.js"></script>
+    <style>
+      /* Visual de menu de jogo de PS2. Fonte, paleta e caixa de diálogo descritas em SPEC.md. */
+      @font-face { font-family: "PS2P"; src: url("assets/fonts/press-start-2p.woff2") format("woff2"); font-display: block; }
+      :root {
+        --ink-dark: #000814;
+        --cyan: #7fe0ff;
+        --red: #ff2a1a;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #b8dbf5; }
+      #root { position: absolute; inset: 0; width: 1080px; height: 1920px; font-family: "PS2P", monospace; }
+
+      .t { position: absolute; font-family: "PS2P", monospace; white-space: pre; line-height: 1.25; }
+      .t .o { color: var(--ink-dark); -webkit-text-stroke: 8px var(--ink-dark); text-shadow: 4px 4px 0 rgba(0, 0, 20, 0.75); }
+      .t.s64 .o, .t.s48 .o { -webkit-text-stroke: 12px var(--ink-dark); text-shadow: 6px 6px 0 rgba(0, 0, 20, 0.75); }
+      .t.big .o { -webkit-text-stroke: 22px var(--ink-dark); text-shadow: 10px 10px 0 rgba(0, 0, 20, 0.75); }
+      .t .f { position: absolute; left: 0; top: 0; width: 100%; text-align: inherit; }
+      .s32 { font-size: 32px; } .s48 { font-size: 48px; } .s64 { font-size: 64px; } .s80 { font-size: 80px; } .s96 { font-size: 96px; } .s112 { font-size: 112px; }
+      .white { color: #fff; }
+      .cyan { color: var(--cyan); }
+      .gold, .red, .ice { -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .gold { background-image: linear-gradient(180deg, #fffbd0 0%, #ffd21f 45%, #ff6a00 100%); }
+      .red { background-image: linear-gradient(180deg, #ffb3a8 0%, #ff2a1a 100%); }
+      .ice { background-image: linear-gradient(180deg, #ffffff 0%, #8fe3ff 100%); }
+
+      .head { position: absolute; left: 68px; top: 220px; width: 960px; height: 170px; }
+      .bar { position: absolute; left: 0; top: 148px; display: flex; gap: 12px; }
+      .seg { display: block; width: 80px; height: 16px; background: rgba(255, 255, 255, 0.3); outline: 4px solid var(--ink-dark); }
+      .seg.on { background: #ffc400; }
+
+      .panel {
+        position: absolute; transform-origin: 50% 50%;
+        background: linear-gradient(180deg, rgba(18, 40, 120, 0.82) 0%, rgba(5, 10, 30, 0.82) 100%);
+        border: 6px solid #bee6ff; border-radius: 18px;
+        box-shadow: inset 0 0 0 4px rgba(5, 10, 30, 0.6), inset 0 0 0 6px rgba(255, 255, 255, 0.3);
+      }
+      .panel::before { content: ""; position: absolute; left: 8px; right: 8px; top: 8px; height: 42%; border-radius: 12px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0)); }
+      .panel.red { background: linear-gradient(180deg, rgba(150, 24, 24, 0.9) 0%, rgba(40, 6, 6, 0.9) 100%); }
+
+      .meter { position: absolute; left: 68px; top: 690px; width: 900px; height: 120px; }
+      .vbar { position: absolute; left: 0; top: 56px; display: flex; gap: 6px; padding: 6px; background: rgba(0, 8, 20, 0.85); }
+      .vseg { display: block; width: 38px; height: 36px; }
+      .item { position: absolute; left: 70px; width: 860px; height: 48px; }
+      .rec { position: absolute; left: 68px; top: 224px; width: 36px; height: 36px; border-radius: 50%; background: var(--red); border: 5px solid var(--ink-dark); }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-hj9e" id="root" data-composition-id="main" data-start="0" data-duration="42" data-width="1080" data-height="1920">
+      <div data-hf-id="hf-ig0b" id="surf" class="clip" data-composition-id="surf" data-composition-src="compositions/surf.html" data-start="0" data-duration="42" data-track-index="0" data-track-kind="graphics" data-width="1080" data-height="1920" style="z-index:1"></div>
+      <div data-hf-id="hf-5ud9" id="intro" class="clip" data-composition-id="intro" data-composition-src="compositions/intro.html" data-start="0" data-duration="3.5" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920" style="z-index:2"></div>
+      <div data-hf-id="hf-pq9n" id="p1" class="clip" data-composition-id="p1" data-composition-src="compositions/p1.html" data-start="3.5" data-duration="5" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920" style="z-index:2"></div>
+      <div data-hf-id="hf-x8xq" id="p2" class="clip" data-composition-id="p2" data-composition-src="compositions/p2.html" data-start="8.5" data-duration="6" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920" style="z-index:2"></div>
+      <div data-hf-id="hf-icka" id="p3" class="clip" data-composition-id="p3" data-composition-src="compositions/p3.html" data-start="14.5" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920" style="z-index:2"></div>
+      <div data-hf-id="hf-6x7i" id="p4" class="clip" data-composition-id="p4" data-composition-src="compositions/p4.html" data-start="18.5" data-duration="7" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920" style="z-index:2"></div>
+      <div data-hf-id="hf-7fgg" id="p5" class="clip" data-composition-id="p5" data-composition-src="compositions/p5.html" data-start="25.5" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920" style="z-index:2"></div>
+      <div data-hf-id="hf-elpe" id="replay" class="clip" data-composition-id="replay" data-composition-src="compositions/replay.html" data-start="29.5" data-duration="6" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920" style="z-index:2"></div>
+      <div data-hf-id="hf-cwbc" id="outro" class="clip" data-composition-id="outro" data-composition-src="compositions/outro.html" data-start="35.5" data-duration="6.5" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920" style="z-index:2"></div>
+      <audio data-hf-id="hf-cn8g" id="trilha" src="assets/audio/trilha.mp3" data-start="0" data-duration="42" data-track-index="10" data-volume="0.8" data-fade-out="2"></audio>
+      <audio data-hf-id="hf-arl9" id="sfx-whoosh-1" src="assets/audio/sfx/whoosh.mp3" data-start="3.37" data-duration="0.58" data-track-index="11" data-volume="0.45"></audio>
+      <audio data-hf-id="hf-moel" id="sfx-whoosh-2" src="assets/audio/sfx/whoosh-short.mp3" data-start="5.87" data-duration="0.58" data-track-index="11" data-volume="0.55"></audio>
+      <audio data-hf-id="hf-9h0f" id="sfx-whoosh-3" src="assets/audio/sfx/whoosh.mp3" data-start="8.37" data-duration="0.58" data-track-index="11" data-volume="0.55"></audio>
+      <audio data-hf-id="hf-mnxm" id="sfx-whoosh-4" src="assets/audio/sfx/whoosh-short.mp3" data-start="11.37" data-duration="0.58" data-track-index="11" data-volume="0.45"></audio>
+      <audio data-hf-id="hf-cf1c" id="sfx-whoosh-5" src="assets/audio/sfx/whoosh.mp3" data-start="14.37" data-duration="0.58" data-track-index="11" data-volume="0.55"></audio>
+      <audio data-hf-id="hf-40oe" id="sfx-whoosh-6" src="assets/audio/sfx/whoosh-short.mp3" data-start="18.37" data-duration="0.58" data-track-index="11" data-volume="0.55"></audio>
+      <audio data-hf-id="hf-2ef9" id="sfx-whoosh-7" src="assets/audio/sfx/whoosh.mp3" data-start="25.37" data-duration="0.58" data-track-index="11" data-volume="0.45"></audio>
+      <audio data-hf-id="hf-r1sw" id="sfx-whoosh-8" src="assets/audio/sfx/whoosh-short.mp3" data-start="29.37" data-duration="0.58" data-track-index="11" data-volume="0.55"></audio>
+      <audio data-hf-id="hf-x2ux" id="sfx-whoosh-9" src="assets/audio/sfx/whoosh.mp3" data-start="30.87" data-duration="0.58" data-track-index="11" data-volume="0.55"></audio>
+      <audio data-hf-id="hf-9oyd" id="sfx-whoosh-10" src="assets/audio/sfx/whoosh-short.mp3" data-start="32.87" data-duration="0.58" data-track-index="11" data-volume="0.45"></audio>
+      <audio data-hf-id="hf-oz9c" id="sfx-whoosh-11" src="assets/audio/sfx/whoosh.mp3" data-start="35.37" data-duration="0.58" data-track-index="11" data-volume="0.55"></audio>
+      <audio data-hf-id="hf-akp5" id="sfx-pop-1" src="assets/audio/sfx/pop.mp3" data-start="3.76" data-duration="0.7" data-track-index="12" data-volume="0.9"></audio>
+      <audio data-hf-id="hf-73v9" id="sfx-pop-2" src="assets/audio/sfx/pop.mp3" data-start="8.76" data-duration="0.7" data-track-index="12" data-volume="0.9"></audio>
+      <audio data-hf-id="hf-v10d" id="sfx-pop-3" src="assets/audio/sfx/pop.mp3" data-start="14.76" data-duration="0.7" data-track-index="12" data-volume="0.9"></audio>
+      <audio data-hf-id="hf-ivxo" id="sfx-pop-4" src="assets/audio/sfx/pop.mp3" data-start="18.76" data-duration="0.7" data-track-index="12" data-volume="0.9"></audio>
+      <audio data-hf-id="hf-rhyj" id="sfx-pop-5" src="assets/audio/sfx/pop.mp3" data-start="25.76" data-duration="0.7" data-track-index="12" data-volume="0.9"></audio>
+      <audio data-hf-id="hf-5bvw" id="sfx-pop-6" src="assets/audio/sfx/pop.mp3" data-start="24.0" data-duration="0.7" data-track-index="12" data-volume="0.9"></audio>
+      <audio data-hf-id="hf-8nvj" id="sfx-pop-7" src="assets/audio/sfx/pop.mp3" data-start="32.41" data-duration="0.7" data-track-index="12" data-volume="0.9"></audio>
+      <audio data-hf-id="hf-aacr" id="sfx-pop-8" src="assets/audio/sfx/pop.mp3" data-start="38.91" data-duration="0.7" data-track-index="12" data-volume="0.9"></audio>
+      <audio data-hf-id="hf-9ebk" id="sfx-riser" src="assets/audio/sfx/riser.mp3" data-start="20.26" data-duration="3.45" data-track-index="13" data-volume="0.6" data-fade-out="0.05"></audio>
+      <audio data-hf-id="hf-09pi" id="sfx-impact-1" src="assets/audio/sfx/impact-bass-1.mp3" data-start="23.66" data-duration="2.1" data-track-index="14" data-volume="0.85"></audio>
+      <audio data-hf-id="hf-ufpf" id="sfx-impact-2" src="assets/audio/sfx/impact-bass-1.mp3" data-start="31.86" data-duration="2.1" data-track-index="14" data-volume="0.6"></audio>
+      <audio data-hf-id="hf-1kn5" id="sfx-click-1" src="assets/audio/sfx/click.mp3" data-start="36.25" data-duration="0.36" data-track-index="14" data-volume="0.7"></audio>
+      <audio data-hf-id="hf-nyor" id="sfx-click-2" src="assets/audio/sfx/click.mp3" data-start="36.8" data-duration="0.36" data-track-index="14" data-volume="0.7"></audio>
+      <audio data-hf-id="hf-ynvr" id="sfx-click-3" src="assets/audio/sfx/click.mp3" data-start="37.35" data-duration="0.36" data-track-index="14" data-volume="0.7"></audio>
+      <audio data-hf-id="hf-bom9" id="sfx-click-4" src="assets/audio/sfx/click.mp3" data-start="37.9" data-duration="0.36" data-track-index="14" data-volume="0.7"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

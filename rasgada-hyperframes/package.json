@@ -1,0 +1,17 @@
+{
+  "name": "rasgada-hyperframes",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.8.225 preview",
+    "check": "npx --yes hyperframes@0.8.225 check",
+    "render": "npx --yes hyperframes@0.8.225 render",
+    "publish": "npx --yes hyperframes@0.8.225 publish"
+  },
+  "devDependencies": {
+    "@fontsource/press-start-2p": "5.1.0",
+    "gsap": "3.12.5",
+    "hyperframes": "0.8.225",
+    "three": "0.169.0"
+  }
+}

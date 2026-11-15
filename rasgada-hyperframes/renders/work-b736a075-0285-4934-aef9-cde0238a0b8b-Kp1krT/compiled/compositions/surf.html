@@ -1,0 +1,22 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; background: #b8dbf5; }
+    #surf-canvas { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; image-rendering: pixelated; }
+  </style>
+  <!-- A cena 3D inteira (onda, surfista, spray, câmeras e pós PS2) é desenhada a partir do tempo t
+       por assets/lib/surf-engine.js (fonte em src/engine.js). -->
+  <div data-hf-id="hf-82ep" id="root" data-composition-id="surf" data-width="1080" data-height="1920" data-duration="42">
+    <canvas data-hf-id="hf-jmao" id="surf-canvas" width="540" height="960"></canvas>
+  </div>
+  <script src="assets/lib/surf-engine.js"></script>
+  <script>
+    (function () {
+      const engine = SurfEngine.create(document.getElementById("surf-canvas"));
+      window.addEventListener("hf-seek", (e) => engine.renderAt(e.detail.time));
+      engine.renderAt(0);
+      const tl = gsap.timeline({ paused: true });
+      tl.set({}, {}, 42);
+      window.__timelines["surf"] = tl;
+    })();
+  </script>
+</template>

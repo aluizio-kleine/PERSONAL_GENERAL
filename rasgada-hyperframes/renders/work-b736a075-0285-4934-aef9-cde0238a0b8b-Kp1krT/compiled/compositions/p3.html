@@ -1,0 +1,21 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+  </style>
+  <div data-hf-id="hf-iqiz" id="root" data-composition-id="p3" data-width="1080" data-height="1920" data-duration="4" data-composition-variables='[{"id": "title", "type": "string", "label": "Título do passo", "default": "SUBA NA PAREDE"}, {"id": "tip1", "type": "string", "label": "Dica, linha 1", "default": "Suba firme, quase vertical,", "maxLength": 28}, {"id": "tip2", "type": "string", "label": "Dica, linha 2", "default": "mirando o lip.", "maxLength": 28}]'>
+    <div data-hf-id="hf-cxda" id="p3-head" class="head"><div data-hf-id="hf-pb51" id="p3-label" class="t s32 " data-layout-allow-overlap style="left:0px;top:0px"><span data-hf-id="hf-pwsf" class="o">PASSO 3/5</span><span data-hf-id="hf-sst5" class="f cyan">PASSO 3/5</span></div><div data-hf-id="hf-ohm1" id="p3-title" class="t s64 " data-layout-allow-overlap style="left:0px;top:52px"><span data-hf-id="hf-85du" class="o" data-var-text="title">SUBA NA PAREDE</span><span data-hf-id="hf-rvvz" class="f gold" data-var-text="title">SUBA NA PAREDE</span></div><div data-hf-id="hf-tv8i" id="p3-bar" class="bar"><i data-hf-id="hf-jgpt" id="p3-seg0" class="seg on"></i><i data-hf-id="hf-ip20" id="p3-seg1" class="seg on"></i><i data-hf-id="hf-rcxv" id="p3-seg2" class="seg on"></i><i data-hf-id="hf-ad5l" id="p3-seg3" class="seg"></i><i data-hf-id="hf-1p9q" id="p3-seg4" class="seg"></i></div></div>
+    <div data-hf-id="hf-sjgk" id="p3-panel" class="panel" style="left:52px;top:424px;width:976px;height:160px"><div data-hf-id="hf-ne23" id="p3-tip0" class="t s32 line" data-layout-allow-overlap style="left:36px;top:40px"><span data-hf-id="hf-17s2" class="o" data-var-text="tip1">Suba firme, quase vertical,</span><span data-hf-id="hf-jq00" class="f white" data-var-text="tip1">Suba firme, quase vertical,</span></div><div data-hf-id="hf-volx" id="p3-tip1" class="t s32 line" data-layout-allow-overlap style="left:36px;top:96px"><span data-hf-id="hf-wzym" class="o" data-var-text="tip2">mirando o lip.</span><span data-hf-id="hf-ozo8" class="f white" data-var-text="tip2">mirando o lip.</span></div></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#p3-head", { x: -840 }, { x: 0, duration: 0.45, ease: "back.out(1.9)" }, 0);
+      tl.fromTo("#p3-seg2", { opacity: 1 }, { opacity: 0.35, duration: 0.25, ease: "steps(1)", repeat: 7, yoyo: true }, 0.5);
+      tl.fromTo("#p3-panel", { scaleY: 0 }, { scaleY: 1, duration: 0.3, ease: "back.out(1.9)" }, 0.15);
+      tl.fromTo("#p3-tip0", { clipPath: "inset(-24px 100% -24px -24px)" }, { clipPath: "inset(-24px -24px -24px -24px)", duration: 0.71, ease: "steps(27)" }, 0.40);
+      tl.fromTo("#p3-tip1", { clipPath: "inset(-24px 100% -24px -24px)" }, { clipPath: "inset(-24px -24px -24px -24px)", duration: 0.37, ease: "steps(14)" }, 1.11);
+      tl.set({}, {}, 4);
+      window.__timelines["p3"] = tl;
+    })();
+  </script>
+</template>
