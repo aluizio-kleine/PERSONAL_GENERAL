@@ -3,7 +3,7 @@
 Tutorial de surf em 3D estilo PlayStation 2, vertical 1080x1920, 30 fps, 42 s, feito com
 [HyperFrames](https://hyperframes.heygen.com) (HTML renderizado em vídeo).
 
-- `renders/rasgada-ps2.mp4`: o vídeo final
+- `renders/rasgada-ps2-sem-narracao.mp4`: o vídeo final (trilha + efeitos, sem voz)
 - `SPEC.md`: o roteiro em números (planos, tempos, cores, fontes); `REVIEW.md`: a revisão
 
 ## Estrutura
